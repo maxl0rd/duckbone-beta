@@ -1,0 +1,5 @@
+<% require 'duckbone/templates' %>
+<% Duckbone::Templates.depend_on_all_handlebars_files self %>
+
+Duckbone.TemplatesData = <%= Duckbone::Templates.package_templates(binding) %>;
+Duckbone.PartialsData = <%= Duckbone::Templates.package_partials(binding) %>;
