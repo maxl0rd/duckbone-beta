@@ -1,5 +1,7 @@
-require "duckbone/version"
+require 'duckbone/version'
+require 'rails'
 
 module Duckbone
-  # Your code goes here...
+  class Engine < Rails::Engine
+  end
 end
