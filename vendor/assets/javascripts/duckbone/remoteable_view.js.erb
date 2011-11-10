@@ -1,0 +1,45 @@
+(function() {
+  
+  // A RemoteableView relies upon the server to render its contents.
+  // It can be used to integrate any ERB view into a Duckbone View.
+  // Set the 'url' property to the route where Rails will render the contents.
+  // Configure the route to respond to a normal html format request.
+  
+  Duckbone.RemoteableView = {
+    
+    debounceRequest: 500, 
+    
+    initialize: function() {
+      this.render = _.debounce(_.bind(this.serverSideRender, this), this.debounceRequest);
+      if (this.model) this.model.bind('change', this.render);
+      this.render();
+    },
+    
+    // Replace the entire contents of the element with the result from the server
+    
+    serverSideRender: function() {
+      if (this.url) {
+        $.ajax({
+          url: this.url,
+          dataType: 'html',
+          context: this,
+          success: function(responseHTML) {
+            $(this.el).empty();
+            $(this.el).html(responseHTML);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            <% if Rails.env.development? %>
+              $(this.el).html('Error rendering from ' + this.url);
+            <% else %>
+              Duckbone.serverError();
+            <% end %>
+          }
+        })
+      } else {
+        throw('Set url property on RemoteView to enable server-side rendering.')
+      }
+      return this;
+    }
+  }
+  
+}).call();

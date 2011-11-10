@@ -1,0 +1,119 @@
+(function() {
+
+  // Duckbone.TemplateableView
+  //
+
+  // Create a registry that only lives in this context
+  var templateRegistry = new Duckbone.TemplateRegistry();
+
+  // Create Handlebars helpers if we're using Handlebars.
+  // These helpers make working with models and collections easier.
+
+  if (Handlebars) {
+
+    // Fix broken if and unless behavior in the stock handlebars
+    // Now #if can reference a function property that returns true or false
+
+    Handlebars.helpers['oldIf'] = Handlebars.helpers['if']
+
+    Handlebars.registerHelper('if', function(context, fn, inverse) {
+      var condition = typeof context === "function" ? context.call(this) : context;
+      return Handlebars.helpers['oldIf'].call(this, condition, fn, inverse);
+    });
+
+    // The "attr" helper renders a model's attribute.
+    //
+    // This is only necessary if you have a property on
+    // the model object with the same name as your attribute
+    // but you want to access the attribute anyway.
+    //
+    // usage: {{attr "foo"}}
+
+    Handlebars.registerHelper('attr', function(attribute){
+      return this.get(attribute);
+    });
+
+    // Make each capable of handling collections
+
+    Handlebars.helpers['oldEach'] = Handlebars.helpers['each']
+
+    Handlebars.registerHelper('each', function(context, fn, inverse) {
+      if (context.models) {
+        context = context.models;
+      }
+      return Handlebars.helpers['oldEach'].call(this, context, fn, inverse);
+    });
+
+  }
+
+  // Duckbone.TemplateableView
+  // Doc above
+
+  Duckbone.TemplateableView = {
+    isTemplateableView: true,
+
+    included: function() {
+      if (!this.hasViewLifecycleExtensions) {
+        Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
+      }
+    },
+
+    templateRegistry: templateRegistry,
+
+    // Fetch template out of the View's templateData, options or the templateRegistry
+
+    getTemplate: function(templateName) {
+      this.templateData = this.templateData || this.options.templateData || null;
+      if (this.templateData) {
+        this.template = Duckbone.Handlebars.compile(this.templateData);
+      } else {
+        templateName = templateName || this.templateName || this.options.templateName || "";
+        this.template = this.templateRegistry.get(templateName);
+      }
+      return this.template
+    },
+
+    // Twirl fetches its template from any of the following places:
+    // this.template, this.options.template, this.templateName, this.options.templateName
+    // Then it renders it in the context of its model.
+    // The output replaces the entire html content of the view's container element.
+    // Pass a different context param to render from a different context.
+    // ie this.twirl({some_different: "data"});
+
+    // Twirl attempts to replicate typical server-side templating behavior in which
+    // errors in development will show as error messages in place in the template,
+    // and errors in a production environments will result in a server error.
+    // Twirl also prints useful error messages to the console.
+
+    twirl: function(context) {
+      var context = context || this.model || {};
+      if (!this.template && _.isFunction(this.options.template)) {
+        this.template = this.options.template;
+      } else if (!this.template) {
+        this.getTemplate();
+      }
+      if (this.template) {
+        try {
+          $(this.el).html(this.template(context));
+        } catch(e) {
+          _.log("Handlebars threw an exception rendering your template:");
+          _.log(e.message);
+          _.log("Context:");
+          _.log(context);
+          <% if Rails.env.development? %>
+            $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + e.message + '</div>');
+          <% else %>
+            Duckbone.serverError();
+            throw(e);
+          <% end %>
+        }
+      }
+      var templateName = this.templateName || this.options.templateName;
+      if (this.templateName) {
+        $(this.el).addClass(this.templateName);
+      }
+    }
+
+  }
+
+}).call(this);

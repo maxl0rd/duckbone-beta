@@ -1,0 +1,102 @@
+(function() {
+
+  var TEMPLATES_DATA = "TemplatesData";
+  var PARTIALS_DATA = "PartialsData";
+
+  Duckbone.TemplateRegistry = function(options) {
+    options = options || {};
+    this.compiledTemplates = {};
+    this.templatesData = options.templatesData;
+    this.partialsData = options.partialsData;
+    this.templatesCompiled = false;
+    this.partialsCompiled = false;
+  }
+
+  _.extend(Duckbone.TemplateRegistry.prototype, {
+
+    refresh: function() {
+      this.templatesCompiled = false;
+      this.partialsCompiled = false;
+      locateTemplates(this);
+    },
+
+    compile: function() {
+      compileTemplates(this);
+    },
+
+    get: function(src) {
+      locateTemplates(this);
+      compilePartials(this);
+      compileTemplates(this, src);
+      if (this.compiledTemplates[src]) {
+        return this.compiledTemplates[src];
+      } else {
+        return Duckbone.Handlebars.compile("<div>Missing Template " + src + " </div>");
+      }
+    }
+  });
+
+  // Internal functions
+
+  function locateTemplates(context) {
+    if (!context.templatesData) {
+      context.templatesData = Duckbone[TEMPLATES_DATA];
+    }
+    if (!context.partialsData) {
+      context.partialsData = Duckbone[PARTIALS_DATA];
+    }
+  }
+
+  function compileTemplates (context, src) {
+    if (context.templatesCompiled) return;
+    locateTemplates(context);
+    compilePartials(context);
+    if (context.templatesData && src) {
+      // compile one template
+      context.compiledTemplates[src] = compileTemplate(context.templatesData[src], src);
+    } else if (context.templatesData) {
+      // compile all of them
+      _.each(_.keys(context.templatesData), function(key) {
+        context.compiledTemplates[key] = compileTemplate(context.templatesData[key], key);
+      }, context);
+      context.templatesCompiled = true;
+    }
+  }
+
+  function compilePartials(context) {
+    if (context.partialsCompiled) return;
+    locateTemplates(context);
+    if (context.partialsData) {
+      _.each(_.keys(context.partialsData), function(key) {
+        Handlebars.registerPartial(key, compileTemplate(context.partialsData[key], key));
+      }, context);
+      context.partialsCompiled = true;
+    }
+  }
+
+  function compileTemplate(templateData, src) {
+    src = src || "";
+    if (templateData) {
+      try {
+        return Duckbone.Handlebars.compile(templateData);
+      } catch (e) {
+        _.log("Syntax Error in Template " + src);
+        _.log(e.message);
+        <% if Rails.env.production? %>
+          Duckbone.serverError();
+        <% else %>
+          return Duckbone.Handlebars.compile('<div class="duckbone_error">Syntax Error in Template ' + src +
+            '<div class="duckbone_message">' + e.message + '</div></div>');
+        <% end %>
+      }
+    } else {
+      _.log("Missing Handlebars template " + src);
+      <% if Rails.env.production? %>
+        Duckbone.serverError();
+      <% else %>
+        return Duckbone.Handlebars.compile('<div class="duckbone_error">Missing Template ' + src + ' </div>');
+      <% end %>
+    }
+  }
+
+}).call(this);

@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Duckbone::VERSION
   s.authors     = ["Max Lord"]
   s.email       = ["maxlord@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "http://github.com/maxl0rd/duckbone"
+  s.summary     = "Backbone extensions for Rails development"
+  s.description = "Backbone extensions for Rails development"
 
   s.rubyforge_project = "duckbone"
 
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_dependency('rails', '~> 3.1.0')
+  s.add_dependency('rails-backbone', '~> 0.5.4')
+
 end
