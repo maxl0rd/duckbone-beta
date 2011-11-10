@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>form_fields.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>form_fields.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>{{#form &ldquo;edit_goal&rdquo;}} &hellip; {{/form}}
+Block helper to create a form tag and give it a name and a class</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">block</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">className</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="nx">className</span> <span class="o">=</span> <span class="nx">className</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^(new_)(.*)/</span><span class="p">,</span> <span class="s2">&quot;$2&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^(edit_)(.*)/</span><span class="p">,</span> <span class="s2">&quot;$2&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">className</span> <span class="o">!=</span> <span class="nx">name</span><span class="p">)</span> <span class="nx">className</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="k">return</span> <span class="s1">&#39;&lt;form action=&quot;#&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot; class=&quot;&#39;</span><span class="o">+</span><span class="nx">className</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;\n&#39;</span> <span class="o">+</span> <span class="nx">block</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;\n&lt;/form&gt;&#39;</span><span class="p">;</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>{{form<em>error</em>banner &ldquo;Woopsie doodles! There&rsquo;s a problem.&rdquo;}}</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_error_banner&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span> <span class="o">||</span> <span class="s2">&quot;Please fix the errors below&quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;error_banner&quot; style=&quot;display: none&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>{{form_error &ldquo;title&rdquo;}}
+Explicitly place the form error el rather than the default location
+(otherwise it will be implicitly placed after the element)</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;&#39;</span><span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_errors&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>{{form<em>label &ldquo;field</em>name&rdquo; &ldquo;Label text&hellip;&rdquo;}}
+If label text is omitted, then prettyify the field name and use that</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_label&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">text</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span> <span class="c1">// text is empty. use name</span>
+      <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^(.)/</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span> <span class="c1">// capitalize first character</span>
+      <span class="p">});</span>
+      <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(\_[a-z])/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">$1</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">);</span> <span class="c1">// capitalize each next word, replace _ with space</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;label data-field-name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s1">&#39;&lt;/label&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>{{form_text &ldquo;title&rdquo;}}</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_text&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_text&quot; type=&quot;text&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>{{form_select &ldquo;goal&rdquo;}}
+Helper to create a form select field</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_select&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;select class=&quot;form_select&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/select&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>{{form<em>radio</em>set &ldquo;how_saved&rdquo;}}
+Helper to create a radio set</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_radio_set&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;form_radio_set&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>{{form<em>checkbox &ldquo;accept</em>terms&rdquo;}}
+Helper to create a checkbox option</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_checkbox&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_checkbox&quot; type=&quot;checkbox&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>{{form_textarea &ldquo;body&rdquo;}}
+Helper to create a textarea</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_textarea&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;textarea class=&quot;form_textarea&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/textarea&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>{{form_password &ldquo;password&rdquo;}}
+Helper to create a password input</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_password&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_password&quot; type=&quot;password&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/input&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>{{form<em>submit &ldquo;my</em>submit&rdquo;}}
+Helper to create a submit input</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;button class=&quot;form_submit&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Base class for all form fields
+A Backbone view with BindableField and ValidateableField
+Custom initializer. User afterInitialize() to extend.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+  <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableField</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ValidateableField</span><span class="p">,</span> <span class="p">{</span>
+
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">form</span><span class="p">;</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">elAttributes</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">afterInitialize</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindToModel</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindToDOM</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindValidation</span><span class="p">();</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-14">&#182;</a>
+        </div>
+        <p>Extend this with specific field init behaviors</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">afterInitialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-15'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-15">&#182;</a>
+        </div>
+        <p>Extend this if the field creates additional DOM elements</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-16'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-16">&#182;</a>
+        </div>
+        <p>TextFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TextFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">changeEvent</span><span class="o">:</span> <span class="s2">&quot;change&quot;</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-17'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-17">&#182;</a>
+        </div>
+        <p>SelectFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">SelectFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;select&quot;</span><span class="p">,</span>
+    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectOptions</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">selectOptions</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">opts</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">opt</span> <span class="k">in</span> <span class="nx">selectOptions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">optionEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;option&gt;&lt;/option&gt;&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nx">value</span><span class="o">:</span> <span class="nx">opt</span><span class="p">});</span>
+        <span class="nx">optionEl</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-18'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-18">&#182;</a>
+        </div>
+        <p>RadioSetFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">RadioSetFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;radio_set&quot;</span><span class="p">,</span>
+    <span class="nx">changeEvent</span><span class="o">:</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span>
+    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectOptions</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">selectOptions</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">opts</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">opt</span> <span class="k">in</span> <span class="nx">selectOptions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fieldId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">optionEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&lt;input type=&quot;radio&quot;/&gt;&lt;label for=&quot;&#39;</span> <span class="o">+</span> <span class="nx">fieldId</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;radio_label&quot;&gt;&lt;/label&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="nx">fieldId</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">opt</span><span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input:checked&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newValue</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-19'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-19">&#182;</a>
+        </div>
+        <p>Wipe existing selection</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">checkedRadio</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input:checked&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">checkedRadio</span><span class="p">)</span> <span class="nx">checkedRadio</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-20'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-20">&#182;</a>
+        </div>
+        <p>Find the desired new selection. Only set it if it exists</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">radio</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input[value=&quot;&#39;</span><span class="o">+</span><span class="nx">newValue</span><span class="o">+</span><span class="s1">&#39;&quot;]&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">radio</span><span class="p">)</span> <span class="nx">radio</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-21'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-21">&#182;</a>
+        </div>
+        <p>Override this so that it binds to the child inputs instead of the main el</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">bindDOMChangeHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">modelAttribute</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">attrToSet</span> <span class="o">=</span> <span class="p">{};</span>
+      <span class="kd">var</span> <span class="nx">changeEvent</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">||</span> <span class="s1">&#39;change&#39;</span><span class="p">;</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">attrToSet</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+        <span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">attrToSet</span><span class="p">,</span> <span class="p">{</span><span class="nx">silent</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;form_change:&quot;</span><span class="o">+</span><span class="nx">attr</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">);</span> <span class="c1">// fake form change event</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-22'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-22">&#182;</a>
+        </div>
+        <p>CheckboxFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">CheckboxFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;checkbox&quot;</span><span class="p">,</span>
+    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;:checked&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelValue</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nx">checked</span><span class="o">:</span> <span class="nx">modelValue</span><span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-23'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-23">&#182;</a>
+        </div>
+        <p>TextAreaFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TextAreaFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;textarea&quot;</span><span class="p">,</span>
+    <span class="nx">changeEvent</span><span class="o">:</span> <span class="s2">&quot;change&quot;</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-24'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-24">&#182;</a>
+        </div>
+        <p>PasswordFormField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PasswordFormField</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormFieldBase</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+    <span class="nx">changeEvent</span><span class="o">:</span> <span class="s2">&quot;change&quot;</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-25'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-25">&#182;</a>
+        </div>
+        <p>SubmitFormField
+Does not extend FormFieldBase since it&rsquo;s not a BindableField</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">SubmitFormField</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+  <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">SubmitFormField</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableField</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;submit&quot;</span><span class="p">,</span>
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">form</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">spinnerEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">next</span><span class="p">(</span><span class="s1">&#39;img.ajax_loading&#39;</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bindDisableAndSpin</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">submitForm</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submitForm</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">submitForm</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">bindDisableAndSpin</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-26'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-26">&#182;</a>
+        </div>
+        <p>Don&rsquo;t double up bindings</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;sync:create&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;sync:update&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-27'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-27">&#182;</a>
+        </div>
+        <p>Don&rsquo;t disable and spin until the sync starts</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;sync:create&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;sync:update&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">submitForm</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">submit</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">disableAndSpin</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;sync:create&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;sync:update&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">disableAndSpin</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spinnerEl</span><span class="p">)</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spinnerEl</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">stealClick</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;sync:complete&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">syncComplete</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">stealClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-28'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-28">&#182;</a>
+        </div>
+        <p>Don&rsquo;t submit again &hellip; we&rsquo;re BUSY!</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">syncComplete</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spinnerEl</span><span class="p">)</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">spinnerEl</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">bindDisableAndSpin</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">fieldTypes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">text</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TextFormField</span><span class="p">,</span>
+    <span class="nx">select</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">SelectFormField</span><span class="p">,</span>
+    <span class="nx">radio_set</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">RadioSetFormField</span><span class="p">,</span>
+    <span class="nx">checkbox</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">CheckboxFormField</span><span class="p">,</span>
+    <span class="nx">textarea</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TextAreaFormField</span><span class="p">,</span>
+    <span class="nx">password</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PasswordFormField</span><span class="p">,</span>
+    <span class="nx">submit</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">SubmitFormField</span>
+  <span class="p">};</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

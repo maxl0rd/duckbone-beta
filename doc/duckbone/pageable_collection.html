@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>pageable_collection.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>pageable_collection.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>A Pageable collection interacts with a server side model that is paginated
+(ie with will_paginate or kaminari)
+Use the Rails class Duckbone::PageableCollection to assist in
+rendering json responses for these collections</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PageableCollection</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">isPageableCollection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Example response:
+{num<em>pages: 4, limit</em>value: 25, current_page: 1, records: [{&hellip;}, {&hellip;}]}</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">parse</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">)</span>  <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">numPages</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">num_pages</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">limitValue</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">limit_value</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">current_page</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">records</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">fetchPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">pageNum</span> <span class="o">=</span> <span class="nx">pageNum</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span> <span class="o">||</span> <span class="nx">_</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="o">:</span> <span class="nx">pageNum</span><span class="p">})),</span>
+        <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">c</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;pageChange&#39;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nx">currentPage</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Set additonal query params on the collection, ie search string
+These will be sent to the server on fetch and show up in the url</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">setParam</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{};</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">[</span><span class="nx">param</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">setPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">p</span> <span class="o">!=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span> <span class="o">&lt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">numPages</span><span class="p">)</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">nextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">prevPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+  <span class="p">};</span>
+
+  <span class="kd">function</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">()</span> <span class="o">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">url</span> <span class="o">+=</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">o</span> <span class="k">in</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">url</span> <span class="o">+=</span> <span class="nx">o</span><span class="o">+</span><span class="s1">&#39;=&#39;</span><span class="o">+</span><span class="nx">options</span><span class="p">[</span><span class="nx">o</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">url</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

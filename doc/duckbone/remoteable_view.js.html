@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>remoteable_view.js.erb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>remoteable_view.js.erb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>A RemoteableView relies upon the server to render its contents.
+It can be used to integrate any ERB view into a Duckbone View.
+Set the &lsquo;url&rsquo; property to the route where Rails will render the contents.
+Configure the route to respond to a normal html format request.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">RemoteableView</span> <span class="o">=</span> <span class="p">{</span>
+    
+    <span class="nx">debounceRequest</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span> 
+    
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">debounce</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">serverSideRender</span><span class="p">,</span> <span class="k">this</span><span class="p">),</span> <span class="k">this</span><span class="p">.</span><span class="nx">debounceRequest</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+    <span class="p">},</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Replace the entire contents of the element with the result from the server</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    
+    <span class="nx">serverSideRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+          <span class="nx">url</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+          <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span>
+          <span class="nx">context</span><span class="o">:</span> <span class="k">this</span><span class="p">,</span>
+          <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">responseHTML</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">empty</span><span class="p">();</span>
+            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">responseHTML</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">development</span><span class="o">?</span> <span class="o">%&gt;</span>
+              <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;Error rendering from &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+            <span class="o">&lt;%</span> <span class="k">else</span> <span class="o">%&gt;</span>
+              <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">serverError</span><span class="p">();</span>
+            <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
+          <span class="p">}</span>
+        <span class="p">})</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span><span class="p">(</span><span class="s1">&#39;Set url property on RemoteView to enable server-side rendering.&#39;</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  
+<span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

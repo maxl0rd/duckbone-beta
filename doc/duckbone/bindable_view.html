@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>bindable_view.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>bindable_view.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-Duckbone.BindableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.BindableView">&#182;</a>
+        </div>
+        <h1>Duckbone.BindableView</h1>
+
+<p>This mixin enables any view to selectively data-bind to changes in the model.
+Many developers prefer this approach over re-rendering an entire view on each model
+change event. It also implements &ldquo;weak bindings&rdquo; that clean themselves up when the
+view is removed.</p>
+
+<h2>Usage</h2>
+
+<p>Mix Duckbone.BindableView into any View that needs to use declarative data-binding
+to model attributes.</p>
+
+<h3>Data Binding</h3>
+
+<p>Data bindings should be defined in the <code>attributeChanges</code> object. The binding value
+can be a string selector, in which case the html of that selector is replaced with
+the model value. It can also be a callback function, which is simply executed,
+in the context of the view. For example:</p>
+
+<pre><code>attributeChanges: {
+  &lsquo;attribute&rsquo;: &lsquo;span.attribute&rsquo;,
+  &lsquo;title&rsquo;: &lsquo;div.title&rsquo;,
+  &lsquo;amount&rsquo;: function(val) {
+    $(this.el).find(&lsquo;span.amount&rsquo;).html(&lsquo;$&rsquo;+val);
+  }
+}
+</code></pre>
+
+<p>BindableView also mixes in Duckbone.ViewlifecycleExtensions to assist in creating
+and tearing down bindings. If you are using the lifecycle, then bindings will be
+created and destroyed for you. If not, call <code>bindAttributes()</code> in the view&rsquo;s
+initialize method to establish the bindings. And call <code>removeWeakBindings()</code> in the
+view&rsquo;s remove() method.</p>
+
+<h3>Weak Binding</h3>
+
+<p>BindableView uses &ldquo;weak bindings&rdquo; which are intended to be unbound when the view is
+removed. This prevents zombie callbacks from wreaking havoc as a model gets passed from
+view to view. All of the bindings defined in <code>attributeChanges</code> use weak binding.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Mixin'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Mixin">&#182;</a>
+        </div>
+        <h3>Mixin</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-property_isBindableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-property_isBindableView">&#182;</a>
+        </div>
+        <h4>property isBindableView</h4>
+
+<p>Identifies a view that has BindableView mixed in.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">isBindableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_included'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_included">&#182;</a>
+        </div>
+        <h4>function included</h4>
+
+<p>Also mix in Duckbone.ViewLifecycleExtensions</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasViewLifecycleExtensions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_bindAttributes'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_bindAttributes">&#182;</a>
+        </div>
+        <h4>function bindAttributes</h4>
+
+<ul>
+<li>model &ndash; the model to bind to, defaulting to <code>this.model</code></li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Establishes the bindings declared in <code>this.attributeChanges</code>.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">bindAttributes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">attributeChanges</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+      <span class="nx">model</span> <span class="o">=</span> <span class="nx">model</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">();</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">attributeChanges</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bindAttribute</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">attributeChanges</span><span class="p">[</span><span class="nx">attr</span><span class="p">]);</span>
+      <span class="p">}</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_bindAttribute'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_bindAttribute">&#182;</a>
+        </div>
+        <h4>function bindAttribute</h4>
+
+<ul>
+<li>model &ndash; the model to bind to, defaulting to <code>this.model</code></li>
+<li>attr &ndash; the model attribute to bind to</li>
+<li>binding &ndash; the jQuery selector or binding callback</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Bind a single attribute to the supplied model.
+The binding param can either be a string selector,
+in which case the html of that selector is replaced with the model value
+or a callback function, which is simply executed, in the context of the view.
+If the view is already rendered, then initial values will be set
+to the current state of the model at the time of this call.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">bindAttribute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">binding</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Get model</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">model</span> <span class="o">=</span> <span class="nx">model</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">binding</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>The binding is a callback function. Set value now.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="nx">binding</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Bind the method to changes.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">this</span><span class="p">.</span><span class="nx">weakBindToModel</span><span class="p">(</span><span class="s1">&#39;change:&#39;</span><span class="o">+</span><span class="nx">attr</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">binding</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">binding</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>The binding is a selector. Set value now.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>Bind the selector&rsquo;s html to changes.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">this</span><span class="p">.</span><span class="nx">weakBindToModel</span><span class="p">(</span><span class="s1">&#39;change:&#39;</span><span class="o">+</span><span class="nx">attr</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Weak_Binding'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Weak_Binding">&#182;</a>
+        </div>
+        <h3>Weak Binding</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_weakBindToModel'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_weakBindToModel">&#182;</a>
+        </div>
+        <h4>function weakBindToModel</h4>
+
+<ul>
+<li>event &ndash; event to bind to, ie &lsquo;change:foo&rsquo;</li>
+<li>callback &ndash; callback function</li>
+<li>context &ndash; optional <code>this</code> context for the callback, defaults to the view</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Creates a binding on the view&rsquo;s model that is unbound when the view is removed</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">weakBindToModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">weakBindTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_weakBindTo'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_weakBindTo">&#182;</a>
+        </div>
+        <h4>function weakBindTo</h4>
+
+<ul>
+<li>obj &ndash; An object responding to <code>bind()</code>, e.g. a jQuery object or anything that
+includes Backbone.Events</li>
+<li>event &ndash; event to bind to, ie &lsquo;change:foo&rsquo;</li>
+<li>callback &ndash; callback function</li>
+<li>context &ndash; optional <code>this</code> context for the callback, defaults to the view</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Creates a binding on the object that is unbound when the view is removed</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">weakBindTo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span> <span class="o">||</span> <span class="p">[];</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">]);</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_removeWeakBindings'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_removeWeakBindings">&#182;</a>
+        </div>
+        <h4>function removeWeakBindings</h4>
+
+<ul>
+<li>returns &ndash; nothing
+Unbinds all weak bindings created by this view</li>
+</ul>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">removeWeakBindings</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">binding</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">binding</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">unbind</span><span class="p">(</span><span class="nx">binding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nx">binding</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+      <span class="p">});</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;_weakBindings&#39;</span><span class="p">];</span>
+    <span class="p">}</span>
+
+  <span class="p">};</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

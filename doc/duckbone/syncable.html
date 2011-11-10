@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>syncable.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>syncable.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-Duckbone.Syncable'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.Syncable">&#182;</a>
+        </div>
+        <h1>Duckbone.Syncable</h1>
+
+<p>Duckbone&rsquo;s sync method takes the same method signature as Backbone.sync.
+It is directly pluggable into any Model or Collection.
+Its default behavior is the same as that described in the Backbone documentation at
+<a href="http://documentcloud.github.com/backbone/#Sync">http://documentcloud.github.com/backbone/#Sync</a>.</p>
+
+<h2>Usage</h2>
+
+<p>Mix Syncable into any Model or Collection. It will call Syncable.sync
+instead of Backbone.sync for all fetch, save, destroy, etc. methods.</p>
+
+<h3>Create Syncable Compatible Controllers</h3>
+
+<p>Duckbone.sync provides additional functionality that is necessary to
+properly couple a client-side application to a set of JSON-centric Rails controllers.
+To implement this pattern, craft the application&rsquo;s controllers as follows.</p>
+
+<ul>
+<li>Call <code>respond_to :json</code> in the controller, and avoid mixing html and json responses in one controller.</li>
+<li>Respond to GET/index actions with an array of JSONified models.</li>
+<li>Respond to GET/show actions with a single JSON object.
+Set the Backbone.Model&rsquo;s <code>paramRoot</code> if you prefer to use a JSON root attribute.</li>
+<li>Respond to successful POST/create and PUT/update actions with the single JSONified model.</li>
+<li>Respond to invalid POST/create and PUT/update actions with a 422 (Unprocessable Entity)
+in the header and the model&rsquo;s errors JSONified in the body.</li>
+<li>Respond to valid DELETE/destroy actions with status 202 (No Content)</li>
+<li>Respond to invalid DELETE/destroy actions with status 422 (Unprocessable Entity)</li>
+<li>Respond to all &ldquo;not found&rdquo; errors with status 404</li>
+<li>There is no need to write new or edit actions</li>
+</ul>
+
+<p>For example:</p>
+
+<pre><code>def update
+  @goal = goals.find(params[:id])
+  if @goal.update_attributes(params[:goal])
+    render :json =&gt; @goal
+  else
+    render :json =&gt; {:errors =&gt; @goal.errors},
+      :status =&gt; :unprocessable_entity
+  end
+end
+</code></pre>
+
+<h3>CSRF Codes</h3>
+
+<p>Syncable will automatically insert the page&rsquo;s CSRF code into every ajax request.
+Be sure that they are present in the page head metadata.</p>
+
+<h3>Server Errors</h3>
+
+<p>Syncable will trigger the following events on the top level Duckbone object
+whenever server errors happen during sync.
+This enables disparate parts of the application to respond to potentially fatal errors.
+Any response status greater than or equal to 400 will trigger an error event.
+These include:</p>
+
+<ul>
+<li>&lsquo;sync:400&rsquo; &ndash; triggered on 400 error</li>
+<li>&lsquo;sync:404&rsquo; &ndash; triggered on 404 not found</li>
+<li>&lsquo;sync:500&rsquo; &ndash; triggered on 500 server error</li>
+</ul>
+
+<h3>Ajax Request Events</h3>
+
+<p>While Backbone supports jQuery&rsquo;s well known <code>success</code> and <code>error</code> callbacks,
+by themselves these are frequently inadequate for the range of functionality
+that must respond to model sync behavior. Syncable uses jQuery promises on
+ajax calls to bind all additional behavior. This technique is usually preferred
+over the use of the success and error callbacks. Other Duckbone mixins,
+notably EditableView, rely heavily on model sync events to bind complex behavior.
+The following events are available on all Syncable models and collections:</p>
+
+<ul>
+<li>&lsquo;sync:create&rsquo; &ndash; triggered at the start of a create request</li>
+<li>&lsquo;sync:read&rsquo; &ndash; triggered at the start of a read request</li>
+<li>&lsquo;sync:update&rsquo; &ndash; triggered at the start of an update request</li>
+<li>&lsquo;sync:destroy&rsquo; &ndash; triggered at the start of a destroy request</li>
+<li>&lsquo;sync:invalid&rsquo; &ndash; triggered when a request returns invalid (422)</li>
+<li>&lsquo;sync:error&rsquo; &ndash; triggered when a request returns an error (ie 404, 500)</li>
+</ul>
+
+<h3>URLs and Customizing Calls</h3>
+
+<p>The URL that will be called follows the following order of precedence:</p>
+
+<ol>
+<li>The url passed to sync() in the options object</li>
+<li>The url property or function on the model</li>
+<li>A url derived from the urlRoot property on the model</li>
+<li>A url derived from the url of the collection including the model</li>
+</ol>
+
+<p>Note that Duckbone.ModelHelpers improves Backbone.Model&rsquo;s implementation of
+urlRoot so that it can also be specified as a function that returns the url root.</p>
+
+<h3>A Note on Security</h3>
+
+<p>Many client-side security issues can result from Rails' default behavior
+in which JSON serialization of models is completely unconstrained.
+Take care to only include information in JSON data that the current user
+should have access to. Consider overriding ActiveRecord::Base&rsquo;s as_json()
+so that it will either blow up or emit nothing without explicit work by the developer.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Syncable</span> <span class="o">=</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-property_isSyncable'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-property_isSyncable">&#182;</a>
+        </div>
+        <h4>property isSyncable</h4>
+
+<p>Identifies a Model or Collection that has Syncable mixed in.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">isSyncable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_sync(method,_model,_[options])'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_sync(method,_model,_[options])">&#182;</a>
+        </div>
+        <h4>function sync(method, model, [options])</h4>
+
+<ul>
+<li>method – the CRUD method (&ldquo;create&rdquo;, &ldquo;read&rdquo;, &ldquo;update&rdquo;, or &ldquo;delete&rdquo;)</li>
+<li>model – the model to be saved (or collection to be read)</li>
+<li>options – success and error callbacks, and all other jQuery request options</li>
+<li>returns &ndash; the jqXHR object of the request</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">sync</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">jqXHR</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="nx">methodMap</span><span class="p">[</span><span class="nx">method</span><span class="p">];</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Default JSON-request options.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
+        <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+        <span class="nx">beforeSend</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">xhr</span> <span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">);</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span> <span class="nx">token</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">},</span> <span class="nx">options</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>workaround IE&rsquo;s aggressive caching of JSON</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">msie</span><span class="p">)</span> <span class="nx">params</span><span class="p">.</span><span class="nx">cache</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Ensure URL, and then append .json to it</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">params</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">getUrl</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="o">||</span> <span class="nx">urlError</span><span class="p">();</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Ensure that we have the appropriate request data.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">params</span><span class="p">.</span><span class="nx">data</span> <span class="o">&amp;&amp;</span> <span class="nx">model</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;update&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">paramRoot</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">data</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">paramRoot</span><span class="p">]</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">data</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Don&rsquo;t process data on a non-GET request.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">type</span> <span class="o">!==</span> <span class="s1">&#39;GET&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">processData</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Add the user credentials if HTTP Auth is used</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">password</span><span class="p">;</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="s1">&#39;Basic &#39;</span> <span class="o">+</span> <span class="nx">encode64</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">username</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nx">params</span><span class="p">.</span><span class="nx">password</span><span class="p">)</span>
+        <span class="p">};</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Make the request.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>Attach the params that were used to make testing easier</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>When it starts, trigger one of the crud events
+sync:create, sync:read, sync:update, sync:delete</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:&#39;</span><span class="o">+</span><span class="nx">method</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">());</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Trigger sync:complete when it&rsquo;s done regardless of outcome</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:complete&#39;</span><span class="p">,</span> <span class="nx">jqXHR</span><span class="p">);</span>
+      <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-14">&#182;</a>
+        </div>
+        <p>When a model is saved, trigger &lsquo;sync:success&rsquo;
+It will be added to its destinationCollection if it&rsquo;s not already</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span> <span class="nx">model</span><span class="p">.</span><span class="nx">errors</span><span class="p">;</span>
+        <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:success&#39;</span><span class="p">,</span> <span class="nx">jqXHR</span><span class="p">);</span>
+      <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-15'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-15">&#182;</a>
+        </div>
+        <p>Broadcast errors to the whole application</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">&gt;=</span> <span class="mi">400</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:&#39;</span><span class="o">+</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span> <span class="nx">jqXHR</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-16'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-16">&#182;</a>
+        </div>
+        <p>Bind an additional callback to set error messages on the model</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">condition</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">422</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">model</span><span class="p">.</span><span class="nx">errors</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">errors</span><span class="p">;</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">model</span><span class="p">.</span><span class="nx">errors</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:invalid&#39;</span><span class="p">,</span> <span class="nx">jqXHR</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:error&#39;</span><span class="p">,</span> <span class="nx">jqXHR</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+
+      <span class="k">return</span> <span class="nx">jqXHR</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-HTTP_Authentication'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-HTTP_Authentication">&#182;</a>
+        </div>
+        <h3>HTTP Authentication</h3>
+
+<p>These methods enable all SyncableModels to use HTTP Authentication.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-setAuthenticatedUser'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-setAuthenticatedUser">&#182;</a>
+        </div>
+        <h4>setAuthenticatedUser</h4>
+
+<ul>
+<li>username &ndash; HTTP Auth username</li>
+<li>password &ndash; HTTP Auth password</li>
+</ul>
+
+<p>Call this function with the user&rsquo;s credentials.
+All subsequent requests will be signed by this user.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">setAuthenticatedUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">username</span><span class="p">;</span>
+    <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">password</span><span class="p">;</span>
+  <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-removeAuthenticatedUser'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-removeAuthenticatedUser">&#182;</a>
+        </div>
+        <h4>removeAuthenticatedUser</h4>
+
+<p>Clear the user&rsquo;s credentials.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">removeAuthenticatedUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">password</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-20'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-20">&#182;</a>
+        </div>
+        <p>Singleton authenticatedUser which holds the credentials inside this closure</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">authenticatedUser</span> <span class="o">=</span> <span class="p">{};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-21'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-21">&#182;</a>
+        </div>
+        <p>Backbone internal functions used by sync ported here</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">methodMap</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;create&#39;</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;update&#39;</span><span class="o">:</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;delete&#39;</span><span class="o">:</span> <span class="s1">&#39;DELETE&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;read&#39;</span>  <span class="o">:</span> <span class="s1">&#39;GET&#39;</span>
+  <span class="p">};</span>
+
+  <span class="kd">function</span> <span class="nx">getUrl</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">object</span> <span class="o">&amp;&amp;</span> <span class="nx">object</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="o">?</span> <span class="nx">object</span><span class="p">.</span><span class="nx">url</span><span class="p">()</span> <span class="o">:</span> <span class="nx">object</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">urlError</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;A &#39;url&#39; property or function must be specified&quot;</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-22'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-22">&#182;</a>
+        </div>
+        <p>Base 64 Encoder used by Basic Auth. Thank you internet.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">encode64</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">keyStr</span> <span class="o">=</span> <span class="s2">&quot;ABCDEFGHIJKLMNOP&quot;</span> <span class="o">+</span> <span class="s2">&quot;QRSTUVWXYZabcdef&quot;</span> <span class="o">+</span>
+                 <span class="s2">&quot;ghijklmnopqrstuv&quot;</span> <span class="o">+</span> <span class="s2">&quot;wxyz0123456789+/&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">chr1</span><span class="p">,</span> <span class="nx">chr2</span><span class="p">,</span> <span class="nx">chr3</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">enc1</span><span class="p">,</span> <span class="nx">enc2</span><span class="p">,</span> <span class="nx">enc3</span><span class="p">,</span> <span class="nx">enc4</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+      <span class="nx">chr1</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="o">++</span><span class="p">);</span>
+      <span class="nx">chr2</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="o">++</span><span class="p">);</span>
+      <span class="nx">chr3</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="o">++</span><span class="p">);</span>
+      <span class="nx">enc1</span> <span class="o">=</span> <span class="nx">chr1</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">;</span>
+      <span class="nx">enc2</span> <span class="o">=</span> <span class="p">((</span><span class="nx">chr1</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nx">chr2</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">);</span>
+      <span class="nx">enc3</span> <span class="o">=</span> <span class="p">((</span><span class="nx">chr2</span> <span class="o">&amp;</span> <span class="mi">15</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nx">chr3</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">);</span>
+      <span class="nx">enc4</span> <span class="o">=</span> <span class="nx">chr3</span> <span class="o">&amp;</span> <span class="mi">63</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">chr2</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">enc3</span> <span class="o">=</span> <span class="nx">enc4</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">chr3</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">enc4</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">output</span> <span class="o">=</span> <span class="nx">output</span> <span class="o">+</span>
+      <span class="nx">keyStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">enc1</span><span class="p">)</span> <span class="o">+</span>
+      <span class="nx">keyStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">enc2</span><span class="p">)</span> <span class="o">+</span>
+      <span class="nx">keyStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">enc3</span><span class="p">)</span> <span class="o">+</span>
+      <span class="nx">keyStr</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">enc4</span><span class="p">);</span>
+      <span class="nx">chr1</span> <span class="o">=</span> <span class="nx">chr2</span> <span class="o">=</span> <span class="nx">chr3</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="nx">enc1</span> <span class="o">=</span> <span class="nx">enc2</span> <span class="o">=</span> <span class="nx">enc3</span> <span class="o">=</span> <span class="nx">enc4</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">input</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">output</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

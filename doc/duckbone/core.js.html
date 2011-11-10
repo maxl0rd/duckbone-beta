@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>core.js.erb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>core.js.erb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-Duckbone_Core'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone_Core">&#182;</a>
+        </div>
+        <h1>Duckbone Core</h1>
+
+<p>This file is loaded first and just establishes some namespaces and useful helpers.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Establish top level namespaces</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nb">window</span><span class="p">.</span><span class="nx">Duckbone</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Duckbone</span> <span class="o">||</span> <span class="p">{};</span>
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span> <span class="o">||</span> <span class="p">{};</span>
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">||</span> <span class="p">{};</span>
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplatesData</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplatesData</span> <span class="o">||</span> <span class="p">{};</span>
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PartialsData</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PartialsData</span> <span class="o">||</span> <span class="p">{};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>The top level Duckbone object dispatches some events</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Events</span><span class="p">);</span>
+
+  <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">,</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_serverError'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_serverError">&#182;</a>
+        </div>
+        <h4>function serverError</h4>
+
+<ul>
+<li>message &ndash; error message text</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Defines default behavior for 500 errors. Log error in development mode.
+Redirect to 500 page in production.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">serverError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;500 Server Error&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+      <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">production</span><span class="o">?</span> <span class="o">%&gt;</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="s2">&quot;/500.html&quot;</span>
+      <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_serverError'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_serverError">&#182;</a>
+        </div>
+        <h4>function serverError</h4>
+
+<ul>
+<li>message &ndash; error message text</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Default behavior for 404 errors.
+Log error in development mode.
+Redirect to 404 page in production.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">fileNotFound</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;404 File Not Found&quot;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+      <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">production</span><span class="o">?</span> <span class="o">%&gt;</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="s2">&quot;/404.html&quot;</span>
+      <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_register'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_register">&#182;</a>
+        </div>
+        <h4>function register</h4>
+
+<ul>
+<li>f &ndash; a function to register</li>
+<li>single &ndash; a boolean determining whether it should be single use, defaults to false</li>
+<li>returns &ndash; the string name of the registered function</li>
+</ul>
+
+<p>This util is used to simplify communication with a Flash ExternalInterface.
+JavaScript callback functions can only be passed as string names,
+and not as function references. This makes some things really hard,
+and prohibits the use of anonymous functions.
+This method wraps up a function and returns its string reference.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">register</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">single</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">single</span> <span class="o">=</span> <span class="nx">single</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">funcName</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">uniqueId</span><span class="p">(</span><span class="s1">&#39;regfunc&#39;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">registeredFunctions</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">registeredFunctions</span> <span class="o">=</span> <span class="p">{};</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">single</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">f</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">wrap</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+          <span class="k">delete</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">registeredFunctions</span><span class="p">[</span><span class="nx">funcName</span><span class="p">]</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+      <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">registeredFunctions</span><span class="p">[</span><span class="nx">funcName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">f</span><span class="p">;</span>
+      <span class="k">return</span> <span class="s2">&quot;Duckbone.registeredFunctions.&quot;</span> <span class="o">+</span> <span class="nx">funcName</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_wrapMethods'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_wrapMethods">&#182;</a>
+        </div>
+        <h4>function wrapMethods</h4>
+
+<ul>
+<li>object &ndash; the object to wrap methods on, ie a view</li>
+<li>wrapper &ndash; the wrapper function</li>
+<li>the rest of the args can be strings of method names,
+or a single array of the method name strings</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Wraps all of the given object methods in another function wrapper.
+In the wrapper, &ldquo;this&rdquo; is defined as the original object.
+For example, it&rsquo;s useful for wrapping all of a
+Backbone view&rsquo;s event callbacks in a common wrapper.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">wrapMethods</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">wrapper</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">methods</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">methods</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="nx">methods</span> <span class="o">=</span> <span class="nx">methods</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="p">}</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">methods</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">wrappedFunction</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">];</span>
+        <span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[</span><span class="nx">wrappedFunction</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">));</span>
+          <span class="k">return</span> <span class="nx">wrapper</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+        <span class="p">};</span>
+      <span class="p">});</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_log'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_log">&#182;</a>
+        </div>
+        <h4>function log</h4>
+
+<ul>
+<li>msg &ndash; log message</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Suppress logs if console.log is undefined.
+Suppress logs in production environments.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">log</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">&lt;%=</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">development</span><span class="o">?</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span> <span class="o">%&gt;</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">console</span> <span class="o">&amp;&amp;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_include'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_include">&#182;</a>
+        </div>
+        <h4>function include</h4>
+
+<ul>
+<li>obj &ndash; the object to extend</li>
+<li>remaining arguments are objects from which to mix in properties and methods</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>This is the core method used to add Duckbone mixins to new classes.
+It extends a given object with all the properties in the passed-in object(s).
+It works just like _.extend except that it throws an exception if you pass an undefined object,
+ie. if you spell a mixin wrong, which you will.
+Also calls included() on the mixin after mixing in the methods, which
+can provide additional side-effects.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">include</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Attempt to include into undefined object.&quot;</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">source</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Attempt to include undefined object.&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">prop</span> <span class="o">!=</span> <span class="s1">&#39;included&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">source</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">!==</span> <span class="k">void</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">obj</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="nx">prop</span><span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">source</span><span class="p">[</span><span class="s1">&#39;included&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="nx">source</span><span class="p">[</span><span class="s1">&#39;included&#39;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+      <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span> <span class="c1">// end _.extend</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

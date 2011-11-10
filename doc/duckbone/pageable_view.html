@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>pageable_view.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>pageable_view.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>PageableView works in concert with ListableView to create a container view that
+manages a list of subviews that represent a paginated collection.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Usage..</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="cm">/*</span>
+<span class="cm">  myPageableView = Backbone.View.extend({</span>
+<span class="cm">    ...</span>
+<span class="cm">  });</span>
+<span class="cm">  Duckbone.include(myPageableView.prototype, Duckbone.PageableView)</span>
+<span class="cm">  */</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PageableView</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">isPageableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Also include ViewLifecycleExtensions and ListableView</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasViewLifecycleExtensions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createListView</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">pager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createPagerView</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pager</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>bind &lsquo;changePage&rsquo; events to navigation state</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">application</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">application</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">application</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;pageChange&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">newLocation</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">urlEncodedOptions</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">options</span><span class="p">)).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">o</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">[</span><span class="nx">o</span><span class="p">]</span>
+          <span class="p">}).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">);</span>
+          <span class="nx">newLocation</span> <span class="o">+=</span> <span class="nx">urlEncodedOptions</span><span class="p">;</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">application</span><span class="p">.</span><span class="nx">navigate</span><span class="p">(</span><span class="nx">newLocation</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Creates a list view container for the elements</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">createListView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
+        <span class="nx">viewClass</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">,</span>
+        <span class="nx">pageableView</span><span class="o">:</span> <span class="k">this</span>
+      <span class="p">});</span>
+      <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListableView</span><span class="p">);</span>
+      <span class="nx">list</span><span class="p">.</span><span class="nx">collection</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">;</span>
+      <span class="nx">list</span><span class="p">.</span><span class="nx">createChildViews</span><span class="p">();</span>
+      <span class="nx">list</span><span class="p">.</span><span class="nx">bindCollectionEvents</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">||</span> <span class="nx">list</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">list</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Creates a view for the pager element
+You can set a custom pager view class, or use the supplied default view</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">createPagerView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">pagerClass</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">pagerClass</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pagerClass</span> <span class="o">||</span> <span class="nx">Pager</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">pager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">pagerClass</span><span class="p">({</span>
+        <span class="nx">collection</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
+        <span class="nx">pageableView</span><span class="o">:</span> <span class="k">this</span>
+      <span class="p">});</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">pager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">pager</span> <span class="o">||</span> <span class="nx">pager</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">pager</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">p</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">setPage</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">showNextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">showPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPreviousPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">showPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Smooth scroll up to the top of the list</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">scrollToTopOfList</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">offset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">-</span> <span class="mi">20</span><span class="p">;</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span> <span class="nx">scrollTop</span><span class="o">:</span> <span class="nx">offset</span> <span class="p">},</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;swing&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Default Pager template</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">pagerTemplateData</span> <span class="o">=</span>
+  <span class="s1">&#39;&lt;div class=&quot;pager&quot;&gt;&amp;nbsp;&lt;br/&gt;\</span>
+<span class="s1">    {{#if showPrevious}}\</span>
+<span class="s1">      &lt;a href=&quot;#&quot; class=&quot;previous_link&quot;&gt;&amp;laquo;&amp;nbsp;Previous&lt;/a&gt;&amp;nbsp;\</span>
+<span class="s1">    {{else}}\</span>
+<span class="s1">      &lt;span class=&quot;inactive&quot;&gt;&amp;laquo;&amp;nbsp;Previous&lt;/span&gt;&amp;nbsp;\</span>
+<span class="s1">    {{/if}}\</span>
+<span class="s1">    {{#each pages}}\</span>
+<span class="s1">      {{#if currentPage}}\</span>
+<span class="s1">        &lt;span class=&quot;current&quot;&gt;{{title}}&lt;/span&gt;&amp;nbsp;\</span>
+<span class="s1">      {{else}}\</span>
+<span class="s1">        &lt;a href=&quot;#&quot; class=&quot;page_link&quot; data-page=&quot;{{id}}&quot;&gt;{{title}}&lt;/a&gt;&amp;nbsp;\</span>
+<span class="s1">      {{/if}}\</span>
+<span class="s1">    {{/each}}\</span>
+<span class="s1">    {{#if showNext}}\</span>
+<span class="s1">      &lt;a href=&quot;#&quot; class=&quot;next_link&quot;&gt;Next&amp;nbsp;&amp;raquo;&lt;/a&gt;\</span>
+<span class="s1">    {{else}}\</span>
+<span class="s1">      &lt;span class=&quot;inactive&quot;&gt;Next&amp;nbsp;&amp;raquo;&lt;/span&gt;\</span>
+<span class="s1">    {{/if}}\</span>
+<span class="s1">  &lt;/div&gt;&#39;</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Default Pager view class</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Pager</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+
+    <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;&lt;div class=&quot;pager_view&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">,</span>
+    <span class="nx">templateData</span><span class="o">:</span> <span class="nx">pagerTemplateData</span><span class="p">,</span>
+
+    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;click a.previous_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showPreviousPage&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;click a.next_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showNextPage&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;click a.page_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showPage&#39;</span>
+    <span class="p">},</span>
+
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>Only render if pagination data is present and fetched</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">paginationData</span><span class="p">());</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">paginationData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">numPages</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">pageData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">showPrevious</span><span class="o">:</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="nx">numPages</span><span class="o">:</span> <span class="nx">numPages</span><span class="p">,</span>
+        <span class="nx">showNext</span><span class="o">:</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">),</span>
+        <span class="nx">pages</span><span class="o">:</span> <span class="nx">_</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">numPages</span><span class="o">+</span><span class="mi">1</span><span class="p">)).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="nx">i</span><span class="p">,</span>
+            <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="o">+</span><span class="nx">i</span><span class="p">,</span>
+            <span class="nx">currentPage</span><span class="o">:</span> <span class="p">(</span><span class="nx">i</span> <span class="o">==</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span><span class="p">)</span>
+          <span class="p">}</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">)</span>
+      <span class="p">};</span>
+      <span class="k">return</span> <span class="nx">pageData</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">));</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">showPage</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPreviousPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">showPreviousPage</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">showNextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">showNextPage</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Pager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span><span class="p">);</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
