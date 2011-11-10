@@ -2,7 +2,7 @@
 
 Duckbone consists of a modular set of extensions for the popular Backbone javascript framework that round out the common feature set necessary for building "one page" client-side web applications on Rails. These extras have been used extensively in several large projects and have proven to be robust tools that reduce redundant code, and make large applications more elegant.
 
-The only additional dependency that Duckbone introduces is Handlebars.js, our preferred template language. Our view system requires smarter templates than Underscore provides, and Handlebars fits well. But it is not too hard to adapt Duckbone's template system to use another language if you insist.
+The only additional dependency that Duckbone introduces is Handlebars.js, our preferred template language. The view system requires smarter templates than Underscore provides, and Handlebars fits well.
 
 ### Compatibility
 
@@ -19,12 +19,22 @@ Duckbone works with all browsers that Backbone supports:
 
 To install, just add the `duckbone` gem to your Gemfile.
 
-Add these lines to the application layout. The first line includes Backbone and its dependencies (jQuery and Underscore). The second adds all of the scripts in the Duckbone package. The third line packages all of the application's handlebars templates.
+Then add these lines to your `application.js` file, or whatever is your primary javascript manifest file.
+This adds Duckbone and all of its dependencies to your scripts. (Hopefully you already require jquery...).
+
+```js
+\\= require jquery
+\\= require underscore
+\\= require backbone
+\\= require duckbone
+```
+
+Then, add the following line to `<head>` tag in your layout.
+This will create a script that concatenates and includes all of the application's Handlebars templates.
 
 ```html
-<% include_javascripts 'backbone' %>
-<% include_javascripts 'duckbone' %>
 <% include_javascripts 'templates.js' %>
+
 ```
 
 ### Overview
@@ -63,11 +73,11 @@ Duckbone defaults to conventions and behaviors that should be familiar to Rails 
 
 Duckbone is carefully modularized, so that the developer may utilize only those extensions that he finds useful in his work. Each module is encapsulated in a mixin that is intended to be added to a Model, Collection, or View, and adds a small set of additional functionality. The developer is free to mix in those modules where they are needed, or create his own set of abstract classes that include Duckbone functionality.
 
-A Duckbone module is mixed into a class with the `_.include` method that Duckbone adds to underscore. This method copies all of the mixin's properties over to the new class, and also executes a Ruby-style "included" callback that can add conditional functionality to the object. Usually, the mixin will be used to extend a class prototype. For example:
+A Duckbone module is mixed into a class with the method `Duckbone.include`. This method copies all of the mixin's properties over to the new class, and also executes a Ruby-style "included" callback that can add conditional functionality to the object. Usually, the mixin will be used to extend a class prototype. For example:
 
 ```js
 var myFormView = Backbone.View.extend();
-_.include(myView.prototype, Duckbone.EditableView);
+Duckbone.include(myView.prototype, Duckbone.EditableView);
 ```
 
 There are almost no dependencies between Duckbone modules, with one notable exception. All of the "-View" modules also mix in Duckbone.ViewLifecycleExtensions to make initialization and teardown more accessible.
