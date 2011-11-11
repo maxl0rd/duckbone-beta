@@ -3,6 +3,7 @@
 //= require ./model
 //= require ./collection
 //= require ./syncable
+//= require ./routeable_application
 //= require ./view_lifecycle_extensions
 //= require ./handlebars_extensions
 //= require ./template_registry
@@ -12,6 +13,7 @@
 //= require ./pageable_collection
 //= require ./bindable_view
 //= require ./listable_view
+//= require ./flashable_view
 //= require ./bindable_field
 //= require ./validateable_field
 //= require ./form_fields
