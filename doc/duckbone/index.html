@@ -17,6 +17,7 @@
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
           <a class="source" href="handlebars.html">handlebars.js</a>
@@ -27,6 +28,7 @@
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="routeable_application.html">routeable_application.js</a>
           <a class="source" href="simple_queue.html">simple_queue.js</a>
           <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
           <a class="source" href="syncable.html">syncable.js</a>
@@ -55,15 +57,17 @@
 = require ./model
 = require ./collection
 = require ./syncable
-= require ./view<em>lifecycle</em>extensions
-= require ./handlebars<em>extensions
-= require ./template</em>registry
-= require ./templateable<em>view
-= require ./stylizeable</em>view
-= require ./pageable<em>view
-= require ./pageable</em>collection
-= require ./bindable<em>view
-= require ./listable</em>view
+= require ./routeable<em>application
+= require ./view</em>lifecycle<em>extensions
+= require ./handlebars</em>extensions
+= require ./template<em>registry
+= require ./templateable</em>view
+= require ./stylizeable<em>view
+= require ./pageable</em>view
+= require ./pageable<em>collection
+= require ./bindable</em>view
+= require ./listable<em>view
+= require ./flashable</em>view
 = require ./bindable<em>field
 = require ./validateable</em>field
 = require ./form<em>fields

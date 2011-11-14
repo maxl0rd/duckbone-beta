@@ -17,6 +17,7 @@
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
           <a class="source" href="handlebars.html">handlebars.js</a>
@@ -27,6 +28,7 @@
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="routeable_application.html">routeable_application.js</a>
           <a class="source" href="simple_queue.html">simple_queue.js</a>
           <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
           <a class="source" href="syncable.html">syncable.js</a>
@@ -45,140 +47,219 @@
     </tr>
   </thead>
   <tbody>
-    <tr id='section-1'>
+    <tr id='section-Duckbone.BindableField'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-1">&#182;</a>
+          <a class="pilcrow" href="#section-Duckbone.BindableField">&#182;</a>
         </div>
-        
+        <h1>Duckbone.BindableField</h1>
+
+<p>This module enables a view to act as a form element that can bind bi-directionally to a model.
+For example, an input field in a form can both reflect the model&rsquo;s state, and also update it
+based on a user&rsquo;s input. The abstract form field base class <code>Duckbone.FormFieldBase</code> includes
+this module, and any custom form field types used by an EditableView should also include this module.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableField</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-2'>
+    <tr id='section-property_isBindableField'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-2">&#182;</a>
+          <a class="pilcrow" href="#section-property_isBindableField">&#182;</a>
         </div>
-        <p>Duckbone.BindableField
-This module enables a view to act as a form element that can bind bi-directionally to a model.
-For example, an input field in a form can both reflect the model&rsquo;s state,
-and also update it based on a user&rsquo;s input.
-Any custom form field types used by an EditableView should include this module.</p>
+        <h4>property isBindableField</h4>
+
+<p>Indicates a view with this mixin included</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableField</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">isBindableField</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">isBindableField</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
       </td>
     </tr>
-    <tr id='section-3'>
+    <tr id='section-Model/DOM_Translation'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
+          <a class="pilcrow" href="#section-Model/DOM_Translation">&#182;</a>
         </div>
-        <p>If data must be transformed to or from the DOM, 
-then override these methods to provide different behavior</p>
+        <h3>Model/DOM Translation</h3>
+
+<p>If <code>jquery.val()</code> does not do the right thing for your form field, then
+override the <code>get</code> and <code>set</code> functions to move data in and out of the DOM element.
+If <code>jquery.val()</code> works, but the data must be transformed in or out of the model,
+then simply override <code>modelToDomTransform</code> and <code>domToModelTransform</code>.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">modelToDomTransform</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelValue</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">modelValue</span> <span class="o">?</span> <span class="nx">modelValue</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-    <span class="p">},</span>
-    <span class="nx">domToModelTransform</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domValue</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">domValue</span><span class="p">;</span>
-    <span class="p">},</span></pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-function_get'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-function_get">&#182;</a>
         </div>
-        <p>Override get and set to provide even more non-standard behaviors.
-If jQuery.val() does not do the right thing for your form field,
-then override these functions to move data in and out of the DOM element</p>
+        <h4>function get</h4>
+
+<ul>
+<li>returns &ndash; The current value of the form field&rsquo;s DOM element</li>
+</ul>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">domToModelTransform</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">val</span><span class="p">());</span>
-    <span class="p">},</span>
-    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_set'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_set">&#182;</a>
+        </div>
+        <h4>function set</h4>
+
+<ul>
+<li>value &ndash; the new value to set the form field&rsquo;s DOM element to</li>
+<li>returns &ndash; nothing</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelToDomTransform</span><span class="p">(</span><span class="nx">value</span><span class="p">));</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-5'>
+    <tr id='section-function_modelToDomTransform'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-5">&#182;</a>
+          <a class="pilcrow" href="#section-function_modelToDomTransform">&#182;</a>
         </div>
-        <p>Bind changes on the model to this field&rsquo;s DOM element.
-Subscribe to &ldquo;change:attribute&rdquo; events on the model.
-Call this function in initialize() to establish the binding in this direction.</p>
+        <h4>function modelToDomTransform</h4>
+
+<ul>
+<li>modelValue &ndash; the given model value</li>
+<li>returns &ndash; the transformed value to set on the DOM element</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">modelToDomTransform</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">modelValue</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">modelValue</span> <span class="o">?</span> <span class="nx">modelValue</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_domToModelTransform'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_domToModelTransform">&#182;</a>
+        </div>
+        <h4>function domToModelTransform</h4>
+
+<ul>
+<li>domValue &ndash; the given DOM element value</li>
+<li>returns &ndash; the transformed value to set on the model</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">domToModelTransform</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domValue</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">domValue</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Binding'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Binding">&#182;</a>
+        </div>
+        <h3>Binding</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_bindToModel'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_bindToModel">&#182;</a>
+        </div>
+        <h4>function bindToModel</h4>
+
+<ul>
+<li>attr &ndash; the model attribute to bind to, falling back first to the view&rsquo;s <code>modelAttribute</code>,
+and then to the form field&rsquo;s <code>name</code> attribute.</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>This method initializes the form field&rsquo;s value to the model value,
+and then continually updates on any changes to that model attribute.
+The DOM element will only be updated if the model attribute is a valid value
+(non-undefined, non-NaN) and different from the existing field value.
+This behavior arrests the circular firing of change events.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">bindToModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">attr</span> <span class="o">=</span> <span class="nx">attr</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Duckbone.BindableField.bindToModel() called without a modelAttribute&quot;</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">changeEvent</span> <span class="o">=</span> <span class="s1">&#39;change:&#39;</span><span class="o">+</span><span class="nx">attr</span><span class="p">;</span>
-      <span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ModelHelpers</span><span class="p">.</span><span class="nx">isValidAttribute</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">)))</span> 
-          <span class="nx">field</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Duckbone.BindableField.bindToModel() called without a modelAttribute&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span> <span class="nx">changeEvent</span> <span class="o">=</span> <span class="s1">&#39;change:&#39;</span><span class="o">+</span><span class="nx">attr</span><span class="p">;</span>
+      <span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// bind to model changes</span>
+        <span class="kd">var</span> <span class="nx">newValue</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">newValue</span> <span class="o">!=</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ModelHelpers</span><span class="p">.</span><span class="nx">isValidAttribute</span><span class="p">(</span><span class="nx">newValue</span><span class="p">))</span>
+          <span class="nx">field</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">newValue</span><span class="p">);</span>
       <span class="p">});</span>
-      <span class="nx">field</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span>
+      <span class="nx">field</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span> <span class="c1">// initialize field to model value</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-function_bindToDOM'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-function_bindToDOM">&#182;</a>
         </div>
-        <p>Bind changes to this field&rsquo;s DOM element to model.set
-This will trigger a &ldquo;change:attribute&rdquo; event on the model.
-Call this function in initialize() to establish the binding in this direction.</p>
+        <h4>function bindToDOM</h4>
+
+<ul>
+<li>attr &ndash; the model attribute to bind to, falling back first to the view&rsquo;s <code>modelAttribute</code>,
+and then to the form field&rsquo;s <code>name</code> attribute.</li>
+<li>changeEvent &ndash; the DOM event on the view&rsquo;s element to bind to changes.
+Defaults to &lsquo;change&rsquo; which works for most input-style fields.</li>
+<li>el &ndash; the DOM element to bind to, defaulting to the view&rsquo;s top level element</li>
+</ul>
+
+<p>This method initializes the model&rsquo;s value to the form field value,
+and then continually updates on any further changes to the field.
+The model will generally be set to <code>null</code> on an empty field, not undefined.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">bindToDOM</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">changeEvent</span><span class="p">)</span> <span class="p">{</span>
+        <div class='highlight'><pre>    <span class="nx">bindToDOM</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">changeEvent</span><span class="p">,</span> <span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">attr</span> <span class="o">=</span> <span class="nx">attr</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Duckbone.BindableField.bindToDOM() called without a modelAttribute&quot;</span><span class="p">);</span>
-      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">attr</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Duckbone.BindableField.bindToDOM() called without a modelAttribute&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">modelAttribute</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">changeEvent</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">changeEvent</span> <span class="o">||</span> <span class="s1">&#39;change&#39;</span><span class="p">;</span>
+      <span class="nx">el</span> <span class="o">=</span> <span class="nx">el</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">;</span> <span class="c1">// by default, bind to the parent element</span>
       <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span> <span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nx">el</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="nx">changeEvent</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// bind to DOM changes</span>
         <span class="nx">modelSet</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">());</span>
       <span class="p">});</span>
-      <span class="nx">modelSet</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">());</span>
+      <span class="nx">modelSet</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">field</span><span class="p">.</span><span class="nx">get</span><span class="p">());</span> <span class="c1">// initialize model to field value</span>
     <span class="p">}</span>
-
-  <span class="p">};</span>
-  </pre></div>
+  <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-7'>
+    <tr id='section-Internal_Functions'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
+          <a class="pilcrow" href="#section-Internal_Functions">&#182;</a>
         </div>
-        <p>Internal</p>
+        <h3>Internal Functions</h3>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  </pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-8'>
+    <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>Make sure to never set a model value to undefined.
 Undefined attributes are dropped when serialized to JSON,
@@ -187,16 +268,10 @@ These attrs will be ignored instead of validated against a null value.</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  
-  <span class="kd">function</span> <span class="nx">modelSet</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">silent</span><span class="p">)</span> <span class="p">{</span>
+        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">modelSet</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">silent</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">silent</span> <span class="o">=</span> <span class="nx">silent</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">val</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Attempt to set model attribute &quot;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s2">&quot; to undefined&quot;</span><span class="p">);</span>
-      <span class="nx">val</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">attrs</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
-    <span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">attrs</span><span class="p">,</span> <span class="p">{</span><span class="nx">silent</span><span class="o">:</span> <span class="nx">silent</span><span class="p">});</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">val</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="nx">val</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ModelHelpers</span><span class="p">.</span><span class="nx">setOne</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="p">{</span><span class="nx">silent</span><span class="o">:</span> <span class="nx">silent</span><span class="p">});</span>
   <span class="p">}</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>

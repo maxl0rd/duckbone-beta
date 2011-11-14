@@ -17,6 +17,7 @@
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
           <a class="source" href="handlebars.html">handlebars.js</a>
@@ -27,6 +28,7 @@
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="routeable_application.html">routeable_application.js</a>
           <a class="source" href="simple_queue.html">simple_queue.js</a>
           <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
           <a class="source" href="syncable.html">syncable.js</a>
@@ -93,6 +95,13 @@ ie. &lsquo;email&rsquo;, &lsquo;phone&rsquo;, etc.</li>
 <ul>
 <li><code>selectOptions</code> &ndash; an object representing ids and values of the selection options</li>
 <li><code>selectOptions</code> &ndash; or a function that returns the above object</li>
+</ul>
+
+<p>A Submit Button accepts:</p>
+
+<ul>
+<li><code>submitForm</code> &ndash; a boolean that determines whether the submit button automatically
+submits the form or not. The developer may deactivate this and bind his own behavior.</li>
 </ul>
 
 <h3>The Form Manager</h3>
