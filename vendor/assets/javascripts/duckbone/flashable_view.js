@@ -7,6 +7,10 @@ Enables any view or application to manage a set of flash messages.
 
   Duckbone.FlashableView = {
 
+    // #### property isFlashableView
+    // Indicates a view that includes this mixin.
+    isFlashableView: true,
+
     // #### function configureFlash
     // Accepts the following options:
     // - container - the DOM element to insert flash messages into

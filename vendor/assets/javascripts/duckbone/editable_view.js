@@ -38,6 +38,11 @@ Additionally, some fields take special options. Select and Radio Set fields acce
 - `selectOptions` - an object representing ids and values of the selection options
 - `selectOptions` - or a function that returns the above object
 
+A Submit Button accepts:
+
+- `submitForm` - a boolean that determines whether the submit button automatically
+  submits the form or not. The developer may deactivate this and bind his own behavior.
+
 ### The Form Manager
 
 The EditableView's default initializer calls `Duckbone.EditableView.createForm()` which
