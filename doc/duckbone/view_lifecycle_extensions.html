@@ -101,13 +101,26 @@ and mixing this in will have no effect.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
-        <p>There are several callback hooks available that can be defined on the object:
-beforeCreateChildViews() =&gt; called before ListView creates its children
-beforeClone() =&gt; called before EditableView clones its model for editing
-beforeTwirl() =&gt; called before TemplateableView calls twirl()
-afterInitialize() =&gt; called after all other initializations are complete
-beforeRemove() =&gt; called before the View is removed
-afterRemove() =&gt; called after the View is removed</p>
+        <p>There are several callback hooks available that can be defined on the object:</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <ul>
+<li>beforeCreateChildViews() =&gt; called before ListView creates its children</li>
+<li>beforeClone() =&gt; called before EditableView clones its model for editing</li>
+<li>beforeTwirl() =&gt; called before TemplateableView calls twirl()</li>
+<li>afterCreateForm() =&gt; called after EditableView renders its form elements</li>
+<li>afterInitialize() =&gt; called after all other initializations are complete</li>
+<li>beforeRemove() =&gt; called before the View is removed</li>
+<li>afterRemove() =&gt; called after the View is removed</li>
+</ul>
 
       </td>
       <td class=code>
@@ -154,6 +167,7 @@ afterRemove() =&gt; called after the View is removed</p>
       <span class="nx">tryMethods</span><span class="p">([</span>
         <span class="s1">&#39;bindModelSyncEvents&#39;</span><span class="p">,</span>
         <span class="s1">&#39;createForm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;afterCreateForm&#39;</span><span class="p">,</span> <span class="c1">// User optionally defines this</span>
         <span class="s1">&#39;bindFormSubmit&#39;</span>
       <span class="p">]);</span>
     <span class="p">}</span>

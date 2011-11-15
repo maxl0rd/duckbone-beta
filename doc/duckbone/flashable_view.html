@@ -62,6 +62,19 @@
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FlashableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
+    <tr id='section-property_isFlashableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-property_isFlashableView">&#182;</a>
+        </div>
+        <h4>property isFlashableView</h4>
+
+<p>Indicates a view that includes this mixin.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">isFlashableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-function_configureFlash'>
       <td class=docs>
         <div class="pilwrap">
@@ -132,7 +145,7 @@
 
 <ul>
 <li>message &ndash; displays the given flash message</li>
-<li>returns &ndash; the flahs notice view</li>
+<li>returns &ndash; the flash notice view</li>
 </ul>
       </td>
       <td class=code>
@@ -153,14 +166,25 @@
         </div>
         <h4>function clearFlashes</h4>
 
-<p>Immediately clears all flash notices and alerts.
-This is called on each loadView</p>
+<p>Clears all flash notices and alerts.</p>
+
+<ul>
+<li>immediately &ndash; instantly hides the flashes.  otherwise they are
+faded out according to the fadeDuration</li>
+</ul>
+
+<p>This is called on each loadView</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">clearFlashes</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span>
-        <span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div.flash_notice, div.flash_alert&#39;</span><span class="p">).</span>
-        <span class="nx">fadeOut</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">fadeDuration</span><span class="p">);</span>
+        <div class='highlight'><pre>    <span class="nx">clearFlashes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span>
+        <span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div.flash_notice, div.flash_alert&#39;</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">targets</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">targets</span><span class="p">.</span><span class="nx">fadeOut</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">fadeDuration</span><span class="p">);</span>
+      <span class="p">}</span>
     <span class="p">}</span>
 
   <span class="p">};</span></pre></div>

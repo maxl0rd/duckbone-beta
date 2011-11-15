@@ -54,7 +54,7 @@ Enables any view or application to manage a set of flash messages.
 
     // #### function flashAlert
     // - message - displays the given flash message
-    // - returns - the flahs notice view
+    // - returns - the flash notice view
     flashAlert: function(message) {
       var flash = new FlashAlertView({
         message: message
@@ -65,7 +65,11 @@ Enables any view or application to manage a set of flash messages.
     },
 
     // #### function clearFlashes
-    // Immediately clears all flash notices and alerts.
+    // Clears all flash notices and alerts.
+    //
+    // - immediately - instantly hides the flashes.  otherwise they are
+    //   faded out according to the fadeDuration
+    //
     // This is called on each loadView
     clearFlashes: function(immediately) {
       var targets = $(this.flashOptions.container).

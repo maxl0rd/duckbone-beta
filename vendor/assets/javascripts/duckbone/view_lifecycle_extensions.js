@@ -12,12 +12,14 @@
   // and mixing this in will have no effect.
 
   // There are several callback hooks available that can be defined on the object:
-  // beforeCreateChildViews() => called before ListView creates its children
-  // beforeClone() => called before EditableView clones its model for editing
-  // beforeTwirl() => called before TemplateableView calls twirl()
-  // afterInitialize() => called after all other initializations are complete
-  // beforeRemove() => called before the View is removed
-  // afterRemove() => called after the View is removed
+
+  // - beforeCreateChildViews() => called before ListView creates its children
+  // - beforeClone() => called before EditableView clones its model for editing
+  // - beforeTwirl() => called before TemplateableView calls twirl()
+  // - afterCreateForm() => called after EditableView renders its form elements
+  // - afterInitialize() => called after all other initializations are complete
+  // - beforeRemove() => called before the View is removed
+  // - afterRemove() => called after the View is removed
 
   var defaultInitialize = function () {
 

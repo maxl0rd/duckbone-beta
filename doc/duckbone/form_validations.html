@@ -55,8 +55,7 @@
         
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  </pre></div>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
     <tr id='section-2'>
@@ -69,11 +68,11 @@ fields: {
   amount: {
     modelAttribute: &lsquo;amount&rsquo;,
     validate: &lsquo;money&rsquo;
-  } 
+  }
 }</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  </pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-3'>
@@ -82,33 +81,22 @@ fields: {
           <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
         <p>Thx to andyet/happy.js for a few of these</p>
+
       </td>
       <td class=code>
-        <div class='highlight'><pre>  
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">||</span> <span class="p">{};</span>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span> <span class="o">||</span> <span class="p">{};</span>
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">validators</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">validators</span> <span class="o">||</span> <span class="p">{};</span>
-  
+
   <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">forms</span><span class="p">.</span><span class="nx">validators</span><span class="p">,</span> <span class="p">{</span>
-    
+
     <span class="nx">required</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="nx">val</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">val</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">val</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">);</span>
     <span class="p">},</span>
     <span class="nx">USPhone</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="sr">/^\(?(\d{3})\)?[\- ]?\d{3}[\- ]?\d{4}$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-    <span class="p">},</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-4'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
-        </div>
-        <p>matches mm/dd/yyyy (requires leading 0&rsquo;s (which may be a bit silly, what do you think?)</p>
-
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">date</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="sr">/^(?:0[1-9]|1[0-2])\/(?:0[1-9]|[12][0-9]|3[01])\/(?:\d{4})/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">date</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="sr">/^(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[12][0-9]|3[01])\/\d{2}?\d{2}$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
     <span class="p">},</span>
     <span class="nx">email</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="sr">/^(?:\w+\.?)*\w+@(?:\w+\.)+\w+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
@@ -116,9 +104,9 @@ fields: {
     <span class="nx">numeric</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">NaN</span><span class="p">);</span>
     <span class="p">}</span>
-    
+
   <span class="p">});</span>
-  
+
 <span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
       </td>
     </tr>

@@ -222,7 +222,7 @@ Each view should have a <code>routeName</code> and a <code>routeAction</code> de
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">loadView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">clearFlashes</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">clearFlashes</span><span class="p">();</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
       <span class="nx">options</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
@@ -240,9 +240,9 @@ Each view should have a <code>routeName</code> and a <code>routeAction</code> de
         <h4>function bindNavigationBars</h4>
 
 <p>Resets css classes on navigation bars on every navigate event.
-All navigation bars should be lists in a <nav> element,
-and the li class should be equal to the routeName of the link destination.
-A <code>current</code> class will be assigned to the current route</p>
+All navigation bars should be lists in a <code>&lt;nav&gt;</code> element,
+and the <code>&lt;li&gt;</code> class should be equal to the routeName of the link destination.
+A <code>current</code> class will be assigned to the current route.</p>
 
       </td>
       <td class=code>
