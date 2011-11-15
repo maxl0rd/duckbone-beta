@@ -67,10 +67,15 @@ Enables any view or application to manage a set of flash messages.
     // #### function clearFlashes
     // Immediately clears all flash notices and alerts.
     // This is called on each loadView
-    clearFlashes: function() {
-      $(this.flashOptions.container).
-        find('div.flash_notice, div.flash_alert').
-        fadeOut(this.flashOptions.fadeDuration);
+    clearFlashes: function(immediately) {
+      var targets = $(this.flashOptions.container).
+        find('div.flash_notice, div.flash_alert')
+
+      if (immediately) {
+        targets.hide();
+      } else {
+        targets.fadeOut(this.flashOptions.fadeDuration);
+      }
     }
 
   };
