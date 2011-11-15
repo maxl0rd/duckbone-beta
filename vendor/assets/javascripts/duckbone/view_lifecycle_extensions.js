@@ -62,6 +62,7 @@
       tryMethods([
         'bindModelSyncEvents',
         'createForm',
+        'afterCreateForm', // User optionally defines this
         'bindFormSubmit'
       ]);
     }
