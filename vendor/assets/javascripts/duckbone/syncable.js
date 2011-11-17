@@ -114,6 +114,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
       var jqXHR;
       var type = methodMap[method];
 
+      // A model may provide a defaultSyncOptions property which is merged into the
+      // jQuery request before the call-time options
+      var defaultSyncOptions = model.defaultSyncOptions || {};
+
       // Default JSON-request options.
       var params = _.extend({
         type: type,
@@ -122,7 +126,7 @@ so that it will either blow up or emit nothing without explicit work by the deve
           var token = $('meta[name="csrf-token"]').attr('content');
           if (token) xhr.setRequestHeader('X-CSRF-Token', token);
         }
-      }, options);
+      }, defaultSyncOptions, options);
 
       // workaround IE's aggressive caching of JSON
       if ($.browser.msie) params.cache = false;
@@ -153,9 +157,8 @@ so that it will either blow up or emit nothing without explicit work by the deve
       if (authenticatedUser.username) {
         params.username = authenticatedUser.username;
         params.password = authenticatedUser.password;
-        params.headers = {
-          'Authorization': 'Basic ' + encode64(params.username+':'+params.password)
-        };
+        params.headers = params.headers || {};
+        params.headers['Authorization'] = 'Basic ' + encode64(params.username+':'+params.password);
       }
 
       // Make the request.
