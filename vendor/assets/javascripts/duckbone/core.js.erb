@@ -140,4 +140,9 @@ This file is loaded first and just establishes some namespaces and useful helper
 
   }); // end _.extend
 
+  // Mix in log to underscore
+  _.mixin({
+    log: Duckbone.log
+  });
+
 }).call();

@@ -118,8 +118,7 @@ on itself. For example:
     loadView: function(view, options) {
       if (options === undefined) options = {};
       if (this.isFlashableView) this.clearFlashes();
-      $(this.mainView.el).remove();
-      this.mainView.remove();
+      if (this.mainView) this.mainView.remove();
       options.application = this;
       this.mainView = new view(options);
       $(this.mainView.el).appendTo(this.mainContainer);
