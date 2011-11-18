@@ -24,7 +24,9 @@ this module, and any custom form field types used by an EditableView should also
     // #### function get
     // - returns - The current value of the form field's DOM element
     get: function() {
-      return this.domToModelTransform($(this.el).val());
+      var val = this.domToModelTransform($(this.el).val());
+      if (this.stripWhitespace && this.options.stripWhitespace !== false) val = val.replace(/^\s+|\s+$/g, '');
+      return val;
     },
 
     // #### function set

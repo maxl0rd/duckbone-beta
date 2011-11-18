@@ -282,28 +282,6 @@ into the JSON.
     // to null instead.
     isValidAttribute: function(val) {
       return (!_.isNaN(val) && !_.isUndefined(val))
-    },
-
-    // #### function stripWhitespaceOnSet
-    // Instructs this model to strip leading and trailing whitespace from attributes when setting.
-    // While Rails is also capable of stripping whitespace, doing it on the client makes many
-    // form handling systems work better.
-    stripWhitespaceOnSet: function() {
-      if (this.set != this.setWithWhitespaceStripping) {
-        this.setWithoutWhitespaceStripping = this.set;
-        this.set = this.setWithWhitespaceStripping;
-      }
-    },
-
-    // #### function setWithWhitespaceStripping
-    // - attrs - accepts the same arguments as `set`
-    setWithWhitespaceStripping: function(attrs) {
-      _.each(attrs, function(val, attr) {
-        if (typeof val == 'string') {
-          attrs[attr] = val.replace(/^\s+|\s+$/g, '');
-        }
-      });
-      return this.setWithoutWhitespaceStripping.call(this, attrs, arguments[1])
     }
   };
 

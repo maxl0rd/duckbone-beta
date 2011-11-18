@@ -193,6 +193,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
 
     // #### property type
     type: "text",
+    stripWhitespace: true
 
   });
 
@@ -282,6 +283,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
 
     // #### property type
     type: "textarea",
+    stripWhitespace: true
 
   });
 
