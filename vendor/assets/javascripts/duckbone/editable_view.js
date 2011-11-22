@@ -236,6 +236,7 @@ Usage examples:
     // EditableView. It also moves the view's model reference to the originalModel, so that it is
     // accessable to any `afterRemove()` callbacks.
     expireClone: function() {
+      if (!this.originalModel) return;
       this.model.clear({silent: true});
       var explode = function() {
         throw('Attempted get/set on expired clone from Duckbone.EditableView. Use original model instead.');
@@ -243,6 +244,7 @@ Usage examples:
       this.model.set = explode;
       this.model.get = explode;
       this.model = this.originalModel;
+      delete this.originalModel;
     },
 
     // #### function resetModel
