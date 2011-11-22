@@ -166,7 +166,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     initialize: function(options) {
       this.name = this.options.name || $(this.el).attr('name');
       this.form = this.options.form;
-      $(this.el).attr(options.elAttributes);
+      if (options.elAttributes) $(this.el).attr(options.elAttributes);
       this.afterInitialize(options);
       this.createChildren();
       this.bindToModel();
