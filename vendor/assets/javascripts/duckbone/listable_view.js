@@ -3,6 +3,9 @@
   Duckbone.ListableView = {
     isListableView: true,
 
+    tagName: 'ul',
+    className: 'listable_view',
+
     // Also include ViewLifecycleExtensions
 
     included: function() {

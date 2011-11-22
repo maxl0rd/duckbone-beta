@@ -48,7 +48,9 @@
     createListView: function() {
       var list = new Backbone.View({
         viewClass: this.viewClass,
-        pageableView: this
+        pageableView: this,
+        tagName: 'ul',
+        className: 'listable_view',
       });
       Duckbone.include(list, Duckbone.ListableView);
       list.collection = this.collection;
