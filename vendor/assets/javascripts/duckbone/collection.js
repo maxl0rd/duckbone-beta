@@ -36,12 +36,14 @@ extend Backbone.Collection into your own base collection class. For example:
 
     // #### function toSelectOptions
     // - attr - the model attribute to use for the select option html, defaults to "title"
+    // - empty - show an empty slot first
     // - returns - an Object
     //
     // Returns an object suitable for passing to a select or radio field's selectOptions.
-    toSelectOptions: function(attr) {
+    toSelectOptions: function(attr, empty) {
       var options = {};
       attr = attr || 'title';
+      if (empty) options[' '] = ' '
       this.each(function(m) {
         options[m.id] = m.get(attr);
       });
