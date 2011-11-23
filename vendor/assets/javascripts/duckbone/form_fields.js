@@ -150,6 +150,20 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     return new Handlebars.SafeString('<button class="form_submit" name="'+name+'">'+text+'</button>');
   });
 
+  // #### helper {{form\_submit\_with\_spinner}}
+  // - name - the form field name, generally set to the same as the name of the form itself
+  //
+  // Create an HTML tag of type `<button>` for triggering form submission.
+  // Also creates a small invisible spinner graphic, which the form submit view can use.
+  Handlebars.registerHelper('form_submit_with_spinner', function(name, text, path) {
+    path = (typeof path == 'object') ? '/assets/ajax_loader.gif' : path;
+    if (typeof text == 'undefined') text = "Save";
+    if (typeof text == 'object') text = "Save";
+    var out = '<button class="form_submit" name="'+name+'">'+text+'</button>';
+    out += '<img src="' + path + '" class="ajax_loading '+name+'_loading" style="display: none"/>';
+    return new Handlebars.SafeString(out);
+  });
+
   // ### Duckbone.FormFieldBase
   //
   // This provides a base class for all form fields defined in this file, or extended by the developer.

@@ -139,8 +139,51 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
         binding[0].unbind(binding[1],binding[2]);
       });
       delete this['_weakBindings'];
+      this.unbindLiveTimestamps();
+    },
+
+    // #### function bindLiveTimestamps
+    // - seconds - number of seconds to wait before updating again
+    // - returns - nothing
+    //
+    // If you are using the {{live_timestamp}} helper, then call this function
+    // to begin updating those timestamps once per minute.
+    bindLiveTimestamps: function(seconds) {
+      seconds = seconds || 60;
+      var updateTimestamps = _.bind(function() {
+        $(this.el).find('span[data-live-timestamp]').each(_.bind(function(i, span) {
+          var millis = parseInt($(span).attr('data-live-timestamp'));
+          var pretty = Duckbone.helpers.dateToPrettyTimeAgo(new Date(millis));
+          $(span).html(pretty);
+        }, this))
+      }, this);
+      updateTimestamps();
+      this._updateLiveTimeStampsInterval = setInterval(updateTimestamps, seconds * 1000);
+    },
+
+    // #### unbindLiveTimestamps
+    // Stop updating timestamps.
+    unbindLiveTimestamps: function() {
+      clearInterval(this._updateLiveTimeStampsInterval);
     }
 
   };
+
+  // #### helper {{live\_timestamp}}
+  // Creates a partial that can be used to insert a live timestamp
+  // Bindable view can use this to update it once per minute
+  // usage {{live_timestamp "created_at"}}
+  if (Handlebars) {
+    Handlebars.registerHelper("live_timestamp", function(timestamp) {
+      var stamp = Duckbone.Handlebars.getAttr(this, timestamp);
+      if (!stamp) return "";
+      var date = new Date(stamp);
+      if (!date) return "";
+      return new Handlebars.SafeString(
+        '<span data-live-timestamp="' + date.getTime() + '">' +
+        Duckbone.helpers.dateToPrettyTimeAgo(date) + '</span>'
+      );
+    });
+  }
 
 }).call(this);
