@@ -21,16 +21,17 @@
       return Handlebars.helpers['oldIf'].call(this, condition, fn, inverse);
     });
 
-    // The "attr" helper renders a model's attribute.
-    //
-    // This is only necessary if you have a property on
-    // the model object with the same name as your attribute
-    // but you want to access the attribute anyway.
+    // The "attr" helper renders a model's attribute,
+    // and binds the view to any changes on that attribute.
+    // Handlebars can automatically find attributes, so
+    // this is only necessary if you want to bind to changes.
     //
     // usage: {{attr "foo"}}
 
     Handlebars.registerHelper('attr', function(attribute){
-      return this.get(attribute);
+      return new Handlebars.SafeString(
+        '<span data-bind="attr_' + attribute + '">' + this.get(attribute) + '</span>'
+      );
     });
 
     // Make each capable of handling collections
@@ -86,32 +87,48 @@
     // Twirl also prints useful error messages to the console.
 
     twirl: function(context) {
+
+      // Set up context and template
       var context = context || this.model || {};
       if (!this.template && _.isFunction(this.options.template)) {
         this.template = this.options.template;
       } else if (!this.template) {
         this.getTemplate();
       }
-      if (this.template) {
-        try {
-          $(this.el).html(this.template(context));
-        } catch(e) {
-          _.log("Handlebars threw an exception rendering your template:");
-          _.log(e.message);
-          _.log("Context:");
-          _.log(context);
-          <% if Rails.env.development? %>
-            $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + e.message + '</div>');
-          <% else %>
-            Duckbone.serverError();
-            throw(e);
-          <% end %>
-        }
+      if (!this.template) throw("Twirl called without a template.")
+
+      // Render the HTML template, and if it fails, output as much info as possible
+      // 500 Error on exceptions in production
+      try {
+        $(this.el).html(this.template(context));
+      } catch(e) {
+        _.log("Handlebars threw an exception rendering your template:");
+        _.log(e.message);
+        _.log("Context:");
+        _.log(context);
+        <% if Rails.env.development? %>
+          $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + e.message + '</div>');
+        <% else %>
+          Duckbone.serverError();
+          throw(e);
+        <% end %>
       }
+
+      // Establish any data-bindings that are defined by {{attr "attribute"}} helpers
+      if (this.isBindableView && context instanceof Backbone.Model) {
+        $(this.el).find('span[data-bind]').each(_.bind(function(i, span) {
+          var attr = $(span).attr('data-bind').slice(5); // ie data-bind="attr_title"
+          var binding = 'span[data-bind="attr_' + attr + '"]';
+          this.bindAttribute(context, attr, binding )
+        }, this));
+      }
+
+      // Assign a descriptive class name to the element
       var templateName = this.templateName || this.options.templateName;
       if (this.templateName) {
         $(this.el).addClass(this.templateName);
       }
+
     }
 
   }
