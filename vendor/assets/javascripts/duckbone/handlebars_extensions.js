@@ -19,7 +19,7 @@
 
 
   Duckbone.Handlebars.getAttr = function(object, key) {
-    if (/^[0-9]+$/.test(name)) {
+    if (/^[0-9]+$/.test(key)) {
       return object[parseInt(key)];
     }
     if (object[key] != undefined) {
