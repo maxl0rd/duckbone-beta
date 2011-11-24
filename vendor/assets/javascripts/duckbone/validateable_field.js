@@ -127,7 +127,7 @@ in special cases the developer might call `validate` or `addError` on the field 
           $(this.el).after(this.errorList);
         }
       }
-      this.errorList.append($('<li>').html(message));
+      this.errorList.append($('<li>').html(Handlebars.Utils.escapeExpression(message)));
     },
 
     // #### clearErrors
