@@ -57,7 +57,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // whenever the form is submitted and found to be invalid.
   Handlebars.registerHelper('form_error_banner', function(text) {
     text = text || "Please fix the errors below";
-    return new Handlebars.SafeString('<div class="error_banner" style="display: none">' + text + '</div>');
+    return new Handlebars.SafeString('<div class="error_banner" style="display: none">' + Handlebars.Utils.escapeExpression(text) + '</div>');
   });
 
   // #### helper {{form\_error}}
@@ -66,7 +66,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // Explicitly place the form error el rather than in the default location.
   // Otherwise it will be implicitly placed after the element.
   Handlebars.registerHelper('form_error', function(name) {
-    return new Handlebars.SafeString('<div class="'+ name + '_errors"></div>');
+    return new Handlebars.SafeString('<div class="'+ Handlebars.Utils.escapeExpression(name) + '_errors"></div>');
   });
 
   // #### helper {{form\_label}}
@@ -86,7 +86,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
         return $1.toUpperCase().replace('_',' '); // capitalize each next word, replace _ with space
       });
     }
-    return new Handlebars.SafeString('<label data-field-name="'+name+'">'+text+'</label>');
+    return new Handlebars.SafeString('<label data-field-name="'+Handlebars.Utils.escapeExpression(name)+'">'+Handlebars.Utils.escapeExpression(text)+'</label>');
   });
 
   // #### helper {{form\_text}}
@@ -94,7 +94,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   //
   // Create an HTML tag of type `<input type="text">`
   Handlebars.registerHelper('form_text', function(name) {
-    return new Handlebars.SafeString('<input class="form_text" type="text" name="'+name+'"/>');
+    return new Handlebars.SafeString('<input class="form_text" type="text" name="'+Handlebars.Utils.escapeExpression(name)+'"/>');
   });
 
   // #### helper {{form\_select}}
@@ -103,7 +103,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // Create an empty HTML `<select>` tag. The form field view is responsible for populating
   // the child `option` elements according to its `selectOptions` property.
   Handlebars.registerHelper('form_select', function(name) {
-    return new Handlebars.SafeString('<select class="form_select" name="'+name+'"></select>');
+    return new Handlebars.SafeString('<select class="form_select" name="'+Handlebars.Utils.escapeExpression(name)+'"></select>');
   });
 
   // #### helper {{form\_radio\_set}}
@@ -113,7 +113,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // HTML `<input type="radio>"` tags, that allows the developer to treat the entire radio
   // set as a single form field. The helper creates a container which is populated by the view.
   Handlebars.registerHelper('form_radio_set', function(name) {
-    return new Handlebars.SafeString('<div class="form_radio_set" name="'+name+'"></div>');
+    return new Handlebars.SafeString('<div class="form_radio_set" name="'+Handlebars.Utils.escapeExpression(name)+'"></div>');
   });
 
   // #### helper {{form\_checkbox}}
@@ -121,7 +121,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   //
   // Create an HTML tag of type `<input type="checkbox">`.
   Handlebars.registerHelper('form_checkbox', function(name) {
-    return new Handlebars.SafeString('<input class="form_checkbox" type="checkbox" name="'+name+'"/>');
+    return new Handlebars.SafeString('<input class="form_checkbox" type="checkbox" name="'+Handlebars.Utils.escapeExpression(name)+'"/>');
   });
 
   // #### helper {{form\_textarea}}
@@ -129,7 +129,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   //
   // Create an HTML tag of type `<textarea>`.
   Handlebars.registerHelper('form_textarea', function(name) {
-    return new Handlebars.SafeString('<textarea class="form_textarea" name="'+name+'"></textarea>');
+    return new Handlebars.SafeString('<textarea class="form_textarea" name="'+Handlebars.Utils.escapeExpression(name)+'"></textarea>');
   });
 
   // #### helper {{form\_password}}
@@ -137,7 +137,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   //
   // Create an HTML tag of type `<input type="password">`.
   Handlebars.registerHelper('form_password', function(name) {
-    return new Handlebars.SafeString('<input class="form_password" type="password" name="'+name+'"></input>');
+    return new Handlebars.SafeString('<input class="form_password" type="password" name="'+Handlebars.Utils.escapeExpression(name)+'"></input>');
   });
 
   // #### helper {{form\_submit}}
@@ -147,7 +147,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   Handlebars.registerHelper('form_submit', function(name, text) {
     if (typeof text == 'undefined') text = "Save";
     if (typeof text == 'object') text = "Save";
-    return new Handlebars.SafeString('<button class="form_submit" name="'+name+'">'+text+'</button>');
+    return new Handlebars.SafeString('<button class="form_submit" name="'+Handlebars.Utils.escapeExpression(name)+'">'+Handlebars.Utils.escapeExpression(text)+'</button>');
   });
 
   // ### Duckbone.FormFieldBase
