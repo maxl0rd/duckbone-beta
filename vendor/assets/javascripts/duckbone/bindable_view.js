@@ -95,10 +95,10 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
         }, this);
       } else if (typeof binding == "string") {
         // The binding is a selector. Set value now.
-        $(this.el).find(binding).html(model.get(attr));
+        $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
         // Bind the selector's html to changes.
         this.weakBindToModel('change:'+attr, function() {
-          $(this.el).find(binding).html(model.get(attr));
+          $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
         }, this);
       }
     },

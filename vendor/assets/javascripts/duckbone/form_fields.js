@@ -225,7 +225,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
       var selectOptions = (typeof opts == "function") ? opts.call(this) : opts;
       for (var opt in selectOptions) {
         var optionEl = $('<option></option>').attr({value: opt});
-        optionEl.html(selectOptions[opt]);
+        optionEl.html(Handlebars.Utils.escapeExpression(selectOptions[opt]));
         $(this.el).append(optionEl);
       }
     }
@@ -247,7 +247,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
         var fieldId = this.form.name + '_' + this.name + '_' + opt;
         var optionEl = $('<div><input type="radio"/><label for="' + fieldId + '" class="radio_label"></label></div>');
         $(optionEl).find('input').attr({id: fieldId, name: this.name, value: opt});
-        $(optionEl).find('label').html(this.options.selectOptions[opt]);
+        $(optionEl).find('label').html(Handlebars.Utils.escapeExpression(this.options.selectOptions[opt]));
         $(this.el).append(optionEl);
       }
       var el = this.el;
