@@ -15,6 +15,7 @@
       this.numPages = resp.num_pages;
       this.limitValue = resp.limit_value;
       this.currentPage = resp.current_page;
+      this.totalCount = resp.total_count;
       return resp.records;
     },
 
