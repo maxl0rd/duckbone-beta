@@ -160,8 +160,10 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     path = (typeof path == 'object') ? '/assets/ajax_loader.gif' : path;
     if (typeof text == 'undefined') text = "Save";
     if (typeof text == 'object') text = "Save";
-    var out = '<button class="form_submit" name="'+name+'">'+text+'</button>';
-    out += '<img src="' + path + '" class="ajax_loading '+name+'_loading" style="display: none"/>';
+    var out = '<button class="form_submit" name="'+Handlebars.Utils.escapeExpression(name)+'">' +
+      Handlebars.Utils.escapeExpression(text)+'</button>';
+    out += '<img src="' + Handlebars.Utils.escapeExpression(path) + '" class="ajax_loading ' +
+      Handlebars.Utils.escapeExpression(name)+'_loading" style="display: none"/>';
     return new Handlebars.SafeString(out);
   });
 
