@@ -23,18 +23,11 @@ Then add these lines to your `application.js` file, or whatever is your primary 
 This adds Duckbone and all of its dependencies to your scripts. (Hopefully you already require jquery...).
 
 ```js
-\\= require jquery
-\\= require underscore
-\\= require backbone
-\\= require duckbone
-```
-
-Then, add the following line to `<head>` tag in your layout.
-This will create a script that concatenates and includes all of the application's Handlebars templates.
-
-```html
-<% include_javascripts 'templates.js' %>
-
+//= require jquery
+//= require underscore
+//= require backbone
+//= require duckbone
+//= require templates
 ```
 
 ### Overview
