@@ -147,7 +147,8 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   Handlebars.registerHelper('form_submit', function(name, text) {
     if (typeof text == 'undefined') text = "Save";
     if (typeof text == 'object') text = "Save";
-    return new Handlebars.SafeString('<button class="form_submit" name="'+Handlebars.Utils.escapeExpression(name)+'">'+Handlebars.Utils.escapeExpression(text)+'</button>');
+    return new Handlebars.SafeString('<button class="form_submit" name="' +
+      Handlebars.Utils.escapeExpression(name)+'">'+Handlebars.Utils.escapeExpression(text)+'</button>');
   });
 
   // #### helper {{form\_submit\_with\_spinner}}
