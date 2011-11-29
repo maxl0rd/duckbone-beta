@@ -31,7 +31,7 @@
       if (this.compiledTemplates[src]) {
         return this.compiledTemplates[src];
       } else {
-        return Duckbone.Handlebars.compile("<div>Missing Template " + src + " </div>");
+        return Duckbone.Handlebars.compile("<div>Missing Template \"" + src + "\"</div>");
       }
     }
   });

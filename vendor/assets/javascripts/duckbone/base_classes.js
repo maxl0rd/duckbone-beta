@@ -6,8 +6,12 @@ to include the most commonly used modules of Duckbone.  Most apps will
 simply extend these base classes instead of the Backbone base classes directly
 unless they desire a high degree of customized behavior.
 
-Additionally, this file defines `Duckbone.FormView`, which mixes in all the
+This file also defines some other Duckbone core classes:
+
+* `Duckbone.FormView`, which mixes in all the
 functionality required for editing and/or saving models via web forms.
+* `Duckbone.Application`, which extends the Backbone router with declarative route actions
+and flash notice/alert management
 
 */
 
@@ -50,5 +54,13 @@ functionality required for editing and/or saving models via web forms.
   Duckbone.include(Duckbone.FormView.prototype,
     Duckbone.EditableView
   );
+
+  // ### Duckbone.Application
+  // Provides core functionality of a duckbone app
+  Duckbone.Application = Backbone.Router.extend()
+
+  Duckbone.include(Duckbone.Application.prototype,
+    Duckbone.RouteableApplication,
+    Duckbone.FlashableView)
 
 })();

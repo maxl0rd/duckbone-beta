@@ -144,11 +144,11 @@ For example:
     // Fetch template out of the View's templateData, options or the templateRegistry
 
     getTemplate: function(templateName) {
-      this.templateData = this.templateData || this.options.templateData || null;
+      this.templateData = this.options.templateData || this.templateData || null;
       if (this.templateData) {
         this.template = Duckbone.Handlebars.compile(this.templateData);
       } else {
-        templateName = templateName || this.templateName || this.options.templateName || "";
+        templateName = templateName || this.options.templateName || this.templateName || "";
         this.template = this.templateRegistry.get(templateName);
       }
       return this.template

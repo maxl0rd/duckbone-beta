@@ -181,7 +181,9 @@ this is only necessary if you want to bind to changes.</p>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
-        <span class="s1">&#39;&lt;span data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attribute</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span>
+        <span class="s1">&#39;&lt;span data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
+        <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">))</span> <span class="o">+</span>
+        <span class="s1">&#39;&lt;/span&gt;&#39;</span>
       <span class="p">);</span>
     <span class="p">});</span></pre></div>
       </td>
@@ -198,7 +200,7 @@ and replace this element</p>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
-        <span class="s1">&#39;&lt;div data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">childName</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span>
+        <span class="s1">&#39;&lt;div data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span>
       <span class="p">);</span>
     <span class="p">});</span></pre></div>
       </td>
@@ -429,7 +431,9 @@ Also prints useful error messages to the console.</p>
         <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">);</span>
-      <span class="p">}</span></pre></div>
+      <span class="p">}</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">templateRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span></pre></div>
       </td>
     </tr>
     <tr id='section-20'>
@@ -438,11 +442,27 @@ Also prints useful error messages to the console.</p>
           <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>return self, so the final call in render in coffee will return itself by convention</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>      <span class="k">return</span> <span class="k">this</span>
 
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-21'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-21">&#182;</a>
+        </div>
+        <p>Calls <code>renderTemplate</code> if it hasn&rsquo;t been called before.  This is useful in a
+custom render method if you want to render a template when the view is initialized
+and then use DOM manipulation to keep the HTML up to date in subsequent renders</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">renderTemplateOnce</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">templateRendered</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
   <span class="p">}</span>

@@ -5,9 +5,9 @@ require "duckbone/version"
 Gem::Specification.new do |s|
   s.name        = "duckbone"
   s.version     = Duckbone::VERSION
-  s.authors     = ["Max Lord"]
-  s.email       = ["maxlord@gmail.com"]
-  s.homepage    = "http://github.com/maxl0rd/duckbone"
+  s.authors     = ["Max Lord", "John Mileham"]
+  s.email       = ["maxlord@gmail.com", "jmileham@impulsesave.com"]
+  s.homepage    = "http://github.com/ImpulseSave/duckbone"
   s.summary     = "Backbone extensions for Rails development"
   s.description = "Backbone extensions for Rails development"
 
@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency('rails', '~> 3.1.0')
   s.add_dependency('rails-backbone', '~> 0.5.0')
-
+  s.add_development_dependency('rocco', '~> 0.8.2')
 end

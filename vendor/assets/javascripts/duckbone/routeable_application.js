@@ -81,19 +81,22 @@ on itself. For example:
     // Each route key is defined in the same way as the Backbone routes map.
     // The value of each route key is the view class for the route.
     // Each view should have a `routeName` and a `routeAction` defined on its class.
+    // If your view prototype has a `templateName`, Duckbone will fall back to using
+    // it as a routeName in its absence.
     mapRoutes: function(routingTable) {
       _.each(_.keys(routingTable), function(route) {
         try {
-          if (!routingTable[route].routeName)
+          var routeName = routingTable[route].routeName || routingTable[route].prototype.templateName
+          if (!routeName)
             throw("Missing or bad routeName for " + route);
           if (typeof routingTable[route].routeAction != 'function')
             throw("Missing or bad routeAction for " + route);
           this.route(route, // draw the normal route
-            routingTable[route].routeName,
+            routeName,
             routingTable[route].routeAction
           );
           this.route(route+'?*params', // draw the route with a query string
-            routingTable[route].routeName,
+            routeName,
             function() { // call the routeAction with the query params appended to arguments
               var args = _.toArray(arguments);
               var params = args.pop();
@@ -104,6 +107,7 @@ on itself. For example:
             }
           );
         } catch (e) {
+          _.log(e);
           throw("Bad route for " + route);
         }
       }, this);

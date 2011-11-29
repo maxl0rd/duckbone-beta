@@ -1,0 +1,2 @@
+class DuckboneController < ApplicationController
+end

@@ -1,48 +1,73 @@
-## Duckbone
+g# Duckbone
 
-Duckbone consists of a modular set of extensions for the popular Backbone javascript framework that round out the common feature set necessary for building "one page" client-side web applications on Rails. These extras have been used extensively in several large projects and have proven to be robust tools that reduce redundant code, and make large applications more elegant.
+Duckbone is an extraction from [ImpulseSave](https://impulsesave.com/).
 
-The only additional dependency that Duckbone introduces is Handlebars.js, our preferred template language. The view system requires smarter templates than Underscore provides, and Handlebars fits well.
+Duckbone provides everything you need to build single page web apps with [Backbone.js](http://documentcloud.github.com/backbone/) and Ruby on Rails.  Using a bit of asset pipeline magic and a set of JavaScript base classes and mixins it provides things like:
+
+* Tightly-integrated templating with [Handlebars.js](http://www.handlebarsjs.com/)
+* Data binding
+* Nested models and associations
+* Seamless integration with Rails-style RESTful APIs
+* Declarative forms with client-side and server-side validations
+* Extensible list views to build anything from from a to-do list to a stateful news feed
+* Pagination compatible with `kaminari`, `will_paginate` and `sunspot`
+* A robust view lifecycle that lets you focus on user experience instead of plumbing
+
+Duckbone's philosophy emerged from @maxl0rd's experiences building several large projects with Backbone tempered by a modest dose of @jmileham's rubyist contrarianism.
+
+## Getting started
+
+### Installation
+
+Add the `duckbone` gem to your Gemfile:
+
+```ruby
+# Your GemFile...
+
+gem 'duckbone'
+```
+
+Update your bundle
+
+```bash
+$ bundle
+```
+
+Run the installer:
+
+```bash
+$ rails g duckbone:install
+```
+
+Start your server and look at it go:
+
+[http://localhost:3000/duckbone](http://localhost:3000/duckbone)
 
 ### Compatibility
 
-Duckbone is written for Rails 3.1 or later. It provides all of its scripts and templates through the asset pipeline. It is not intended to be used with earlier versions of Rails or other server-side frameworks. There is no concatenated and minified distribution, as this functionality exists within the pipeline itself.
+Duckbone requires Rails 3.1 or later. It provides all of its scripts and templates through the asset pipeline.
 
-Duckbone works with all browsers that Backbone supports:
+Duckbone works with all browsers that Backbone supports and is presently well-tested on:
 
 - Internet Explorer 8+
 - Mozilla Firefox 3.5+
 - Apple Safari 4+
 - Google Chrome
 
-### Installation
 
-To install, just add the `duckbone` gem to your Gemfile.
+### Features
 
-Then add these lines to your `application.js` file, or whatever is your primary javascript manifest file.
-This adds Duckbone and all of its dependencies to your scripts. (Hopefully you already require jquery...).
+Duckbone extends Backbone with:
 
-```js
-//= require jquery
-//= require underscore
-//= require backbone
-//= require duckbone
-//= require templates
-```
-
-### Overview
-
-Duckbone adds the following general capabilities to Backbone:
-
-- A convention and set of helpers to manage associations between models and collections
-- A list view that effortlessly manages collections of sub-views
-- View and Collection mixins that manage a server-paginated collection of sub-views
-- A tightly integrated template system and conventions for managing and packaging template files
-- A better sync method that couples tightly with Rails and server-side validations
+- Associations between models and collections
+- List views that effortlessly manage collections of sub-views
+- Pagination for `kaminari` and `will_paginate`
+- Automatic pipelining of .hbs templates
+- Integrated client and server-side form validations
 - Declarative data-binding between models and DOM elements
-- Weak event binding that reduces memory leaks and unintended side effects
+- Weak event binding that avoids the pitfalls of short-lived views and long-lived models
 - In-code templates and CSS styles for those that prefer the "everything in code" style of organization
-- A flexible view initialization lifecycle that simplifies complex view instantiation
+- A view lifecycle that manages complex view initialization and teardown
 - Basic compatibility with legacy ERB-based views
 
 In addition, Duckbone implements a complete form handling system that makes writing client-side web forms as as easy as ERB.
@@ -62,9 +87,9 @@ Duckbone defaults to conventions and behaviors that should be familiar to Rails 
 - Rendering errors are shown in development mode, but trigger server errors in production
 - Pagination is compatible with either will_paginate or Kaminari
 
-### Modules
+### Modularity
 
-Duckbone is carefully modularized, so that the developer may utilize only those extensions that he finds useful in his work. Each module is encapsulated in a mixin that is intended to be added to a Model, Collection, or View, and adds a small set of additional functionality. The developer is free to mix in those modules where they are needed, or create his own set of abstract classes that include Duckbone functionality.
+Even though you will typically start building your app with the provided `Model`, `Collection` and `View` classes, Duckbone is carefully modularized, so you can strip your classes to down to the bare minimum. Each module is encapsulated in a mixin that is intended to be added to a Model, Collection, or View, and adds a small set of additional functionality. You're free to mix in those modules where they are needed, or create your own set of abstract classes that include Duckbone functionality.
 
 A Duckbone module is mixed into a class with the method `Duckbone.include`. This method copies all of the mixin's properties over to the new class, and also executes a Ruby-style "included" callback that can add conditional functionality to the object. Usually, the mixin will be used to extend a class prototype. For example:
 
@@ -73,7 +98,7 @@ var myFormView = Backbone.View.extend();
 Duckbone.include(myView.prototype, Duckbone.EditableView);
 ```
 
-There are almost no dependencies between Duckbone modules, with one notable exception. All of the "-View" modules also mix in Duckbone.ViewLifecycleExtensions to make initialization and teardown more accessible.
+There are almost no dependencies between Duckbone modules, with one notable exception. All of the "-View" modules also mix in Duckbone.ViewLifecycleExtensions to help automate the intricacies of initialization, rendering, and teardown.
 
 ### MIT LICENSE
 
