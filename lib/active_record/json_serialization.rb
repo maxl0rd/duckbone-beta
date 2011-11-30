@@ -1,6 +1,4 @@
-require 'active_record'
-
-if defined?(ActiveRecord::Base)
+if defined?(ActiveRecord)
 
   # ActiveRecord normally suppresses included assocations from JSON if they have no values.
   # Duckbone expects to be told if an association becomes empty or null,
