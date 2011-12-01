@@ -132,10 +132,10 @@ on itself. For example:
     // A `current` class will be assigned to the current route.
     bindNavigationBars: function() {
       this.bind('all', function(e) {
-        if (e.split(':')[0] != 'navigate') return;
+        if (e.split(':')[0] != 'route') return;
         var routeName = e.split(':')[1];
-        $('nav li').removeClass('current');
-        $('nav li.'+routeName).addClass('current');
+        $('nav ul li').removeClass('current');
+        $('nav ul li.'+routeName).addClass('current');
       });
     }
 
