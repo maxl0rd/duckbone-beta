@@ -434,7 +434,7 @@ Usage examples:
     // are called subsequent to all default form behaviors.
     submit: function(options) {
       if (this.validate()) {
-        options = _.clone(options);
+        options = _.clone(options) || {};
         _.each(['success','error'], function(callbackName) {
           if (typeof options[callbackName] == 'function') {
             var originalCallback = options[callbackName];
