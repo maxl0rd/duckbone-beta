@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -223,8 +224,7 @@ Each view should have a <code>routeName</code> and a <code>routeAction</code> de
         <div class='highlight'><pre>    <span class="nx">loadView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">clearFlashes</span><span class="p">();</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
       <span class="nx">options</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">view</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainContainer</span><span class="p">);</span>

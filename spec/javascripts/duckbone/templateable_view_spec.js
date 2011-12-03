@@ -16,7 +16,7 @@ describe("Duckbone.TemplateableView", function() {
   beforeEach(function() {
     templateFixture = '<div>Template {{attr "foo"}} {{foo}}</div>';
     modelFixture = { foo: "Bar" };
-    expectedOutput = '<div>Template Bar Baz</div>';
+    expectedOutput = /<div>Template <[^>]+>Bar<\/[^>]+> Baz<\/div>/;
     ModelWithBaz = Backbone.Model.extend({
       foo: function() {
         return "Baz";
@@ -50,7 +50,7 @@ describe("Duckbone.TemplateableView", function() {
     subject.template = Duckbone.Handlebars.compile(templateFixture);
     subject.model = new ModelWithBaz(modelFixture);
     subject.twirl();
-    expect($(subject.el).html()).toEqual(expectedOutput);
+    expect($(subject.el).html()).toMatch(expectedOutput);
   });
 
   it ("renders every item in a collection", function() {

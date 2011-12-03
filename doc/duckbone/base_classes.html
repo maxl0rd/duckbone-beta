@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>base_classes.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="flashable_view.html">flashable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="routeable_application.html">routeable_application.js</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>base_classes.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-Duckbone_Base_Classes'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone_Base_Classes">&#182;</a>
+        </div>
+        <h1>Duckbone Base Classes</h1>
+
+<p>These base classes extend <code>Backbone.Model</code>, <code>Backbone.Collection</code> and <code>Backbone.View</code>
+to include the most commonly used modules of Duckbone.  Most apps will
+simply extend these base classes instead of the Backbone base classes directly
+unless they desire a high degree of customized behavior.</p>
+
+<p>Additionally, this file defines <code>Duckbone.FormView</code>, which mixes in all the
+functionality required to editing and/or save models via web forms.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.Model'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.Model">&#182;</a>
+        </div>
+        <h3>Duckbone.Model</h3>
+
+<p>extends <code>Backbone.Model</code> with <code>AssociableModel</code>, <code>ModelHelpers</code>
+and <code>Syncable</code></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Model</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">AssociableModel</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ModelHelpers</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Syncable</span>
+  <span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.Collection'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.Collection">&#182;</a>
+        </div>
+        <h3>Duckbone.Collection</h3>
+
+<p>extends <code>Backbone.Collection</code> with <code>CollectionHelpers</code> and <code>Syncable</code></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Collection</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">CollectionHelpers</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Syncable</span>
+  <span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.View'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.View">&#182;</a>
+        </div>
+        <h3>Duckbone.View</h3>
+
+<p>extends <code>Backbone.View</code> with <code>TemplateableView</code> and <code>BindableView</code></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">View</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableView</span>
+  <span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.FormView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.FormView">&#182;</a>
+        </div>
+        <h3>Duckbone.FormView</h3>
+
+<p>further extends <code>Duckbone.View</code> with <code>EditableView</code></p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormView</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">EditableView</span>
+  <span class="p">);</span>
+
+<span class="p">})();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

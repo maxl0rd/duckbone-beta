@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -117,15 +118,17 @@ Uses the same method signature as <code>Array.slice</code></p>
 
 <ul>
 <li>attr &ndash; the model attribute to use for the select option html, defaults to &ldquo;title&rdquo;</li>
+<li>empty &ndash; show an empty slot first</li>
 <li>returns &ndash; an Object</li>
 </ul>
 
 <p>Returns an object suitable for passing to a select or radio field&rsquo;s selectOptions.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">toSelectOptions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
+        <div class='highlight'><pre>    <span class="nx">toSelectOptions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">empty</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
       <span class="nx">attr</span> <span class="o">=</span> <span class="nx">attr</span> <span class="o">||</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">empty</span><span class="p">)</span> <span class="nx">options</span><span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">options</span><span class="p">[</span><span class="nx">m</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">m</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">);</span>
       <span class="p">});</span>

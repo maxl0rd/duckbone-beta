@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -177,9 +178,9 @@ faded out according to the fadeDuration</li>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">clearFlashes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span>
         <span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div.flash_notice, div.flash_alert&#39;</span><span class="p">)</span>
-
       <span class="k">if</span> <span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">targets</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>

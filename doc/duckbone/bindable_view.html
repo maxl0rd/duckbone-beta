@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -233,7 +234,7 @@ to the current state of the model at the time of this call.</p>
         <p>The binding is a selector. Set value now.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span></pre></div>
+        <div class='highlight'><pre>        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">)));</span></pre></div>
       </td>
     </tr>
     <tr id='section-11'>
@@ -245,7 +246,7 @@ to the current state of the model at the time of this call.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>        <span class="k">this</span><span class="p">.</span><span class="nx">weakBindToModel</span><span class="p">(</span><span class="s1">&#39;change:&#39;</span><span class="o">+</span><span class="nx">attr</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">));</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="nx">binding</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attr</span><span class="p">)));</span>
         <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">},</span></pre></div>
@@ -321,7 +322,6 @@ includes Backbone.Events</li>
 <li>returns &ndash; nothing
 Unbinds all weak bindings created by this view</li>
 </ul>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">removeWeakBindings</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -329,9 +329,82 @@ Unbinds all weak bindings created by this view</li>
         <span class="nx">binding</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">unbind</span><span class="p">(</span><span class="nx">binding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nx">binding</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
       <span class="p">});</span>
       <span class="k">delete</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;_weakBindings&#39;</span><span class="p">];</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">unbindLiveTimestamps</span><span class="p">();</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_bindLiveTimestamps'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_bindLiveTimestamps">&#182;</a>
+        </div>
+        <h4>function bindLiveTimestamps</h4>
+
+<ul>
+<li>seconds &ndash; number of seconds to wait before updating again</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>If you are using the {{live_timestamp}} helper, then call this function
+to begin updating those timestamps once per minute.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">bindLiveTimestamps</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">seconds</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">seconds</span> <span class="o">||</span> <span class="mi">60</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">updateTimestamps</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span[data-live-timestamp]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">span</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">millis</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">span</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-live-timestamp&#39;</span><span class="p">));</span>
+          <span class="kd">var</span> <span class="nx">pretty</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">dateToPrettyTimeAgo</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">millis</span><span class="p">));</span>
+          <span class="nx">$</span><span class="p">(</span><span class="nx">span</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">pretty</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">))</span>
+      <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="nx">updateTimestamps</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_updateLiveTimeStampsInterval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="nx">updateTimestamps</span><span class="p">,</span> <span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-unbindLiveTimestamps'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-unbindLiveTimestamps">&#182;</a>
+        </div>
+        <h4>unbindLiveTimestamps</h4>
+
+<p>Stop updating timestamps.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">unbindLiveTimestamps</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">clearInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_updateLiveTimeStampsInterval</span><span class="p">);</span>
     <span class="p">}</span>
 
-  <span class="p">};</span>
+  <span class="p">};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{live_timestamp}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{live_timestamp}}">&#182;</a>
+        </div>
+        <h4>helper {{live_timestamp}}</h4>
+
+<p>Creates a partial that can be used to insert a live timestamp
+Bindable view can use this to update it once per minute
+usage {{live<em>timestamp &ldquo;created</em>at&rdquo;}}</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">if</span> <span class="p">(</span><span class="nx">Handlebars</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s2">&quot;live_timestamp&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">timestamp</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">stamp</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">getAttr</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">stamp</span><span class="p">)</span> <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">stamp</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">date</span><span class="p">)</span> <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
+        <span class="s1">&#39;&lt;span data-live-timestamp=&quot;&#39;</span> <span class="o">+</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">dateToPrettyTimeAgo</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span>
+      <span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
       </td>
