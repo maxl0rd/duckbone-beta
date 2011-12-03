@@ -100,7 +100,7 @@ describe("Duckbone Form View System", function() {
     });
 
     it("should add itself to a collection when afterSaveDestination is set", function() {
-      var collection = new Backbone.Collection();
+      var collection = new Duckbone.Collection();
       var SubjectTestView = TestView.extend({
         afterSaveDestination: {
           collection: collection
@@ -118,7 +118,7 @@ describe("Duckbone Form View System", function() {
     });
 
     it("should add itself as an association when afterSaveDestination is set", function() {
-      var otherModel = new Backbone.Model();
+      var otherModel = new Duckbone.Model();
 
       otherModel.hasOne({
         subjectModel: {model: Backbone.Model}

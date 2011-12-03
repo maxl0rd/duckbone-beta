@@ -19,15 +19,15 @@ describe("Duckbone.AssociableModel", function() {
   }
 
   beforeEach(function() {
-    SubjectModel = Backbone.Model.extend();
-    AssociatedModel = Backbone.Model.extend({
+    SubjectModel = Duckbone.Model.extend();
+    AssociatedModel = Duckbone.Model.extend({
       initialize: function() {
         this.hasOne({
           subject: {model: SubjectModel}
         });
       }
     });
-    AssociatedCollection = Backbone.Collection.extend({
+    AssociatedCollection = Duckbone.Collection.extend({
       model: AssociatedModel
     });
   });
@@ -161,7 +161,7 @@ describe("Duckbone.AssociableModel", function() {
   it("should just add the model when the setter is passed a model", function() {
     subject = new SubjectModel(fixture);
     subject.hasOne({associated_model: {model: AssociatedModel}});
-    var newModel = new Backbone.Model();
+    var newModel = new Duckbone.Model();
     subject.setAssociatedModel(newModel);
     expect(subject.associatedModel.cid).toEqual(newModel.cid);
   });
