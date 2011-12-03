@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -144,7 +145,9 @@ manages a list of subviews that represent a paginated collection.</p>
         <div class='highlight'><pre>    <span class="nx">createListView</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">({</span>
         <span class="nx">viewClass</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">,</span>
-        <span class="nx">pageableView</span><span class="o">:</span> <span class="k">this</span>
+        <span class="nx">pageableView</span><span class="o">:</span> <span class="k">this</span><span class="p">,</span>
+        <span class="nx">tagName</span><span class="o">:</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span>
+        <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;listable_view&#39;</span><span class="p">,</span>
       <span class="p">});</span>
       <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListableView</span><span class="p">);</span>
       <span class="nx">list</span><span class="p">.</span><span class="nx">collection</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">;</span>

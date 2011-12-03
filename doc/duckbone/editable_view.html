@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -397,6 +398,7 @@ accessable to any <code>afterRemove()</code> callbacks.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">expireClone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">originalModel</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">clear</span><span class="p">({</span><span class="nx">silent</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
       <span class="kd">var</span> <span class="nx">explode</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">throw</span><span class="p">(</span><span class="s1">&#39;Attempted get/set on expired clone from Duckbone.EditableView. Use original model instead.&#39;</span><span class="p">);</span>
@@ -404,6 +406,7 @@ accessable to any <code>afterRemove()</code> callbacks.</p>
       <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">originalModel</span><span class="p">;</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">originalModel</span><span class="p">;</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>

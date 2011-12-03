@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -253,7 +254,6 @@ It works just like _.extend except that it throws an exception if you pass an un
 ie. if you spell a mixin wrong, which you will.
 Also calls included() on the mixin after mixing in the methods, which
 can provide additional side-effects.</p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">include</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
@@ -273,8 +273,52 @@ can provide additional side-effects.</p>
       <span class="p">});</span>
       <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
     <span class="p">}</span>
-
   <span class="p">});</span> <span class="c1">// end _.extend</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span> <span class="o">||</span> <span class="p">{};</span>
+
+  <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">helpers</span><span class="p">,</span> <span class="p">{</span>
+
+    <span class="nx">dateToPrettyTimeAgo</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getTime</span><span class="p">())</span> <span class="o">/</span> <span class="mi">60000</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">remainder</span> <span class="o">=</span> <span class="nx">min</span> <span class="o">||</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">prettyTime</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">days</span><span class="p">,</span> <span class="nx">hours</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">remainder</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s2">&quot;just now&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">remainder</span> <span class="o">&gt;=</span> <span class="mi">1400</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">days</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">remainder</span> <span class="o">/</span> <span class="mi">1440</span><span class="p">);</span>
+        <span class="nx">remainder</span> <span class="o">-=</span> <span class="nx">days</span> <span class="o">*</span> <span class="mi">1440</span><span class="p">;</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">days</span><span class="p">;</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">days</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot; days&quot;</span> <span class="o">:</span> <span class="s2">&quot; day&quot;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">remainder</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">hours</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">remainder</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+        <span class="nx">remainder</span> <span class="o">-=</span> <span class="nx">hours</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">hours</span><span class="p">;</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">hours</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot; hours&quot;</span> <span class="o">:</span> <span class="s2">&quot; hour&quot;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">remainder</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">remainder</span><span class="p">;</span>
+        <span class="nx">prettyTime</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">remainder</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot; minutes&quot;</span> <span class="o">:</span> <span class="s2">&quot; minute&quot;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">compact</span><span class="p">(</span><span class="nx">prettyTime</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; ago&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Mix in log to underscore</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">_</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({</span>
+    <span class="nx">log</span><span class="o">:</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">log</span>
+  <span class="p">});</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
       </td>

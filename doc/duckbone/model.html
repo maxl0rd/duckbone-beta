@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -463,48 +464,6 @@ to null instead.</p>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">isValidAttribute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="nx">val</span><span class="p">))</span>
-    <span class="p">},</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-function_stripWhitespaceOnSet'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-function_stripWhitespaceOnSet">&#182;</a>
-        </div>
-        <h4>function stripWhitespaceOnSet</h4>
-
-<p>Instructs this model to strip leading and trailing whitespace from attributes when setting.
-While Rails is also capable of stripping whitespace, doing it on the client makes many
-form handling systems work better.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">stripWhitespaceOnSet</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">set</span> <span class="o">!=</span> <span class="k">this</span><span class="p">.</span><span class="nx">setWithWhitespaceStripping</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">setWithoutWhitespaceStripping</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">setWithWhitespaceStripping</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">},</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-function_setWithWhitespaceStripping'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-function_setWithWhitespaceStripping">&#182;</a>
-        </div>
-        <h4>function setWithWhitespaceStripping</h4>
-
-<ul>
-<li>attrs &ndash; accepts the same arguments as <code>set</code></li>
-</ul>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">setWithWhitespaceStripping</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">attrs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="nx">attr</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">val</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">attrs</span><span class="p">[</span><span class="nx">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s+|\s+$/g</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">setWithoutWhitespaceStripping</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="p">}</span>
   <span class="p">};</span></pre></div>
       </td>
@@ -520,10 +479,10 @@ form handling systems work better.</p>
         <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-17'>
+    <tr id='section-15'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-17">&#182;</a>
+          <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
         <p>Do the work of creating a hasOne association</p>
       </td>
@@ -573,10 +532,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-18'>
+    <tr id='section-16'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-18">&#182;</a>
+          <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Do the work of creating a hasMany association</p>
       </td>
@@ -610,10 +569,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-19'>
+    <tr id='section-17'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
+          <a class="pilcrow" href="#section-17">&#182;</a>
         </div>
         <p>Call the setter on a reciprocal association to establish the belongsTo</p>
       </td>
@@ -632,10 +591,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-18'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-18">&#182;</a>
         </div>
         <p>Replacement function for <code>Model.set</code> that also manages setting to associations.</p>
       </td>
@@ -666,10 +625,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-19'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-19">&#182;</a>
         </div>
         <p>Convert <code>a_rails_var</code> to <code>aJavaScriptVar</code></p>
       </td>
@@ -681,10 +640,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-20'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>Capitalize the first character</p>
       </td>
@@ -696,10 +655,10 @@ form handling systems work better.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-23'>
+    <tr id='section-21'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-23">&#182;</a>
+          <a class="pilcrow" href="#section-21">&#182;</a>
         </div>
         <p>Get a URL from a Model or Collection as a property or as a function.</p>
 

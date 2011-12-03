@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -85,7 +86,7 @@
 
 
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">getAttr</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="sr">/^[0-9]+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">name</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="sr">/^[0-9]+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">object</span><span class="p">[</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">key</span><span class="p">)];</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>

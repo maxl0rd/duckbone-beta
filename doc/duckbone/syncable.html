@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -201,6 +202,18 @@ so that it will either blow up or emit nothing without explicit work by the deve
         <div class="pilwrap">
           <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
+        <p>A model may provide a defaultSyncOptions property which is merged into the
+jQuery request before the call-time options</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">defaultSyncOptions</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">defaultSyncOptions</span> <span class="o">||</span> <span class="p">{};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
         <p>Default JSON-request options.</p>
       </td>
       <td class=code>
@@ -211,13 +224,13 @@ so that it will either blow up or emit nothing without explicit work by the deve
           <span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;meta[name=&quot;csrf-token&quot;]&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">);</span>
           <span class="k">if</span> <span class="p">(</span><span class="nx">token</span><span class="p">)</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;X-CSRF-Token&#39;</span><span class="p">,</span> <span class="nx">token</span><span class="p">);</span>
         <span class="p">}</span>
-      <span class="p">},</span> <span class="nx">options</span><span class="p">);</span></pre></div>
+      <span class="p">},</span> <span class="nx">defaultSyncOptions</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span></pre></div>
       </td>
     </tr>
-    <tr id='section-5'>
+    <tr id='section-6'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-5">&#182;</a>
+          <a class="pilcrow" href="#section-6">&#182;</a>
         </div>
         <p>workaround IE&rsquo;s aggressive caching of JSON</p>
       </td>
@@ -225,10 +238,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
         <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">msie</span><span class="p">)</span> <span class="nx">params</span><span class="p">.</span><span class="nx">cache</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-7'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-7">&#182;</a>
         </div>
         <p>Ensure URL, and then append .json to it</p>
       </td>
@@ -238,10 +251,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
       <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-7'>
+    <tr id='section-8'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
+          <a class="pilcrow" href="#section-8">&#182;</a>
         </div>
         <p>Ensure that we have the appropriate request data.</p>
       </td>
@@ -258,10 +271,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
       <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-8'>
+    <tr id='section-9'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
+          <a class="pilcrow" href="#section-9">&#182;</a>
         </div>
         <p>Don&rsquo;t process data on a non-GET request.</p>
       </td>
@@ -271,10 +284,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
       <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-9'>
+    <tr id='section-10'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-9">&#182;</a>
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Add the user credentials if HTTP Auth is used</p>
       </td>
@@ -282,21 +295,9 @@ so that it will either blow up or emit nothing without explicit work by the deve
         <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">params</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
         <span class="nx">params</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">authenticatedUser</span><span class="p">.</span><span class="nx">password</span><span class="p">;</span>
-        <span class="nx">params</span><span class="p">.</span><span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span>
-          <span class="s1">&#39;Authorization&#39;</span><span class="o">:</span> <span class="s1">&#39;Basic &#39;</span> <span class="o">+</span> <span class="nx">encode64</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">username</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nx">params</span><span class="p">.</span><span class="nx">password</span><span class="p">)</span>
-        <span class="p">};</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">headers</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">headers</span> <span class="o">||</span> <span class="p">{};</span>
+        <span class="nx">params</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Basic &#39;</span> <span class="o">+</span> <span class="nx">encode64</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">username</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="nx">params</span><span class="p">.</span><span class="nx">password</span><span class="p">);</span>
       <span class="p">}</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-10'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
-        </div>
-        <p>Make the request.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>      <span class="nx">jqXHR</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span></pre></div>
       </td>
     </tr>
     <tr id='section-11'>
@@ -304,16 +305,27 @@ so that it will either blow up or emit nothing without explicit work by the deve
         <div class="pilwrap">
           <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
-        <p>Attach the params that were used to make testing easier</p>
+        <p>Make the request.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span></pre></div>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span></pre></div>
       </td>
     </tr>
     <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>Attach the params that were used to make testing easier</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
         <p>When it starts, trigger one of the crud events
 sync:create, sync:read, sync:update, sync:delete</p>
@@ -322,10 +334,10 @@ sync:create, sync:read, sync:update, sync:delete</p>
         <div class='highlight'><pre>      <span class="nx">model</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;sync:&#39;</span><span class="o">+</span><span class="nx">method</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">());</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
         <p>Trigger sync:complete when it&rsquo;s done regardless of outcome</p>
       </td>
@@ -335,10 +347,10 @@ sync:create, sync:read, sync:update, sync:delete</p>
       <span class="p">});</span></pre></div>
       </td>
     </tr>
-    <tr id='section-14'>
+    <tr id='section-15'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
+          <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
         <p>When a model is saved, trigger &lsquo;sync:success&rsquo;
 It will be added to its destinationCollection if it&rsquo;s not already</p>
@@ -350,10 +362,10 @@ It will be added to its destinationCollection if it&rsquo;s not already</p>
       <span class="p">});</span></pre></div>
       </td>
     </tr>
-    <tr id='section-15'>
+    <tr id='section-16'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-15">&#182;</a>
+          <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Broadcast errors to the whole application</p>
       </td>
@@ -365,10 +377,10 @@ It will be added to its destinationCollection if it&rsquo;s not already</p>
       <span class="p">});</span></pre></div>
       </td>
     </tr>
-    <tr id='section-16'>
+    <tr id='section-17'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-16">&#182;</a>
+          <a class="pilcrow" href="#section-17">&#182;</a>
         </div>
         <p>Bind an additional callback to set error messages on the model</p>
       </td>
@@ -444,10 +456,10 @@ All subsequent requests will be signed by this user.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-21'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-21">&#182;</a>
         </div>
         <p>Singleton authenticatedUser which holds the credentials inside this closure</p>
       </td>
@@ -455,10 +467,10 @@ All subsequent requests will be signed by this user.</p>
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">authenticatedUser</span> <span class="o">=</span> <span class="p">{};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-22'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-22">&#182;</a>
         </div>
         <p>Backbone internal functions used by sync ported here</p>
       </td>
@@ -480,10 +492,10 @@ All subsequent requests will be signed by this user.</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-23'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-23">&#182;</a>
         </div>
         <p>Base 64 Encoder used by Basic Auth. Thank you internet.</p>
 

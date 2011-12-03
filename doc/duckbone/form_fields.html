@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -142,7 +143,7 @@ whenever the form is submitted and found to be invalid.</p>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_error_banner&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span> <span class="o">||</span> <span class="s2">&quot;Please fix the errors below&quot;</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;error_banner&quot; style=&quot;display: none&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;error_banner&quot; style=&quot;display: none&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -162,7 +163,7 @@ Otherwise it will be implicitly placed after the element.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;&#39;</span><span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_errors&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;&#39;</span><span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_errors&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -193,7 +194,7 @@ For example, <code>new_account_application</code> will become &ldquo;New Account
         <span class="k">return</span> <span class="nx">$1</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">);</span> <span class="c1">// capitalize each next word, replace _ with space</span>
       <span class="p">});</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;label data-field-name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s1">&#39;&lt;/label&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;label data-field-name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&lt;/label&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -212,7 +213,7 @@ For example, <code>new_account_application</code> will become &ldquo;New Account
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_text&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_text&quot; type=&quot;text&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_text&quot; type=&quot;text&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -232,7 +233,7 @@ the child <code>option</code> elements according to its <code>selectOptions</cod
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_select&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;select class=&quot;form_select&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/select&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;select class=&quot;form_select&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/select&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -253,7 +254,7 @@ set as a single form field. The helper creates a container which is populated by
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_radio_set&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;form_radio_set&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;form_radio_set&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -272,7 +273,7 @@ set as a single form field. The helper creates a container which is populated by
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_checkbox&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_checkbox&quot; type=&quot;checkbox&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_checkbox&quot; type=&quot;checkbox&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;/&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -291,7 +292,7 @@ set as a single form field. The helper creates a container which is populated by
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_textarea&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;textarea class=&quot;form_textarea&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/textarea&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;textarea class=&quot;form_textarea&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/textarea&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -310,7 +311,7 @@ set as a single form field. The helper creates a container which is populated by
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_password&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_password&quot; type=&quot;password&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/input&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;input class=&quot;form_password&quot; type=&quot;password&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&lt;/input&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -331,7 +332,35 @@ set as a single form field. The helper creates a container which is populated by
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_submit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;button class=&quot;form_submit&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;button class=&quot;form_submit&quot; name=&quot;&#39;</span> <span class="o">+</span>
+      <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{form_submit_with_spinner}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{form_submit_with_spinner}}">&#182;</a>
+        </div>
+        <h4>helper {{form_submit_with_spinner}}</h4>
+
+<ul>
+<li>name &ndash; the form field name, generally set to the same as the name of the form itself</li>
+</ul>
+
+<p>Create an HTML tag of type <code>&lt;button&gt;</code> for triggering form submission.
+Also creates a small invisible spinner graphic, which the form submit view can use.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_submit_with_spinner&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">path</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">path</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;/assets/ajax_loader.gif&#39;</span> <span class="o">:</span> <span class="nx">path</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Save&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="s1">&#39;&lt;button class=&quot;form_submit&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
+      <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&lt;/button&gt;&#39;</span><span class="p">;</span>
+    <span class="nx">out</span> <span class="o">+=</span> <span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;ajax_loading &#39;</span> <span class="o">+</span>
+      <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_loading&quot; style=&quot;display: none&quot;/&gt;&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="nx">out</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -369,7 +398,7 @@ for further extension.</p>
         <div class='highlight'><pre>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">form</span><span class="p">;</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">elAttributes</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">elAttributes</span><span class="p">)</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">elAttributes</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">afterInitialize</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">bindToModel</span><span class="p">();</span>
@@ -432,6 +461,7 @@ to implement its functionality.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">stripWhitespace</span><span class="o">:</span> <span class="kc">true</span>
 
   <span class="p">});</span></pre></div>
       </td>
@@ -474,7 +504,7 @@ as defined by the field&rsquo;s <code>selectOptions</code> property.</p>
       <span class="kd">var</span> <span class="nx">selectOptions</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">opts</span><span class="p">;</span>
       <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">opt</span> <span class="k">in</span> <span class="nx">selectOptions</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">optionEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;option&gt;&lt;/option&gt;&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nx">value</span><span class="o">:</span> <span class="nx">opt</span><span class="p">});</span>
-        <span class="nx">optionEl</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]);</span>
+        <span class="nx">optionEl</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]));</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -521,7 +551,7 @@ as defined by the field&rsquo;s <code>selectOptions</code> property.</p>
         <span class="kd">var</span> <span class="nx">fieldId</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nx">opt</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">optionEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&lt;input type=&quot;radio&quot;/&gt;&lt;label for=&quot;&#39;</span> <span class="o">+</span> <span class="nx">fieldId</span> <span class="o">+</span> <span class="s1">&#39;&quot; class=&quot;radio_label&quot;&gt;&lt;/label&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
         <span class="nx">$</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="nx">fieldId</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">opt</span><span class="p">});</span>
-        <span class="nx">$</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">selectOptions</span><span class="p">[</span><span class="nx">opt</span><span class="p">]));</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">optionEl</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">;</span>
@@ -625,6 +655,7 @@ as defined by the field&rsquo;s <code>selectOptions</code> property.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;textarea&quot;</span><span class="p">,</span>
+    <span class="nx">stripWhitespace</span><span class="o">:</span> <span class="kc">true</span>
 
   <span class="p">});</span></pre></div>
       </td>
