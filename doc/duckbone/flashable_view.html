@@ -128,7 +128,7 @@
         <div class='highlight'><pre>    <span class="nx">flashNotice</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">duration</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">duration</span> <span class="o">=</span> <span class="nx">duration</span> <span class="o">||</span> <span class="mi">10000</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">flash</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FlashNoticeView</span><span class="p">({</span>
-        <span class="nx">message</span><span class="o">:</span> <span class="nx">message</span><span class="p">,</span>
+        <span class="nx">model</span><span class="o">:</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="nx">message</span><span class="p">},</span>
         <span class="nx">duration</span><span class="o">:</span> <span class="nx">duration</span>
       <span class="p">});</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">flash</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
@@ -152,7 +152,7 @@
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">flashAlert</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">flash</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FlashAlertView</span><span class="p">({</span>
-        <span class="nx">message</span><span class="o">:</span> <span class="nx">message</span>
+        <span class="nx">model</span><span class="o">:</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="nx">message</span><span class="p">}</span>
       <span class="p">});</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">flash</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
       <span class="nx">$</span><span class="p">(</span><span class="nx">flash</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">hide</span><span class="p">().</span><span class="nx">slideDown</span><span class="p">(</span><span class="mi">300</span><span class="p">);</span>
@@ -205,11 +205,6 @@ faded out according to the fadeDuration</li>
        <span class="s1">&#39;click a.close&#39;</span><span class="o">:</span> <span class="s1">&#39;dismiss&#39;</span>
      <span class="p">},</span>
      <span class="nx">fadeDuration</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
-     <span class="nx">beforeTwirl</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-       <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">({</span>
-         <span class="nx">message</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">message</span>
-       <span class="p">});</span>
-     <span class="p">},</span>
      <span class="nx">dismiss</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fadeDuration</span><span class="p">);</span>
