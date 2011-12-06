@@ -140,11 +140,8 @@ Usage examples:
     isEditableView: true,
 
     // #### function included
-    // Also includes ViewLifecycleExtensions, which calls the following functions during initialize:
-    //
-    // - createForm()
-    // - bindModelSyncEvents()
-    // - bindFormSubmit()
+    // Also includes ViewLifecycleExtensions, which automatically calls several of these
+    // methods during the view's initialize and remove
     included: function() {
       if (!this.hasViewLifecycleExtensions) {
         Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
@@ -184,26 +181,6 @@ Usage examples:
     bindModelSyncEvents: function() {
       bindEvents(this, this.model, defaultModelSyncEvents);
       if (this.modelSyncEvents) bindEvents(this, this.model, this.modelSyncEvents);
-    },
-
-    // #### function bindFormSubmit
-    // - form - the form to bind submission to, defaults to the primary form, `this.form`
-    // - returns - nothing
-    //
-    // This method binds the form submit event to the FormManager's submit method.
-    // This will capture any event that causes the form to submit, and instead call FormManager.submit().
-    bindFormSubmit: function(form) {
-      form = form || this.form;
-      $(form.el).bind('submit', _.bind(function(e) {
-        e.preventDefault();
-        if (form) {
-          form.submit();
-          if (!form.isValid) scrollToTop(form.el);
-        } else {
-          throw ("Duckbone.EditableView form submitted without being initialized.")
-        }
-        return false;
-      }, this));
     },
 
     // ### Model cloning
@@ -446,6 +423,8 @@ Usage examples:
         this.model.save(null, options);
       } else {
         _.log("Form is invalid.")
+        $(this.el).find('div.error_banner').show();
+        scrollToTop(this.el);
       }
     }
   });
@@ -513,7 +492,7 @@ Usage examples:
   // Easing function to use
   var SCROLL_EASING = 'swing';
   // Number of pixels above the top of the form element we scroll to
-  var SCROLL_BREATHING_ROOM = 200;
+  var SCROLL_BREATHING_ROOM = 100;
 
   // Smooth scrolls the browser window so that the top of the form is visible.
   // Called when a form is invalid and all errors should be shown.

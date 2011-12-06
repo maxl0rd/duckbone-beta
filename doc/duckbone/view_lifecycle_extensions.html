@@ -125,65 +125,60 @@ and mixing this in will have no effect.</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">defaultInitialize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">tryMethod</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">])</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+  <span class="p">}</span>
 
-    <span class="kd">var</span> <span class="nx">tryMethod</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">method</span><span class="p">])</span> <span class="k">this</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-
-    <span class="kd">var</span> <span class="nx">tryMethods</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">methods</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">methods</span><span class="p">,</span> <span class="nx">tryMethod</span><span class="p">);</span>
-    <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">defaultInitialize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
     <span class="k">this</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">application</span><span class="p">;</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isListableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethods</span><span class="p">([</span>
-        <span class="s1">&#39;beforeCreateChildViews&#39;</span><span class="p">,</span> <span class="c1">// User optionally defines this</span>
-        <span class="s1">&#39;createChildViews&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;bindCollectionEvents&#39;</span>
-      <span class="p">]);</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeCreateChildViews&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">createChildViews</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindCollectionEvents</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethods</span><span class="p">([</span>
-        <span class="s1">&#39;beforeClone&#39;</span><span class="p">,</span> <span class="c1">// User optionally defines this</span>
-        <span class="s1">&#39;cloneModelForEditing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;afterClone&#39;</span> <span class="c1">// User optionally defines this</span>
-      <span class="p">])</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">cloneModelForEditing</span><span class="p">();</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethods</span><span class="p">([</span>
-        <span class="s1">&#39;beforeTwirl&#39;</span><span class="p">,</span> <span class="c1">// User optionally defines this</span>
-        <span class="s1">&#39;twirl&#39;</span>
-      <span class="p">])</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;createChildren&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;createChildren&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;applyStyles&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;bindAttributes&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindAttributes</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethods</span><span class="p">([</span>
-        <span class="s1">&#39;bindModelSyncEvents&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;createForm&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;afterCreateForm&#39;</span><span class="p">,</span> <span class="c1">// User optionally defines this</span>
-        <span class="s1">&#39;bindFormSubmit&#39;</span>
-      <span class="p">]);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bindModelSyncEvents</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterCreateForm&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="p">}</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;afterInitialize&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterInitialize&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">defaultRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
   <span class="p">};</span>
 
   <span class="kd">var</span> <span class="nx">defaultRemove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">tryMethod</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">method</span><span class="p">])</span> <span class="k">this</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;expireClone&#39;</span><span class="p">);</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;beforeRemove&#39;</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;removeWeakBindings&#39;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">expireClone</span><span class="p">();</span>
+    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeWeakBindings</span><span class="p">();</span>
     <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="s1">&#39;afterRemove&#39;</span><span class="p">);</span>
+    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
   <span class="p">};</span>
 
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span> <span class="o">=</span> <span class="p">{</span>
@@ -192,6 +187,9 @@ and mixing this in will have no effect.</p>
     <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;initialize&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">defaultInitialize</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;render&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">defaultRender</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">remove</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">defaultRemove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>

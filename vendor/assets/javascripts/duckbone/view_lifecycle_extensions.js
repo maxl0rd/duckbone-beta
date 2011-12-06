@@ -53,7 +53,6 @@
       this.bindModelSyncEvents();
       this.createForm();
       tryMethod(this, 'afterCreateForm'); // User optionally defines this
-      this.bindFormSubmit();
     }
     tryMethod(this, 'afterInitialize'); // User optionally defines this
   };
