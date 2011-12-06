@@ -21,80 +21,62 @@
   // - beforeRemove() => called before the View is removed
   // - afterRemove() => called after the View is removed
 
+  var tryMethod = function(obj, method) {
+    if (obj[method]) obj[method].call(obj);
+  }
+
   var defaultInitialize = function () {
-
-    var tryMethod = _.bind(function(method) {
-      if (this[method]) this[method].call(this);
-    }, this);
-
-    var tryMethods = _.bind(function(methods) {
-      _.each(methods, tryMethod);
-    }, this);
 
     this.application = this.options.application;
 
     if (this.isListableView) {
-      tryMethods([
-        'beforeCreateChildViews', // User optionally defines this
-        'createChildViews',
-        'bindCollectionEvents'
-      ]);
+      tryMethod(this, 'beforeCreateChildViews'); // User optionally defines this
+      this.createChildViews();
+      this.bindCollectionEvents();
     }
     if (this.isEditableView) {
-      tryMethods([
-        'beforeClone', // User optionally defines this
-        'cloneModelForEditing',
-        'afterClone' // User optionally defines this
-      ])
+      tryMethod(this, 'beforeClone'); // User optionally defines this
+      this.cloneModelForEditing();
+      tryMethod(this, 'afterClone'); // User optionally defines this
     }
     if (this.isTemplateableView) {
-      tryMethods([
-        'beforeTwirl', // User optionally defines this
-        'twirl'
-      ])
+      tryMethod(this, 'beforeTwirl'); // User optionally defines this
+      this.twirl();
     }
-    tryMethod('createChildren'); // User optionally defines this
+    tryMethod(this, 'createChildren'); // User optionally defines this
     if (this.isStylizeableView) {
-      tryMethod('applyStyles');
+      this.applyStyles();
     }
     if (this.isBindableView) {
-      tryMethod('bindAttributes');
+      this.bindAttributes();
     }
     if (this.isEditableView) {
-      tryMethods([
-        'bindModelSyncEvents',
-        'createForm',
-        'afterCreateForm', // User optionally defines this
-        'bindFormSubmit'
-      ]);
+      this.bindModelSyncEvents();
+      this.createForm();
+      tryMethod(this, 'afterCreateForm'); // User optionally defines this
+      this.bindFormSubmit();
     }
-    tryMethod('afterInitialize'); // User optionally defines this
+    tryMethod(this, 'afterInitialize'); // User optionally defines this
   };
 
   var defaultRender = function() {
 
-    var tryMethod = _.bind(function(method) {
-      if (this[method]) this[method].call(this);
-    }, this);
-
     if (this.isTemplateableView) {
-      tryMethod('twirl')
+      this.twirl();
     }
     if (this.isStylizeableView) {
-      tryMethod('applyStyles');
+      this.applyStyles();
     }
     return this;
   };
 
   var defaultRemove = function() {
-    var tryMethod = _.bind(function(method) {
-      if (this[method]) this[method].call(this);
-    }, this);
-    if (this.isEditableView) tryMethod('expireClone');
-    tryMethod('beforeRemove');
-    if (this.isBindableView) tryMethod('removeWeakBindings');
+    if (this.isEditableView) this.expireClone();
+    tryMethod(this, 'beforeRemove'); // User optionally defines this
+    if (this.isBindableView) this.removeWeakBindings();
     Backbone.View.prototype.remove.call(this);
-    tryMethod('afterRemove');
+    tryMethod(this, 'afterRemove'); // User optionally defines this
+    return this;
   };
 
   Duckbone.ViewLifecycleExtensions = {
