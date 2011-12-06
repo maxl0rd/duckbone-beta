@@ -40,7 +40,6 @@
       tryMethod(this, 'afterClone'); // User optionally defines this
     }
     if (this.isTemplateableView) {
-      tryMethod(this, 'beforeTwirl'); // User optionally defines this
       this.twirl();
     }
     tryMethod(this, 'createChildren'); // User optionally defines this
