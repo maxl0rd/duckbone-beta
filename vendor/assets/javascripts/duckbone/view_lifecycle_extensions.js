@@ -71,6 +71,21 @@
     tryMethod('afterInitialize'); // User optionally defines this
   };
 
+  var defaultRender = function() {
+
+    var tryMethod = _.bind(function(method) {
+      if (this[method]) this[method].call(this);
+    }, this);
+
+    if (this.isTemplateableView) {
+      tryMethod('twirl')
+    }
+    if (this.isStylizeableView) {
+      tryMethod('applyStyles');
+    }
+    return this;
+  };
+
   var defaultRemove = function() {
     var tryMethod = _.bind(function(method) {
       if (this[method]) this[method].call(this);
@@ -88,6 +103,9 @@
     included: function() {
       this.initialize = this.hasOwnProperty('initialize') ? this.initialize : function() {
         defaultInitialize.call(this);
+      }
+      this.render = this.hasOwnProperty('render') ? this.render : function() {
+        defaultRender.call(this);
       }
       this.remove = this.hasOwnProperty('remove') ? this.remove : function() {
         defaultRemove.call(this);
