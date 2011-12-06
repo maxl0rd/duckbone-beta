@@ -44,7 +44,7 @@ Enables any view or application to manage a set of flash messages.
     flashNotice: function(message, duration) {
       duration = duration || 10000;
       var flash = new FlashNoticeView({
-        message: message,
+        model: {message: message},
         duration: duration
       });
       $(this.flashOptions.container).append(flash.el);
@@ -57,7 +57,7 @@ Enables any view or application to manage a set of flash messages.
     // - returns - the flash notice view
     flashAlert: function(message) {
       var flash = new FlashAlertView({
-        message: message
+        model: {message: message}
       });
       $(this.flashOptions.container).append(flash.el);
       $(flash.el).hide().slideDown(300);
@@ -91,11 +91,6 @@ Enables any view or application to manage a set of flash messages.
        'click a.close': 'dismiss'
      },
      fadeDuration: 300,
-     beforeTwirl: function() {
-       this.model = new Backbone.Model({
-         message: this.options.message
-       });
-     },
      dismiss: function(e) {
        if (e) e.preventDefault();
        $(this.el).fadeOut(this.fadeDuration);

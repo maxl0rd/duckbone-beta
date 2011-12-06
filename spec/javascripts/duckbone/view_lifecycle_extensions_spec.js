@@ -38,7 +38,6 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
       beforeCreateChildViews: sinon.spy(),
       beforeClone: sinon.spy(),
       createChildren: sinon.spy(),
-      beforeTwirl: sinon.spy(),
       afterInitialize: sinon.spy(),
       beforeRemove: sinon.spy(),
       afterRemove: sinon.spy()
@@ -55,7 +54,6 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
       beforeCreateChildViews: sinon.spy(),
       beforeClone: sinon.spy(),
       createChildren: sinon.spy(),
-      beforeTwirl: sinon.spy(),
       afterInitialize: sinon.spy(),
       beforeRemove: sinon.spy(),
       afterRemove: sinon.spy()
@@ -69,7 +67,6 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
     expect(subject.afterInitialize.called).toBeTruthy();
     expect(subject.beforeCreateChildViews.called).toBeTruthy();
     expect(subject.beforeClone.called).toBeTruthy();
-    expect(subject.beforeTwirl.called).toBeTruthy();
   });
 
 });
