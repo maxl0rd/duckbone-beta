@@ -18,7 +18,7 @@ describe('Duckbone.StylizableView', function() {
         this.render();
       },
       render: function() {
-        this.twirl();
+        this.renderTemplate();
         this.applyStyles();
         return this;
       },

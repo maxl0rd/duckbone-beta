@@ -18,7 +18,7 @@ describe("Duckbone.ListableView", function () {
         this.render();
       },
       render: function() {
-        this.twirl();
+        this.renderTemplate();
         return this;
       }
     });

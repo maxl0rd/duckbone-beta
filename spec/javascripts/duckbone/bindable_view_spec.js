@@ -11,7 +11,7 @@ describe("Duckbone.BindableView", function() {
       template: Duckbone.Handlebars.compile(templateFixture),
       initialize: function() {
         this.model = new Backbone.Model(modelFixture);
-        this.twirl();
+        this.renderTemplate();
         this.bindAttributes();
       }
     });
