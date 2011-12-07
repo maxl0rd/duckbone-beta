@@ -14,16 +14,22 @@
   Duckbone.PageableView = {
     isPageableView: true,
 
-    // Also include ViewLifecycleExtensions and ListableView
-
+    // Also include ViewLifecycleExtensions
     included: function() {
       if (!this.hasViewLifecycleExtensions) {
         Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
       }
     },
 
-    createChildren: function() {
+    render: function() {
+      this.empty();
+      this.createChildren();
+      return this;
+    },
 
+    // Create sub views for render
+    createChildren: function() {
+      // Create child views
       this.list = this.createListView();
       $(this.el).append(this.list.el);
       this.pager = this.createPagerView();
@@ -43,8 +49,13 @@
       }
     },
 
-    // Creates a list view container for the elements
+    // Clean up sub views
+    empty: function() {
+      if (this.list) this.list.remove();
+      if (this.pager) this.pager.remove();
+    },
 
+    // Creates a list view container for the elements
     createListView: function() {
       var list = new Backbone.View({
         viewClass: this.viewClass,
@@ -52,7 +63,7 @@
         tagName: 'ul',
         className: 'listable_view',
       });
-      Duckbone.include(list, Duckbone.ListableView);
+      Duckbone.include(list, Duckbone.ListableView, Duckbone.BindableView);
       list.collection = this.collection;
       list.createChildViews();
       list.bindCollectionEvents();
@@ -62,7 +73,6 @@
 
     // Creates a view for the pager element
     // You can set a custom pager view class, or use the supplied default view
-
     createPagerView: function() {
       var pagerClass = this.pagerClass || this.options.pagerClass || Pager;
       var pager = new pagerClass({
@@ -87,7 +97,6 @@
     },
 
     // Smooth scroll up to the top of the list
-
     scrollToTopOfList: function() {
       var offset = $(this.list.el).offset().top - 20;
       $('html body').animate({ scrollTop: offset }, 400, 'swing');
@@ -139,7 +148,7 @@
     // Only render if pagination data is present and fetched
 
     render: function() {
-      if (this.collection.numPages) this.twirl(this.paginationData());
+      if (this.collection.numPages) this.renderTemplate(this.paginationData());
       if (this.collection.numPages > 1) {
         $(this.el).show();
       } else {

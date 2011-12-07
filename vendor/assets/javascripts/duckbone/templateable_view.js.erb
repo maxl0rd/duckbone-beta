@@ -1,7 +1,67 @@
-(function() {
+/**
+# Duckbone.TemplateableView
 
-  // Duckbone.TemplateableView
-  //
+This mixin enables any view to use Duckbone Handlebars templates. Most views in a
+typical application should use templates and this mixin is included in Duckbone.View.
+
+This file also defines many additional Handlebars helpers that provide additional
+Duckbone-specific functionality.
+
+## Usage
+
+To assign a template to a view, do one of the following
+
+- Define the View's `templateName` property. This should be the same as the file name in the
+  templates folder, with slashes changed to underscores. So "posts/post" => "posts_post".
+  This is the preferred usage.
+- Define the View's `templateData` property as a raw string Handlebars template
+- Define the View's `template` property as a compiled Handlebars template
+
+Templates are *always* rendered in the context of the View's `model` property.
+
+Use the Duckbone helpers to provide additional functionality:
+
+- {{#if}} now understands functions, so you can use any function that returns a Boolean value
+- {{#each}} now understands Collections, so you can iterate over a Collection's models with it
+- {{attribute}} will automatically include Model attributes
+- {{attr "foo"}} includes a Model attribute and also updates on any model changes
+- {{child "fooView"}} includes another view
+
+### Overriding the Default Render Function
+
+The view lifecycle provides a default render function for you that renders the template. If you
+need to do more work in render, just redefine it, calling `renderTemplate()` somewhere.
+
+    render: function() {
+      this.renderTemplate();
+      // do other stuff here, like ...
+      return this
+    }
+
+### Using Sub-Views
+
+When a view includes another view, use the following technique:
+
+- Define the subview in the parent's `createChildren` callback. The view lifecycle will call this
+  automatically during renderTemplate. Assign the subview to the parent, ie `this.mySubView`
+- Use the `{{child}}` helper in the parent's template, ie {{child "mySubView"}}
+- Tear down the child view in `afterRemove`
+
+For example:
+
+    ParentView = Duckbone.View.extend({
+      templateData: '<div>Parent View</div>
+        <div class="childStuff">{{child "childView"}}</div>',
+      createChildren: function() {
+        this.childView = new Duckbone.View();
+      },
+      afterRemove: function() {
+        if (this.childView) this.childView.remove();
+      }
+    })
+
+*/
+(function() {
 
   // Create a registry that only lives in this context
   var templateRegistry = new Duckbone.TemplateRegistry();
@@ -28,11 +88,22 @@
     //
     // usage: {{attr "foo"}}
 
-    Handlebars.registerHelper('attr', function(attribute){
+    Handlebars.registerHelper('attr', function(attribute) {
       return new Handlebars.SafeString(
         '<span data-bind="attr_' + attribute + '">' + this.get(attribute) + '</span>'
       );
     });
+
+    // The "child" helper indicates where sub-views should be included in a template
+    // renderTemplate() will look for a view with this name defined as a prop on the parent view
+    // and replace this element
+
+    Handlebars.registerHelper('child', function(childName) {
+      return new Handlebars.SafeString(
+        '<div data-child-view="' + childName + '"></div>'
+      );
+    });
+
 
     // Make each capable of handling collections
 
@@ -61,6 +132,13 @@
 
     templateRegistry: templateRegistry,
 
+    // Default render method calls renderTemplate
+
+    render: function() {
+      this.renderTemplate();
+      return this;
+    },
+
     // Fetch template out of the View's templateData, options or the templateRegistry
 
     getTemplate: function(templateName) {
@@ -74,19 +152,19 @@
       return this.template
     },
 
-    // Twirl fetches its template from any of the following places:
+    // Fetches its template from any of the following places:
     // this.template, this.options.template, this.templateName, this.options.templateName
     // Then it renders it in the context of its model.
     // The output replaces the entire html content of the view's container element.
     // Pass a different context param to render from a different context.
-    // ie this.twirl({some_different: "data"});
+    // ie this.renderTemplate({some_different: "data"});
 
-    // Twirl attempts to replicate typical server-side templating behavior in which
+    // Attempts to replicate typical server-side templating behavior in which
     // errors in development will show as error messages in place in the template,
     // and errors in a production environments will result in a server error.
-    // Twirl also prints useful error messages to the console.
+    // Also prints useful error messages to the console.
 
-    twirl: function(context) {
+    renderTemplate: function(context) {
 
       // Set up context and template
       var context = context || this.model || {};
@@ -95,12 +173,25 @@
       } else if (!this.template) {
         this.getTemplate();
       }
-      if (!this.template) throw("Twirl called without a template.")
+      if (!this.template) throw("renderTemplate called without a template.")
+
+      // Remove child views ...
+
+      $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
+        var childName = $(div).attr('data-child-view');
+        var child = this[childName]
+        if (child instanceof Backbone.View) {
+          child.remove();
+        } else {
+          throw("Unknown child view " + childName);
+        }
+      }, this));
+
 
       // Render the HTML template, and if it fails, output as much info as possible
       // 500 Error on exceptions in production
       try {
-        $(this.el).html(this.template(context));
+        $(this.el).empty().html(this.template(context));
       } catch(e) {
         _.log("Handlebars threw an exception rendering your template:");
         _.log(e.message);
@@ -113,6 +204,22 @@
           throw(e);
         <% end %>
       }
+
+      // Call createChildren, which should instantiate any child views
+      if (typeof this.createChildren == 'function') this.createChildren();
+
+      // Include child views where they belong in the DOM
+      $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
+        var childName = $(div).attr('data-child-view');
+        var child = this[childName]
+        if (child instanceof Backbone.View) {
+          $(div).replaceWith(child.el); // swap placeholder for childView
+          $(child.el).attr({'data-child-view': childName});
+          child.delegateEvents();
+        } else {
+          throw("Unknown child view " + childName);
+        }
+      }, this));
 
       // Establish any data-bindings that are defined by {{attr "attribute"}} helpers
       if (this.isBindableView && context instanceof Backbone.Model) {
@@ -128,6 +235,9 @@
       if (this.templateName) {
         $(this.el).addClass(this.templateName);
       }
+
+      // return self, so the final call in render in coffee will return itself by convention
+      return this
 
     }
 

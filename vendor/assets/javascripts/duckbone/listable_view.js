@@ -12,6 +12,9 @@
       if (!this.hasViewLifecycleExtensions) {
         Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
       }
+      if (!this.isBindableView) {
+        Duckbone.include(this, Duckbone.BindableView);
+      }
     },
 
     // Create a child view for each model in the collection
@@ -58,7 +61,7 @@
         if (typeof handler != 'function') {
           throw ('Duckbone.ListableView.bindCollectionEvents() called with bad handler for ' + event )
         }
-        this.collection.bind(event, handler, this);
+        this.weakBindTo(this.collection, event, handler, this);
       }
     },
 
