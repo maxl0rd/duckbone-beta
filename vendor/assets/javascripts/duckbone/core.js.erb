@@ -130,7 +130,7 @@ This file is loaded first and just establishes some namespaces and useful helper
         }
         for (var prop in source) {
           if (prop != 'included' && source[prop] !== void 0) {
-            obj[prop] = source[prop];
+            if (!obj.hasOwnProperty(prop)) obj[prop] = source[prop];
           }
         }
         if (typeof source['included'] == 'function') source['included'].call(obj);
