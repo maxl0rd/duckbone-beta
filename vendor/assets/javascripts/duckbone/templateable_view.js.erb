@@ -102,7 +102,7 @@ For example:
 
     Handlebars.registerHelper('child', function(childName) {
       return new Handlebars.SafeString(
-        '<div data-child-view="' + childName + '"></div>'
+        '<div data-child-view="' + Handlebars.Utils.escapeExpression(childName) + '"></div>'
       );
     });
 
