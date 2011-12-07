@@ -12,6 +12,7 @@
     Jump To &hellip;
     <div id="jump_wrapper">
       <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
@@ -114,17 +115,18 @@ Now #if can reference a function property that returns true or false</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-6">&#182;</a>
         </div>
-        <p>The &ldquo;attr&rdquo; helper renders a model&rsquo;s attribute.</p>
-
-<p>This is only necessary if you have a property on
-the model object with the same name as your attribute
-but you want to access the attribute anyway.</p>
+        <p>The &ldquo;attr&rdquo; helper renders a model&rsquo;s attribute,
+and binds the view to any changes on that attribute.
+Handlebars can automatically find attributes, so
+this is only necessary if you want to bind to changes.</p>
 
 <p>usage: {{attr &ldquo;foo&rdquo;}}</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attribute</span><span class="p">){</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
+        <span class="s1">&#39;&lt;span data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attribute</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&#39;</span>
+      <span class="p">);</span>
     <span class="p">});</span></pre></div>
       </td>
     </tr>
@@ -214,36 +216,84 @@ ie this.twirl({some_different: &ldquo;data&rdquo;});</p>
 errors in development will show as error messages in place in the template,
 and errors in a production environments will result in a server error.
 Twirl also prints useful error messages to the console.</p>
-
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">twirl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="p">{};</span>
+        <div class='highlight'><pre>    <span class="nx">twirl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>Set up context and template</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="p">{};</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">&amp;&amp;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">template</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">template</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">getTemplate</span><span class="p">();</span>
       <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">try</span> <span class="p">{</span>
-          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">context</span><span class="p">));</span>
-        <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Handlebars threw an exception rendering your template:&quot;</span><span class="p">);</span>
-          <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-          <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Context:&quot;</span><span class="p">);</span>
-          <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
-          <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">development</span><span class="o">?</span> <span class="o">%&gt;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;duckbone_error&quot;&gt;Handlebars exception: &#39;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
-          <span class="o">&lt;%</span> <span class="k">else</span> <span class="o">%&gt;</span>
-            <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">serverError</span><span class="p">();</span>
-            <span class="k">throw</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-          <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Twirl called without a template.&quot;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Render the HTML template, and if it fails, output as much info as possible
+500 Error on exceptions in production</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">try</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">context</span><span class="p">));</span>
+      <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Handlebars threw an exception rendering your template:&quot;</span><span class="p">);</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Context:&quot;</span><span class="p">);</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
+        <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">development</span><span class="o">?</span> <span class="o">%&gt;</span>
+          <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;duckbone_error&quot;&gt;Handlebars exception: &#39;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
+        <span class="o">&lt;%</span> <span class="k">else</span> <span class="o">%&gt;</span>
+          <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">serverError</span><span class="p">();</span>
+          <span class="k">throw</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+        <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-14">&#182;</a>
+        </div>
+        <p>Establish any data-bindings that are defined by {{attr &ldquo;attribute&rdquo;}} helpers</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span> <span class="o">&amp;&amp;</span> <span class="nx">context</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span[data-bind]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">span</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">span</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-bind&#39;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// ie data-bind=&quot;attr_title&quot;</span>
+          <span class="kd">var</span> <span class="nx">binding</span> <span class="o">=</span> <span class="s1">&#39;span[data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">;</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">bindAttribute</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">binding</span> <span class="p">)</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">));</span>
+      <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-15'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-15">&#182;</a>
+        </div>
+        <p>Assign a descriptive class name to the element</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">);</span>
       <span class="p">}</span>
+
     <span class="p">}</span>
 
   <span class="p">}</span>

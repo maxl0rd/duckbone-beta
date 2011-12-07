@@ -21,3 +21,4 @@
 //= require ./form_validations
 //= require ./remoteable_view
 //= require ./simple_queue
+//= require ./base_classes
