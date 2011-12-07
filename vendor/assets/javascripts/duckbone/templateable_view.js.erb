@@ -90,7 +90,9 @@ For example:
 
     Handlebars.registerHelper('attr', function(attribute) {
       return new Handlebars.SafeString(
-        '<span data-bind="attr_' + attribute + '">' + this.get(attribute) + '</span>'
+        '<span data-bind="attr_' + Handlebars.Utils.escapeExpression(attribute) + '">' +
+        Handlebars.Utils.escapeExpression(this.get(attribute)) +
+        '</span>'
       );
     });
 

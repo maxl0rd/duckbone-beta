@@ -15,8 +15,8 @@ describe("Duckbone.TemplateableView", function() {
 
   beforeEach(function() {
     templateFixture = '<div>Template {{attr "foo"}} {{foo}}</div>';
-    modelFixture = { foo: "Bar" };
-    expectedOutput = /<div>Template <[^>]+>Bar<\/[^>]+> Baz<\/div>/;
+    modelFixture = { foo: "Bar <!-- evil -->" };
+    expectedOutput = /<div>Template <[^>]+>Bar \&lt;\!-- evil --\&gt;<\/[^>]+> Baz<\/div>/;
     ModelWithBaz = Backbone.Model.extend({
       foo: function() {
         return "Baz";
