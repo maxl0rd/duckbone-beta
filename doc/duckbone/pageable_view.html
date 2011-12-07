@@ -95,7 +95,7 @@ manages a list of subviews that represent a paginated collection.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
-        <p>Also include ViewLifecycleExtensions and ListableView</p>
+        <p>Also include ViewLifecycleExtensions</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -104,18 +104,42 @@ manages a list of subviews that represent a paginated collection.</p>
       <span class="p">}</span>
     <span class="p">},</span>
 
-    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-      <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createListView</span><span class="p">();</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">pager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createPagerView</span><span class="p">();</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pager</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span></pre></div>
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-5'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Create sub views for render</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Create child views</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createListView</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">pager</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createPagerView</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pager</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
         </div>
         <p>bind &lsquo;changePage&rsquo; events to navigation state</p>
       </td>
@@ -134,10 +158,24 @@ manages a list of subviews that represent a paginated collection.</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-8'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Clean up sub views</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">empty</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">list</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pager</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">pager</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
         </div>
         <p>Creates a list view container for the elements</p>
       </td>
@@ -149,7 +187,7 @@ manages a list of subviews that represent a paginated collection.</p>
         <span class="nx">tagName</span><span class="o">:</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span>
         <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;listable_view&#39;</span><span class="p">,</span>
       <span class="p">});</span>
-      <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListableView</span><span class="p">);</span>
+      <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListableView</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableView</span><span class="p">);</span>
       <span class="nx">list</span><span class="p">.</span><span class="nx">collection</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">;</span>
       <span class="nx">list</span><span class="p">.</span><span class="nx">createChildViews</span><span class="p">();</span>
       <span class="nx">list</span><span class="p">.</span><span class="nx">bindCollectionEvents</span><span class="p">();</span>
@@ -158,10 +196,10 @@ manages a list of subviews that represent a paginated collection.</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-7'>
+    <tr id='section-10'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Creates a view for the pager element
 You can set a custom pager view class, or use the supplied default view</p>
@@ -191,10 +229,10 @@ You can set a custom pager view class, or use the supplied default view</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-8'>
+    <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
+          <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
         <p>Smooth scroll up to the top of the list</p>
       </td>
@@ -207,10 +245,10 @@ You can set a custom pager view class, or use the supplied default view</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-9'>
+    <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-9">&#182;</a>
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>Default Pager template</p>
       </td>
@@ -237,10 +275,10 @@ You can set a custom pager view class, or use the supplied default view</p>
 <span class="s1">  &lt;/div&gt;&#39;</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-10'>
+    <tr id='section-13'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
+          <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
         <p>Default Pager view class</p>
       </td>
@@ -262,17 +300,17 @@ You can set a custom pager view class, or use the supplied default view</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-11'>
+    <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-11">&#182;</a>
+          <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
         <p>Only render if pagination data is present and fetched</p>
 
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">paginationData</span><span class="p">());</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">paginationData</span><span class="p">());</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>

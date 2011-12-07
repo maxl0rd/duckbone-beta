@@ -116,7 +116,6 @@ and mixing this in will have no effect.</p>
         <ul>
 <li>beforeCreateChildViews() =&gt; called before ListView creates its children</li>
 <li>beforeClone() =&gt; called before EditableView clones its model for editing</li>
-<li>beforeTwirl() =&gt; called before TemplateableView calls twirl()</li>
 <li>afterCreateForm() =&gt; called after EditableView renders its form elements</li>
 <li>afterInitialize() =&gt; called after all other initializations are complete</li>
 <li>beforeRemove() =&gt; called before the View is removed</li>
@@ -143,10 +142,7 @@ and mixing this in will have no effect.</p>
       <span class="k">this</span><span class="p">.</span><span class="nx">cloneModelForEditing</span><span class="p">();</span>
       <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;createChildren&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
     <span class="p">}</span>
@@ -162,9 +158,8 @@ and mixing this in will have no effect.</p>
   <span class="p">};</span>
 
   <span class="kd">var</span> <span class="nx">defaultRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">twirl</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
@@ -176,6 +171,8 @@ and mixing this in will have no effect.</p>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">expireClone</span><span class="p">();</span>
     <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeWeakBindings</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isListableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isPageableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
     <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
     <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
