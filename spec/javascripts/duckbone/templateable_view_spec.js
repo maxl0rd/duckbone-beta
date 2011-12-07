@@ -49,7 +49,7 @@ describe("Duckbone.TemplateableView", function() {
     subject = new testViewClass({});
     subject.template = Duckbone.Handlebars.compile(templateFixture);
     subject.model = new ModelWithBaz(modelFixture);
-    subject.twirl();
+    subject.renderTemplate();
     expect($(subject.el).html()).toMatch(expectedOutput);
   });
 
@@ -62,7 +62,7 @@ describe("Duckbone.TemplateableView", function() {
     var templateData = "<div>{{#each items}}<li>Pet {{id}}</li>{{/each}}</div>";
     var expectedOutput = "<div><li>Pet dog</li><li>Pet cat</li></div>";
     subject.template = Duckbone.Handlebars.compile(templateData);
-    subject.twirl();
+    subject.renderTemplate();
     expect($(subject.el).html()).toEqual(expectedOutput);
   });
 

@@ -7,7 +7,7 @@ simply extend these base classes instead of the Backbone base classes directly
 unless they desire a high degree of customized behavior.
 
 Additionally, this file defines `Duckbone.FormView`, which mixes in all the
-functionality required to editing and/or save models via web forms.
+functionality required for editing and/or saving models via web forms.
 
 */
 

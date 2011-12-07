@@ -15,7 +15,6 @@
 
   // - beforeCreateChildViews() => called before ListView creates its children
   // - beforeClone() => called before EditableView clones its model for editing
-  // - beforeTwirl() => called before TemplateableView calls twirl()
   // - afterCreateForm() => called after EditableView renders its form elements
   // - afterInitialize() => called after all other initializations are complete
   // - beforeRemove() => called before the View is removed
@@ -39,10 +38,7 @@
       this.cloneModelForEditing();
       tryMethod(this, 'afterClone'); // User optionally defines this
     }
-    if (this.isTemplateableView) {
-      this.twirl();
-    }
-    tryMethod(this, 'createChildren'); // User optionally defines this
+    this.render();
     if (this.isStylizeableView) {
       this.applyStyles();
     }
@@ -58,9 +54,8 @@
   };
 
   var defaultRender = function() {
-
     if (this.isTemplateableView) {
-      this.twirl();
+      this.renderTemplate();
     }
     if (this.isStylizeableView) {
       this.applyStyles();
@@ -72,6 +67,8 @@
     if (this.isEditableView) this.expireClone();
     tryMethod(this, 'beforeRemove'); // User optionally defines this
     if (this.isBindableView) this.removeWeakBindings();
+    if (this.isListableView) this.empty();
+    if (this.isPageableView) this.empty();
     Backbone.View.prototype.remove.call(this);
     tryMethod(this, 'afterRemove'); // User optionally defines this
     return this;

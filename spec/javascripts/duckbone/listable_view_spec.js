@@ -18,7 +18,7 @@ describe("Duckbone.ListableView", function () {
         this.render();
       },
       render: function() {
-        this.twirl();
+        this.renderTemplate();
         return this;
       }
     });
@@ -27,19 +27,12 @@ describe("Duckbone.ListableView", function () {
     collection.model = Backbone.Model;
     collection.reset(dataFixture);
     // List View
-    viewClass = Backbone.View.extend(Duckbone.ListableView);
-    _.extend(viewClass.prototype, {
+    viewClass = Backbone.View.extend({
       viewClass: subViewClass,
-      tagName: 'ol',
-      initialize: function() {
-        this.render();
-        this.bindCollectionEvents();
-      },
-      render: function() {
-        this.createChildViews();
-        this.renderChildViews();
-      }
-    });
+      tagName: 'ol'
+    })
+    Duckbone.include(viewClass.prototype, Duckbone.ListableView);
+
     subject = new viewClass({
       collection: collection
     });
