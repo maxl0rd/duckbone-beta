@@ -4,9 +4,10 @@ describe("Duckbone.BindableView", function() {
   var templateFixture = '<div>My pet is a <span class="pet"></span></div>';
   var modelFixture = { pet: "cat" };
   var testView, testViewSelector, testViewFunctional;
-  var viewOpts = {model: new Backbone.Model(modelFixture)};
+  var viewOpts;
 
   beforeEach(function() {
+    viewOpts = {model: new Backbone.Model(modelFixture)};
     testView = Backbone.View.extend({
       templateData: templateFixture,
     });
