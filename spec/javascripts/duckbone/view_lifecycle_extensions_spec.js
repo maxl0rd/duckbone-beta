@@ -37,14 +37,12 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
     ViewClass = Backbone.View.extend({
       beforeCreateChildViews: sinon.spy(),
       beforeClone: sinon.spy(),
-      createChildren: sinon.spy(),
       afterInitialize: sinon.spy(),
       beforeRemove: sinon.spy(),
       afterRemove: sinon.spy()
     });
     Duckbone.include(ViewClass.prototype, Duckbone.ViewLifecycleExtensions);
     subject = new ViewClass();
-    expect(subject.createChildren.called).toBeTruthy();
     expect(subject.afterInitialize.called).toBeTruthy();
   });
 

@@ -4,17 +4,13 @@ describe("Duckbone.BindableView", function() {
   var templateFixture = '<div>My pet is a <span class="pet"></span></div>';
   var modelFixture = { pet: "cat" };
   var testView, testViewSelector, testViewFunctional;
+  var viewOpts = {model: new Backbone.Model(modelFixture)};
 
   beforeEach(function() {
-    testView = Backbone.View.extend();
-    _.extend(testView.prototype, Duckbone.TemplateableView, Duckbone.BindableView, {
-      template: Duckbone.Handlebars.compile(templateFixture),
-      initialize: function() {
-        this.model = new Backbone.Model(modelFixture);
-        this.renderTemplate();
-        this.bindAttributes();
-      }
+    testView = Backbone.View.extend({
+      templateData: templateFixture,
     });
+    Duckbone.include(testView.prototype, Duckbone.TemplateableView, Duckbone.BindableView)
     testViewSelector = testView.extend({
       attributeChanges: {
         'pet': 'span.pet'
@@ -30,29 +26,29 @@ describe("Duckbone.BindableView", function() {
   });
 
   it ("It sets initial value when using selector bindings", function() {
-    subject = new testViewSelector();
+    subject = new testViewSelector(viewOpts);
     expect($(subject.el).html()).toEqual('<div>My pet is a <span class="pet">cat</span></div>');
   });
 
   it ("It sets initial value when using functional bindings", function() {
-    subject = new testViewFunctional();
+    subject = new testViewFunctional(viewOpts);
     expect($(subject.el).html()).toEqual('<div>My pet is a <span class="pet">cat</span></div>');
   });
 
   it ("It updates when using selector bindings", function() {
-    subject = new testViewSelector();
+    subject = new testViewSelector(viewOpts);
     subject.model.set({pet: 'dog'});
     expect($(subject.el).html()).toEqual('<div>My pet is a <span class="pet">dog</span></div>');
   });
 
   it ("It updates when using functional bindings", function() {
-    subject = new testViewFunctional();
+    subject = new testViewFunctional(viewOpts);
     subject.model.set({pet: 'dog'});
     expect($(subject.el).html()).toEqual('<div>My pet is a <span class="pet">dog</span></div>');
   });
 
   it ("removeWeakBindings removes weak bindings", function() {
-    subject = new testViewFunctional();
+    subject = new testViewFunctional(viewOpts);
     expect(subject.model._callbacks['change:pet'][0]).toBeTruthy();
     subject.removeWeakBindings();
     expect(subject.model._callbacks['change:pet'][0]).toBeFalsy();
