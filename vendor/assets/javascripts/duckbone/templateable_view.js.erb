@@ -238,9 +238,20 @@ For example:
         $(this.el).addClass(this.templateName);
       }
 
+      this.templateRendered = true;
+
       // return self, so the final call in render in coffee will return itself by convention
       return this
 
+    },
+
+    // Calls `renderTemplate` if it hasn't been called before.  This is useful in a
+    // custom render method if you want to render a template when the view is initialized
+    // and then use DOM manipulation to keep the HTML up to date in subsequent renders
+
+    renderTemplateOnce: function (context) {
+      if (!this.templateRendered) this.renderTemplate(context);
+      return this;
     }
 
   }
