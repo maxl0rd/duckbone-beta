@@ -1,4 +1,4 @@
-## Duckbone
+# Duckbone
 
 Duckbone is an extraction from [ImpulseSave](https://impulsesave.com/).
 
@@ -15,9 +15,9 @@ Duckbone provides everything you need to build single page web apps with [Backbo
 
 Duckbone's philosophy emerged from @maxl0rd's experiences building several large projects with Backbone tempered by a modest dose of @jmileham's rubyist contrarianism.
 
-### Installation
+## Installation
 
-Add the `duckbone` gem to your Gemfile:
+Add the gem to your Gemfile:
 
 ```ruby
 # Your GemFile...
@@ -41,7 +41,7 @@ Start your server and look at it go:
 
 [http://localhost:3000/duckbone](http://localhost:3000/duckbone)
 
-### Compatibility
+## Compatibility
 
 Duckbone requires Rails 3.1 or later. It provides all of its scripts and templates through the asset pipeline.
 
@@ -53,7 +53,7 @@ Duckbone works with all browsers that Backbone supports and is presently well-te
 - Google Chrome
 
 
-### Features
+## Features
 
 Duckbone extends Backbone with:
 
@@ -85,7 +85,7 @@ Duckbone defaults to conventions and behaviors that should be familiar to Rails 
 - Rendering errors are shown in development mode, but trigger server errors in production
 - Pagination is compatible with either will_paginate or Kaminari
 
-### Modularity
+## Modularity
 
 Even though you will typically start building your app with the provided `Model`, `Collection` and `View` classes, Duckbone is carefully modularized, so you can strip your classes to down to the bare minimum. Each module is encapsulated in a mixin that is intended to be added to a Model, Collection, or View, and adds a small set of additional functionality. You're free to mix in those modules where they are needed, or create your own set of abstract classes that include Duckbone functionality.
 
@@ -98,7 +98,13 @@ Duckbone.include(myView.prototype, Duckbone.EditableView);
 
 There are almost no dependencies between Duckbone modules, with one notable exception. All of the "-View" modules also mix in Duckbone.ViewLifecycleExtensions to help automate the intricacies of initialization, rendering, and teardown.
 
-### MIT LICENSE
+## Contributing
+
+Duckbone strives to hew to Backbone's minimalist philosophy, so growing Duckbone with new functionality isn't high on our priority list.  Duckbone is intended to solve the problems that every developer runs into every time they build a non-trivial client-side app.  If you've got a great extension, we encourage you to roll your own gem.  Duckbone's mixins should give you a good blueprint to get started.
+
+That said, Duckbone is a young library and there's lots to do. We're always looking for optimizations, fix bugs, and architectural improvements that will help support third-party extensions.  Got code? Send us a pull request. Suggestion?  Open a github issue.
+
+## MIT LICENSE
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
