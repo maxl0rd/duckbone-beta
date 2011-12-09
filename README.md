@@ -102,7 +102,7 @@ There are almost no dependencies between Duckbone modules, with one notable exce
 
 Duckbone strives to hew to Backbone's minimalist philosophy, so growing Duckbone with new functionality isn't high on our priority list.  Duckbone is intended to solve the problems that every developer runs into every time they build a non-trivial client-side app.  If you've got a great extension, we encourage you to roll your own gem.  Duckbone's mixins should give you a good blueprint to get started.
 
-That said, Duckbone is a young library and there's lots to do. We're always looking for optimizations, fix bugs, and architectural improvements that will help support third-party extensions.  Got code? Pull requests welcome! Suggestion? Just open a GitHub issue.
+That said, Duckbone is a young library and there's lots to do. We're always looking for optimizations, bug fixes, and architectural improvements that will help support real-world use cases.  Got code? Pull requests welcome! Suggestion? Just open a GitHub issue.
 
 ## MIT LICENSE
 
