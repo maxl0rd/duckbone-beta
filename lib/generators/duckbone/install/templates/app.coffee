@@ -26,4 +26,5 @@ $ ->
     container: $('div#flash').get(0)
 
   <%= application_name %>.app.bindNavigationBars()
-  Backbone.history.start()
+  # If you want to use hash URLs, just disable pushState
+  Backbone.history.start({pushState: true})

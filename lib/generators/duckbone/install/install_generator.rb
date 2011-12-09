@@ -38,7 +38,8 @@ module Duckbone
       end
 
       def add_route
-        route %{match "duckbone" => "duckbone#index"}
+        route 'match "duckbone" => "duckbone#index"'
+        route 'match "duckbone/*path" => "duckbone#index"'
       end
     end
 
