@@ -1,4 +1,4 @@
-g# Duckbone
+## Duckbone
 
 Duckbone is an extraction from [ImpulseSave](https://impulsesave.com/).
 
@@ -15,8 +15,6 @@ Duckbone provides everything you need to build single page web apps with [Backbo
 
 Duckbone's philosophy emerged from @maxl0rd's experiences building several large projects with Backbone tempered by a modest dose of @jmileham's rubyist contrarianism.
 
-## Getting started
-
 ### Installation
 
 Add the `duckbone` gem to your Gemfile:
@@ -27,7 +25,7 @@ Add the `duckbone` gem to your Gemfile:
 gem 'duckbone'
 ```
 
-Update your bundle
+Update Bundler
 
 ```bash
 $ bundle
