@@ -28,7 +28,7 @@
       locateTemplates(this);
       compilePartials(this);
       compileTemplates(this, src);
-      if (this.compiledTemplates[src]) {
+      if (this.compiledTemplates[src] !== undefined) {
         return this.compiledTemplates[src];
       } else {
         return Duckbone.Handlebars.compile("<div>Missing Template \"" + src + "\"</div>");
@@ -76,7 +76,7 @@
 
   function compileTemplate(templateData, src) {
     src = src || "";
-    if (templateData) {
+    if (templateData !== undefined) {
       try {
         return Duckbone.Handlebars.compile(templateData);
       } catch (e) {
