@@ -55,6 +55,14 @@ and flash notice/alert management
     Duckbone.EditableView
   );
 
+  // ### Duckbone.ListView
+  // Provides rendering of sets of submodels for lists and feeds
+  Duckbone.ListView = Backbone.View.extend();
+
+  Duckbone.include(Duckbone.ListView.prototype,
+    Duckbone.ListableView, Duckbone.BindableView
+  );
+
   // ### Duckbone.Application
   // Provides core functionality of a duckbone app
   Duckbone.Application = Backbone.Router.extend()
