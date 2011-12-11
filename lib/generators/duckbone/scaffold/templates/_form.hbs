@@ -1,0 +1,16 @@
+{{#form "<%= class_name.underscore %>"}}
+
+  {{form_error_banner}}
+
+<% attributes.each do |attribute| -%>
+  <div class="field">
+    {{form_label "<%= attribute.name %>" "<%= attribute.name.titleize %>"}}<br />
+    {{<%= field_type_for attribute.field_type %> "<%= attribute.name %>"}}
+  </div>
+<% end -%>
+
+  <div class="actions">
+    {{form_submit_with_spinner "<%= class_name.underscore %>" createOrUpdate}}
+  </div>
+
+{{/form}}

@@ -1,0 +1,21 @@
+<h1>Listing <%= class_name.underscore.humanize.downcase.pluralize %></h1>
+
+<table>
+  <thead>
+    <tr>
+<% attributes.each do |attribute| -%>
+      <th><%= attribute.name.titleize %></th>
+<% end %>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  {{child "<%= class_name.underscore.pluralize %>List" "tbody"}}
+
+</table>
+
+<br />
+
+<a data-navigate="duckbone/<%= class_name.underscore.pluralize %>/new">New <%= class_name %></a>

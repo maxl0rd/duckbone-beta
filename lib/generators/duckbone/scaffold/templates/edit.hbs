@@ -1,0 +1,6 @@
+<h1>Editing <%= class_name.underscore.humanize.downcase %></h1>
+
+{{> <%= class_name.underscore.pluralize %>__form}}
+
+<a data-navigate="duckbone/<%= class_name.underscore.pluralize %>/{{id}}">Show</a> |
+<a data-navigate="duckbone/<%= class_name.underscore.pluralize %>">Back</a>

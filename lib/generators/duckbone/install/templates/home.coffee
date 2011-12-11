@@ -1,4 +1,5 @@
 class <%= application_name %>.Views.Home extends Duckbone.View
+
   templateName: 'home'
 
   @routeAction: =>

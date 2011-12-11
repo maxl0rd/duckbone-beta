@@ -1,0 +1,10 @@
+<% attributes.each do |attribute| -%>
+<p>
+  <b><%= attribute.name.titleize %>:</b>
+
+  {{attr "<%= attribute.name %>"}}
+</p>
+<% end %>
+
+<a data-navigate="duckbone/<%= class_name.underscore.pluralize %>/{{id}}/edit">Edit</a> |
+<a data-navigate="duckbone/<%= class_name.underscore.pluralize %>">Back</a>
