@@ -121,7 +121,7 @@ on itself. For example:
     // Each route action generally results in a call to `loadView()`.
     loadView: function(view, options) {
       if (options === undefined) options = {};
-      if (this.isFlashableView) this.clearFlashes();
+      if (this.isFlashableView) this.clearFlashes(true);
       if (this.mainView) this.mainView.remove();
       options.application = this;
       this.mainView = new view(options);
