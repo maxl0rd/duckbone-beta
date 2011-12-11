@@ -20,26 +20,32 @@ Duckbone's philosophy emerged from @maxl0rd's experiences building several large
 Add the gem to your Gemfile:
 
 ```ruby
-# Your GemFile...
-
 gem 'duckbone'
 ```
 
-Update Bundler
+Update Bundler from your shell:
 
 ```bash
-$ bundle
+bundle
 ```
 
-Run the installer:
+Run the installer to setup the basics:
 
 ```bash
-$ rails g duckbone:install
+rails g duckbone:install
 ```
 
-Start your server and look at it go:
+This will also mount a hello world view at [http://localhost:3000/duckbone](http://localhost:3000/duckbone)
 
-[http://localhost:3000/duckbone](http://localhost:3000/duckbone)
+Create a scaffold:
+
+```bash
+rails g duckbone:scaffold car model:string cylinders:integer doors:integer style:string description:text
+rake db:migrate
+rails s
+```
+
+and [check it out in your browser](http://localhost:3000/duckbone/cars)
 
 ## Compatibility
 
