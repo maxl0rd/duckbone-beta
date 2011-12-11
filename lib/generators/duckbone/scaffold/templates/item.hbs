@@ -1,5 +1,5 @@
 <% attributes.each do |attribute| -%>
-<td>{{<%= attribute.name %>}}</td>
+<td>{{attr "<%= attribute.name %>"}}</td>
 <% end %>
 <td><a data-navigate="duckbone/<%= class_name.underscore.pluralize %>/{{id}}">Show</a></td>
 <td><a data-navigate="duckbone/<%= class_name.underscore.pluralize %>/{{id}}/edit">Edit</a></td>
