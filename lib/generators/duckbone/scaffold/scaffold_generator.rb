@@ -23,7 +23,7 @@ module Duckbone
 
       def add_routes
         inject_into_file "app/assets/javascripts/duckbone/#{application_name.underscore}.js.coffee", :after => "\n    @mapRoutes" do
-          {"" => "Index", "/:id" => "Show", "/new" => "New", "/edit" => "Edit"}.inject("") do |memo, pair|
+          {"" => "Index", "/:id" => "Show", "/new" => "New", "/:id/edit" => "Edit"}.inject("") do |memo, pair|
             memo + "\n      'duckbone/#{class_name.underscore.pluralize}#{pair.first}': #{application_name}.Views.#{class_name.pluralize}#{pair.last}"
           end
         end
@@ -33,13 +33,15 @@ module Duckbone
         # Models
         template "model.coffee", "#{js_dir}/models/#{class_name.underscore}.js.coffee"
         # Views
-        %w(index edit).each do |view_name|
+        %w(index show new edit).each do |view_name|
           template "#{view_name}.coffee", "#{js_dir}/views/#{class_name.underscore.pluralize}/#{view_name}.js.coffee"
         end
         # Templates
         %w(item index show _form new edit).each do |template_name|
           template "#{template_name}.hbs", "#{js_dir}/templates/#{class_name.underscore.pluralize}/#{template_name}.hbs"
         end
+        # Stylesheet
+        template "scaffold.css", "app/assets/stylesheets/duckbone_scaffold.css"
       end
 
       protected

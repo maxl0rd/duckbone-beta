@@ -9,8 +9,9 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Item extends Duck
 
   destroy: ->
     if confirm("Are you sure?")
-      @model.destroy()
-
+      @model.destroy
+        success: ->
+          <%= application_name%>.<%= class_name.underscore.pluralize %>.remove(@model)
 
 # The List View that manages all <%= class_name %> items on the page
 class <%= application_name %>.Views.<%= class_name.pluralize %>ListView extends Duckbone.ListView

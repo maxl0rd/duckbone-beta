@@ -37,7 +37,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
     respond_to do |format|
       if @<%= orm_instance.update_attributes("params[:#{singular_table_name}]") %>
-        format.json { head :ok }
+        format.json { head :no_content }
       else
         format.json { render <%= key_value :json, "@#{orm_instance.errors}" %>, <%= key_value :status, ':unprocessable_entity' %> }
       end
@@ -50,7 +50,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     @<%= orm_instance.destroy %>
 
     respond_to do |format|
-      format.json { head :ok }
+      format.json { head :no_content }
     end
   end
 end

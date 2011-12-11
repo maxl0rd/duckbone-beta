@@ -3,8 +3,9 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Edit extends Duck
   templateName: '<%= class_name.underscore.pluralize %>_edit'
 
   fields:
-    title: {}
-    body: {}
+<% attributes.each do |attribute| -%>
+    <%= attribute.name %>: {}
+<% end %>
 
   modelSyncEvents:
     'sync:success': 'modelSaved'
