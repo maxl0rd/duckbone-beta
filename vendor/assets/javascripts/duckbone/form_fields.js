@@ -56,7 +56,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // This helper creates a div containing a form error banner. This banner is shown
   // whenever the form is submitted and found to be invalid.
   Handlebars.registerHelper('form_error_banner', function(text) {
-    text = text || "Please fix the errors below";
+    text = (typeof text == "string") ? text : "Please fix the errors below";
     return new Handlebars.SafeString('<div class="error_banner" style="display: none">' + Handlebars.Utils.escapeExpression(text) + '</div>');
   });
 
