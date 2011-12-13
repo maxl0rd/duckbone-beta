@@ -100,11 +100,9 @@ For example:
     // renderTemplate() will look for a view with this name defined as a prop on the parent view
     // and replace this element
 
-    Handlebars.registerHelper('child', function(childName, tagName) {
-      if (typeof tagName != "string") tagName = 'div';
-      tagName = Handlebars.Utils.escapeExpression(tagName)
+    Handlebars.registerHelper('child', function(childName) {
       return new Handlebars.SafeString(
-        '<' + tagName + ' data-child-view="' + Handlebars.Utils.escapeExpression(childName) + '"></' + tagName + '>'
+        '<script type="text/x-placeholder" data-child-view="' + Handlebars.Utils.escapeExpression(childName) + '"></script>'
       );
     });
 
