@@ -79,8 +79,30 @@ extend Backbone.Collection into your own base collection class. For example:
         this.remove(m);
       }, this);
       this.trigger('freshen', this);
-    }
+    },
 
+    // Override Backbone's fetch method to add 'freshen' capability.
+    // just pass freshen: true to non-destructively update a collection from
+    // the server
+    fetch: function(options) {
+      options || (options = {});
+      var collection = this;
+      var success = options.success;
+      options.success = function(resp, status, xhr) {
+        collection[options.add ? 'add' : (options.freshen ? 'freshen' : 'reset')](collection.parse(resp, xhr), options);
+        if (success) success(collection, resp);
+      };
+      var error = options.error;
+      options.error = function(resp) {
+        if (error) {
+          error(collection, resp, options);
+        } else {
+          collection.trigger('error', collection, resp, options)
+        }
+      }
+
+      return (this.sync || Backbone.sync).call(this, 'read', this, options);
+    }
   }
 
 }).call(this);
