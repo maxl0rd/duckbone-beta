@@ -86,19 +86,20 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
     bindAttribute: function(model, attr, binding) {
       // Get model
       model = model || this.model || new Backbone.Model();
+      var attrValue = Handlebars.Utils.escapeExpression(model.get(attr));
       if (typeof binding == "function") {
         // The binding is a callback function. Set value now.
-        binding.call(this, model.get(attr));
+        binding.call(this, attrValue);
         // Bind the method to changes.
         this.weakBindToModel('change:'+attr, function() {
-          binding.call(this, model.get(attr));
+          binding.call(this, attrValue);
         }, this);
       } else if (typeof binding == "string") {
         // The binding is a selector. Set value now.
-        $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
+        $(this.el).find(binding).html(attrValue);
         // Bind the selector's html to changes.
         this.weakBindToModel('change:'+attr, function() {
-          $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
+          $(this.el).find(binding).html(attrValue);
         }, this);
       }
     },
