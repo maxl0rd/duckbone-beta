@@ -40,7 +40,7 @@ this module, and any custom form field types used by an EditableView should also
     // - modelValue - the given model value
     // - returns - the transformed value to set on the DOM element
     modelToDomTransform: function(modelValue) {
-      return modelValue ? modelValue : "";
+      return (modelValue !== undefined || modelValue !== NaN) ? modelValue : "";
     },
 
     // #### function domToModelTransform
@@ -69,7 +69,7 @@ this module, and any custom form field types used by an EditableView should also
       var field = this, model = this.model, changeEvent = 'change:'+attr;
       model.bind(changeEvent, function() { // bind to model changes
         var newValue = model.get(attr);
-        if (newValue != field.get() && Duckbone.ModelHelpers.isValidAttribute(newValue))
+        if (newValue !== field.get() && Duckbone.ModelHelpers.isValidAttribute(newValue))
           field.set(newValue);
       });
       field.set(model.get(attr)); // initialize field to model value
