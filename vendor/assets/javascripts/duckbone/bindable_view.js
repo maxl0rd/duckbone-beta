@@ -3,8 +3,7 @@
 
 This mixin enables any view to selectively data-bind to changes in the model.
 Many developers prefer this approach over re-rendering an entire view on each model
-change event. It also implements "weak bindings" that clean themselves up when the
-view is removed.
+change event.
 
 ## Usage
 
@@ -102,45 +101,6 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
           $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
         }, this);
       }
-    },
-
-    // ### Weak Binding
-
-    // #### function weakBindToModel
-    // - event - event to bind to, ie 'change:foo'
-    // - callback - callback function
-    // - context - optional `this` context for the callback, defaults to the view
-    // - returns - nothing
-    //
-    // Creates a binding on the view's model that is unbound when the view is removed
-    weakBindToModel: function(event, callback, context) {
-      this.weakBindTo(this.model, event, callback, context);
-    },
-
-    // #### function weakBindTo
-    // - obj - An object responding to `bind()`, e.g. a jQuery object or anything that
-    //   includes Backbone.Events
-    // - event - event to bind to, ie 'change:foo'
-    // - callback - callback function
-    // - context - optional `this` context for the callback, defaults to the view
-    // - returns - nothing
-    //
-    // Creates a binding on the object that is unbound when the view is removed
-    weakBindTo: function(obj, event, callback, context) {
-      this._weakBindings = this._weakBindings || [];
-      this._weakBindings.push([obj, event, callback]);
-      obj.bind.apply(obj, _.toArray(arguments).slice(1));
-    },
-
-    // #### function removeWeakBindings
-    // - returns - nothing
-    // Unbinds all weak bindings created by this view
-    removeWeakBindings: function() {
-      _.each(this._weakBindings, function(binding) {
-        binding[0].unbind(binding[1],binding[2]);
-      });
-      delete this['_weakBindings'];
-      this.unbindLiveTimestamps();
     },
 
     // #### function bindLiveTimestamps
