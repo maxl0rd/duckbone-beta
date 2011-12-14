@@ -14,8 +14,8 @@ class <%= application_name %>.Application extends Duckbone.Application
   initialize: (options) ->
 
     # Create the routes
-    @mapRoutes
-      'duckbone': <%= application_name %>.Views.Home
+    @mapRoutes {
+    }
 
 # Bootstrap Application on Document Ready
 # Creates the application, assigns the container, and starts the history

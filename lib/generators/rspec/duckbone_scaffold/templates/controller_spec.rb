@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-describe <%= controller_class_name %>Controller do
+describe Api::<%= controller_class_name %>Controller do
 
   before do
     request.env["HTTP_ACCEPT"] = "application/json"

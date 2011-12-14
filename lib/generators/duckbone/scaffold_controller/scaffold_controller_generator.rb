@@ -8,6 +8,10 @@ module Duckbone
 
       remove_hook_for :template_engine, :helper, :test_framework
 
+      def create_controller_files
+        template 'controller.rb', File.join('app/controllers/api', class_path, "#{controller_file_name}_controller.rb")
+      end
+
       hook_for :test_framework, :as => :duckbone_scaffold
     end
   end

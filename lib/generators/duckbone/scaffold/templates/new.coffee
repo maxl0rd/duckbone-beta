@@ -16,7 +16,7 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>New extends Duckb
     'sync:success': 'modelSaved'
 
   modelSaved: () =>
-    <%= application_name %>.app.navigate "duckbone/<%= class_name.underscore.pluralize %>/#{@model.id}", true
+    <%= application_name %>.app.navigate "<%= class_name.underscore.pluralize %>/#{@model.id}", true
     <%= application_name %>.app.flashNotice('<%= class_name %> was successfully created.')
 
   @routeAction: ->

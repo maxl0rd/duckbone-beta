@@ -35,8 +35,6 @@ Run the installer to setup the basics:
 rails g duckbone:install
 ```
 
-This will also mount a hello world view at [http://localhost:3000/duckbone](http://localhost:3000/duckbone)
-
 Create a scaffold:
 
 ```bash
@@ -45,7 +43,7 @@ rake db:migrate
 rails s
 ```
 
-and [check it out in your browser](http://localhost:3000/duckbone/cars)
+and [check it out in your browser](http://localhost:3000/cars).
 
 ## Compatibility
 

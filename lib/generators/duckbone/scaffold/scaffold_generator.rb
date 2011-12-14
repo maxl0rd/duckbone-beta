@@ -21,10 +21,23 @@ module Duckbone
         }
       end
 
-      def add_routes
-        inject_into_file "app/assets/javascripts/duckbone/#{application_name.underscore}.js.coffee", :after => "\n    @mapRoutes" do
+      # Override Rails's route to include api
+      def add_resource_route
+        return if options[:actions].present?
+        route_config =  (['api'] + regular_class_path).collect{|namespace| "namespace :#{namespace} do " }.join(" ")
+        route_config << "resources :#{file_name.pluralize}"
+        route_config << " end" * (regular_class_path.size + 1)
+        route route_config
+      end
+
+      def add_duckbone_route
+        route "resources :#{file_name.pluralize}, :controller => :duckbone, :only => [:index, :show, :new, :edit]"
+      end
+
+      def add_js_routes
+        inject_into_file "app/assets/javascripts/duckbone/#{application_name.underscore}.js.coffee", :after => "\n    @mapRoutes {" do
           {"" => "Index", "/:id" => "Show", "/new" => "New", "/:id/edit" => "Edit"}.inject("") do |memo, pair|
-            memo + "\n      'duckbone/#{class_name.underscore.pluralize}#{pair.first}': #{application_name}.Views.#{class_name.pluralize}#{pair.last}"
+            memo + "\n      '#{class_name.underscore.pluralize}#{pair.first}': #{application_name}.Views.#{class_name.pluralize}#{pair.last}"
           end
         end
       end

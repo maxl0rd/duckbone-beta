@@ -31,15 +31,8 @@ module Duckbone
 
       def create_files
         template "app.coffee", "app/assets/javascripts/duckbone/#{application_name.underscore}.js.coffee"
-        template "home.coffee", "app/assets/javascripts/duckbone/views/home.js.coffee"
-        template "home.hbs", "app/assets/javascripts/duckbone/templates/home.hbs"
         template "controller.rb", "app/controllers/duckbone_controller.rb"
         template "view.erb", "app/views/duckbone/index.html.erb"
-      end
-
-      def add_route
-        route 'match "duckbone" => "duckbone#index"'
-        route 'match "duckbone/*path" => "duckbone#index"'
       end
     end
 

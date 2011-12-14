@@ -1,7 +1,7 @@
 class <%= application_name %>.Models.<%= class_name %> extends Duckbone.Model
 
   urlRoot: ->
-    "/<%= class_name.underscore.pluralize %>"
+    "/api/<%= class_name.underscore.pluralize %>"
 
   createOrUpdate: ->
     if @isNew()
@@ -14,4 +14,4 @@ class <%= application_name %>.Collections.<%= class_name.pluralize %> extends Du
 
   model: <%= application_name %>.Models.<%= class_name %>
   url: ->
-    "/<%= class_name.underscore.pluralize %>"
+    "/api/<%= class_name.underscore.pluralize %>"

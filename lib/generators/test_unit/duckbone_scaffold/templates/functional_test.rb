@@ -1,7 +1,7 @@
 require 'test_helper'
 
 <% module_namespacing do -%>
-class <%= controller_class_name %>ControllerTest < ActionController::TestCase
+class Api::<%= controller_class_name %>ControllerTest < ActionController::TestCase
   setup do
     @<%= singular_table_name %> = <%= table_name %>(:one)
   end
