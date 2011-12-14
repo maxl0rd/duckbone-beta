@@ -24,9 +24,12 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Index extends Duc
 
   templateName: '<%= class_name.underscore.pluralize %>_index'
 
-  createChildren: () =>
+  createChildren: =>
     @<%= class_name.underscore.pluralize %>List = new <%= application_name %>.Views.<%= class_name.pluralize %>ListView
       collection: @collection
+
+  beforeRemove: =>
+    @<%= class_name.underscore.pluralize %>List.remove()
 
   @routeAction: (id) ->
     <%= application_name %>.<%= class_name.underscore.pluralize %> ?= new <%= application_name %>.Collections.<%= class_name.pluralize %>

@@ -67,7 +67,7 @@ this module, and any custom form field types used by an EditableView should also
       if (!attr) throw("Duckbone.BindableField.bindToModel() called without a modelAttribute");
       this.modelAttribute = attr;
       var field = this, model = this.model, changeEvent = 'change:'+attr;
-      model.bind(changeEvent, function() { // bind to model changes
+      field.form.view.weakBindToModel(changeEvent, function() { // bind to model changes
         var newValue = model.get(attr);
         if (newValue !== field.get() && Duckbone.ModelHelpers.isValidAttribute(newValue))
           field.set(newValue);

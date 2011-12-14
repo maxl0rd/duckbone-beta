@@ -179,8 +179,8 @@ Usage examples:
     // behaviors defined below. Additionally binds user defined model sync events,
     // defined on the view's `modelSyncEvents` property.
     bindModelSyncEvents: function() {
-      bindEvents(this, this.model, defaultModelSyncEvents);
-      if (this.modelSyncEvents) bindEvents(this, this.model, this.modelSyncEvents);
+      bindEvents(this, defaultModelSyncEvents);
+      if (this.modelSyncEvents) bindEvents(this, this.modelSyncEvents);
     },
 
     // ### Model cloning
@@ -194,7 +194,7 @@ Usage examples:
       if (!this.model) throw("Found not, has your model been. Cloned, it can not be.");
       this.originalModel = this.model;
       this.model = this.originalModel.clone();
-      this.model.bind('sync:success', function() {
+      this.weakBindToModel('sync:success', function() {
         var attrs = _.clone(this.model.attributes);
         _(this.form.fields).each(function(field) {
           if (field.options.temporary) {
@@ -461,10 +461,10 @@ Usage examples:
   };
 
   // Binds default events to the model
-  function bindEvents(view, model, events) {
+  function bindEvents(view, events) {
     for (var event in events) {
       var method = view[events[event]];
-      if (typeof method == 'function') model.bind(event, method, view);
+      if (typeof method == 'function') view.weakBindToModel(event, method, view);
     }
   };
 
