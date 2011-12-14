@@ -4,25 +4,16 @@ describe('Duckbone.StylizableView', function() {
   var templateFixture = '<div>My <b>pet</b> is a <span class="pet">cat</span></div>';
 
   beforeEach(function() {
-    testViewClass = Backbone.View.extend();
-    _.extend(testViewClass.prototype, Duckbone.TemplateableView, Duckbone.StylizeableView);
-    _.extend(testViewClass.prototype, {
-      template: Duckbone.Handlebars.compile(templateFixture),
+    testViewClass = Backbone.View.extend({
+      templateData: templateFixture,
       styles: {
         'el': {color: 'blue'},
         'el.hot': {color: 'rgb(204, 0, 0)'},
         'b': {color: 'green'},
         'span.pet': {color: 'red'}
-      },
-      initialize: function() {
-        this.render();
-      },
-      render: function() {
-        this.renderTemplate();
-        this.applyStyles();
-        return this;
-      },
+      }
     });
+    Duckbone.include(testViewClass.prototype, Duckbone.TemplateableView, Duckbone.StylizeableView);
     subject = new testViewClass();
   });
 

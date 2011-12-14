@@ -26,7 +26,7 @@ For example:
 ### Custom Field Types
 
 Extend the class `Duckbone.FormFieldBase` to create additional field types. Add additional
-functionality to `afterInitialize` and `createChildren`. Override `get` and `set` to interact
+functionality to `afterInitialize` and `createNestedViews`. Override `get` and `set` to interact
 with the model.
 
 Study the class `Duckbone.RadioSetFormField` for an example of a complex new field type.
@@ -190,7 +190,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
       this.form = this.options.form;
       if (options.elAttributes) $(this.el).attr(options.elAttributes);
       this.afterInitialize(options);
-      this.createChildren();
+      this.createNestedViews();
       this.bindToModel();
       this.bindToDOM();
       this.bindValidation();
@@ -206,7 +206,7 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     // Provides a hook for the developer to add additional functionality to subclasses.
     // This method is used when the field must add additional elements to the DOM
     // to implement its functionality.
-    createChildren: function() {}
+    createNestedViews: function() {}
 
   });
 
@@ -225,10 +225,10 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     // #### property type
     type: "select",
 
-    // #### function createChildren
+    // #### function createNestedViews
     // Adds all of the child `<option>` elements to the `<select>` element,
     // as defined by the field's `selectOptions` property.
-    createChildren: function() {
+    createNestedViews: function() {
       var opts = this.options.selectOptions;
       var selectOptions = (typeof opts == "function") ? opts.call(this) : opts;
       for (var opt in selectOptions) {
@@ -245,10 +245,10 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     // #### property type
     type: "radio_set",
 
-    // #### function createChildren
+    // #### function createNestedViews
     // Adds all of the child radio button elements to the field,
     // as defined by the field's `selectOptions` property.
-    createChildren: function() {
+    createNestedViews: function() {
       var opts = this.options.selectOptions;
       var selectOptions = (typeof opts == "function") ? opts.call(this) : opts;
       for (var opt in selectOptions) {

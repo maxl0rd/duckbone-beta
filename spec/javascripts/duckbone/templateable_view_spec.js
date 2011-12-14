@@ -22,7 +22,8 @@ describe("Duckbone.TemplateableView", function() {
         return "Baz";
       }
     });
-    testViewClass = Backbone.View.extend(Duckbone.TemplateableView);
+    testViewClass = Backbone.View.extend();
+    Duckbone.include(testViewClass.prototype, Duckbone.TemplateableView);
     templates = new Duckbone.TemplateRegistry({
       templatesData: templatesDataFixture,
       partialsData: partialsDataFixture

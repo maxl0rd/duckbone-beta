@@ -35,7 +35,6 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
 
   it("Should call all of its init lifecycle callbacks", function() {
     ViewClass = Backbone.View.extend({
-      beforeCreateChildViews: sinon.spy(),
       beforeClone: sinon.spy(),
       afterInitialize: sinon.spy(),
       beforeRemove: sinon.spy(),
@@ -49,9 +48,8 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
   it("Should call all of its lifecycle callbacks when everything is mixed in", function() {
     ViewClass = Backbone.View.extend({
       template: Duckbone.Handlebars.compile('<div>Ohai</div>'),
-      beforeCreateChildViews: sinon.spy(),
       beforeClone: sinon.spy(),
-      createChildren: sinon.spy(),
+      createNestedViews: sinon.spy(),
       afterInitialize: sinon.spy(),
       beforeRemove: sinon.spy(),
       afterRemove: sinon.spy()
@@ -61,9 +59,8 @@ describe("Duckbone.ViewLifecycleExtensions", function() {
     subject = new ViewClass({
       model: new Backbone.Model()
     });
-    expect(subject.createChildren.called).toBeTruthy();
+    expect(subject.createNestedViews.called).toBeTruthy();
     expect(subject.afterInitialize.called).toBeTruthy();
-    expect(subject.beforeCreateChildViews.called).toBeTruthy();
     expect(subject.beforeClone.called).toBeTruthy();
   });
 

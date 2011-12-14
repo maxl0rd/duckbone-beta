@@ -10,7 +10,6 @@
 
   // There are several callback hooks available that can be defined on the object:
 
-  // - beforeCreateChildViews() => called before ListView creates its children
   // - beforeClone() => called before EditableView clones its model for editing
   // - afterClone() => called after EditableView clones its model for editing
   // - afterCreateForm() => called after EditableView renders its form elements
@@ -25,11 +24,6 @@
 
       this.application = this.options.application;
 
-      if (this.isListableView) {
-        tryMethod(this, 'beforeCreateChildViews'); // User optionally defines this
-        this.createChildViews();
-        this.bindCollectionEvents();
-      }
       if (this.isEditableView) {
         tryMethod(this, 'beforeClone'); // User optionally defines this
         this.cloneModelForEditing();
@@ -64,7 +58,7 @@
       if (this.isEditableView) this.expireClone();
       tryMethod(this, 'beforeRemove'); // User optionally defines this
       this.removeWeakBindings();
-      if (this.isListableView) this.empty();
+      if (this.isNestableView) this.removeNestedViews();
       if (this.isPageableView) this.empty();
       Backbone.View.prototype.remove.call(this);
       tryMethod(this, 'afterRemove'); // User optionally defines this

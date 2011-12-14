@@ -22,7 +22,8 @@ describe("Duckbone Form Fields", function() {
         model: model,
         name: "my_text_field",
         modelAttribute: "title",
-        elAttributes: {size: 40, placeholder: "foo"}
+        elAttributes: {size: 40, placeholder: "foo"},
+        form: {view: new Duckbone.View({model: model})}
       });
     });
 
@@ -65,7 +66,8 @@ describe("Duckbone Form Fields", function() {
         name: "my_text_field",
         modelAttribute: "title",
         elAttributes: {size: 40, placeholder: "foo"},
-        stripWhitespace: false
+        stripWhitespace: false,
+        form: {view: new Duckbone.View({model: model})}
       });
       subject.set("  funk");
       expect(subject.get()).toEqual("  funk");
@@ -79,7 +81,8 @@ describe("Duckbone Form Fields", function() {
         el: $('<input type="checkbox" name="my_checkbox_field"/>').get(0),
         model: model,
         name: "my_checkbox_field",
-        modelAttribute: "agree"
+        modelAttribute: "agree",
+        form: {view: new Duckbone.View({model: model})}
       });
     });
 
@@ -110,7 +113,8 @@ describe("Duckbone Form Fields", function() {
           model: model,
           name: "my_select_field",
           modelAttribute: "food",
-          selectOptions: {dogFood: "Bone", catFood: "Fish", fishFood: "Muck"}
+          selectOptions: {dogFood: "Bone", catFood: "Fish", fishFood: "Muck"},
+          form: {view: new Duckbone.View({model: model})}
         });
       });
 
@@ -139,7 +143,8 @@ describe("Duckbone Form Fields", function() {
           modelAttribute: "food",
           selectOptions: function() {
             return {dogFood: "Bone", catFood: "Fish", fishFood: "Muck"}
-          }
+          },
+          form: {view: new Duckbone.View({model: model})}
         });
       });
 
@@ -172,7 +177,8 @@ describe("Duckbone Form Fields", function() {
         model: model,
         name: "my_radio_set_field",
         modelAttribute: "food",
-        selectOptions: {dogFood: "Bone", catFood: "Fish", fishFood: "Muck"}
+        selectOptions: {dogFood: "Bone", catFood: "Fish", fishFood: "Muck"},
+        form: {view: new Duckbone.View({model: model})}
       });
     });
 

@@ -42,21 +42,20 @@ need to do more work in render, just redefine it, calling `renderTemplate()` som
 
 When a view includes another view, use the following technique:
 
-- Define the subview in the parent's `createChildren` callback. The view lifecycle will call this
+- Define the subview in the parent's `createNestedViews` callback. The view lifecycle will call this
   automatically during renderTemplate. Assign the subview to the parent, ie `this.mySubView`
 - Use the `{{child}}` helper in the parent's template, ie {{child "mySubView"}}
-- Tear down the child view in `afterRemove`
+- Teardown is automatic
 
 For example:
 
     ParentView = Duckbone.View.extend({
       templateData: '<div>Parent View</div>
         <div class="childStuff">{{child "childView"}}</div>',
-      createChildren: function() {
-        this.childView = new Duckbone.View();
-      },
-      afterRemove: function() {
-        if (this.childView) this.childView.remove();
+      createNestedViews: function() {
+        {
+          childView: new Duckbone.View()
+        }
       }
     })
 
@@ -130,16 +129,12 @@ For example:
       if (!this.hasViewLifecycleExtensions) {
         Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
       }
+      if (!this.isNestableView) {
+        Duckbone.include(this, Duckbone.NestableView);
+      }
     },
 
     templateRegistry: templateRegistry,
-
-    // Default render method calls renderTemplate
-
-    render: function() {
-      this.renderTemplate();
-      return this;
-    },
 
     // Fetch template out of the View's templateData, options or the templateRegistry
 
@@ -178,17 +173,7 @@ For example:
       if (!this.template) throw("renderTemplate called without a template.")
 
       // Remove child views ...
-
-      $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
-        var childName = $(div).attr('data-child-view');
-        var child = this[childName]
-        if (child instanceof Backbone.View) {
-          child.remove();
-        } else {
-          throw("Unknown child view " + childName);
-        }
-      }, this));
-
+      this.removeNestedViews();
 
       // Render the HTML template, and if it fails, output as much info as possible
       // 500 Error on exceptions in production
@@ -207,13 +192,12 @@ For example:
         <% end %>
       }
 
-      // Call createChildren, which should instantiate any child views
-      if (typeof this.createChildren == 'function') this.createChildren();
+      this.setupNestedViews();
 
       // Include child views where they belong in the DOM
       $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
         var childName = $(div).attr('data-child-view');
-        var child = this[childName]
+        var child = this.nestedViews[childName]
         if (child instanceof Backbone.View) {
           $(div).replaceWith(child.el); // swap placeholder for childView
           $(child.el).attr({'data-child-view': childName});

@@ -14,7 +14,7 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Item extends Duck
           <%= application_name%>.<%= class_name.underscore.pluralize %>.remove(@model)
 
 # The List View that manages all <%= class_name %> items on the page
-class <%= application_name %>.Views.<%= class_name.pluralize %>ListView extends Duckbone.ListView
+class <%= application_name %>.Views.<%= class_name.pluralize %>List extends Duckbone.ListView
   tagName: 'tbody'
   viewClass: <%= application_name %>.Views.<%= class_name.pluralize %>Item
 
@@ -24,12 +24,8 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Index extends Duc
 
   templateName: '<%= class_name.underscore.pluralize %>_index'
 
-  createChildren: =>
-    @<%= class_name.underscore.pluralize %>List = new <%= application_name %>.Views.<%= class_name.pluralize %>ListView
-      collection: @collection
-
-  beforeRemove: =>
-    @<%= class_name.underscore.pluralize %>List.remove()
+  createNestedViews: =>
+    list: new <%= application_name %>.Views.<%= class_name.pluralize %>List(collection: @collection)
 
   @routeAction: (id) ->
     <%= application_name %>.<%= class_name.underscore.pluralize %> ?= new <%= application_name %>.Collections.<%= class_name.pluralize %>

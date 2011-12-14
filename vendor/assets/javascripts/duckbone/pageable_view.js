@@ -21,19 +21,11 @@
       }
     },
 
-    render: function() {
-      this.empty();
-      this.createChildren();
-      return this;
-    },
-
     // Create sub views for render
-    createChildren: function() {
+    createNestedViews: function() {
       // Create child views
-      this.list = this.createListView();
-      $(this.el).append(this.list.el);
-      this.pager = this.createPagerView();
-      $(this.el).append(this.pager.el);
+      var list = this.createListView();
+      var pager = this.createPagerView();
 
       // bind 'changePage' events to navigation state
       this.application = this.options.application || this.application;
@@ -47,40 +39,32 @@
           this.application.navigate(newLocation, false);
         }, this);
       }
-    },
 
-    // Clean up sub views
-    empty: function() {
-      if (this.list) this.list.remove();
-      if (this.pager) this.pager.remove();
+      return {
+        list: list,
+        pager: pager
+      }
     },
 
     // Creates a list view container for the elements
     createListView: function() {
-      var list = new Backbone.View({
+      return new Duckbone.ListView({
         viewClass: this.viewClass,
         pageableView: this,
         tagName: 'ul',
         className: 'listable_view',
+        collection: this.collection
       });
-      Duckbone.include(list, Duckbone.ListableView, Duckbone.BindableView);
-      list.collection = this.collection;
-      list.createChildViews();
-      list.bindCollectionEvents();
-      this.list = this.list || list;
-      return list;
     },
 
     // Creates a view for the pager element
     // You can set a custom pager view class, or use the supplied default view
     createPagerView: function() {
       var pagerClass = this.options.pagerClass || this.pagerClass || Pager;
-      var pager = new pagerClass({
+      return new pagerClass({
         collection: this.collection,
         pageableView: this
       });
-      this.pager = this.pager || pager;
-      return pager;
     },
 
     showPage: function(p) {

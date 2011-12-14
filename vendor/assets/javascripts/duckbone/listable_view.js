@@ -15,31 +15,40 @@
       if (!this.isBindableView) {
         Duckbone.include(this, Duckbone.BindableView);
       }
+      if (!this.isNestableView) {
+        Duckbone.include(this, Duckbone.NestableView);
+      }
     },
 
-    // Create a child view for each model in the collection
+    render: function(force) {
+      if (!this._viewsRendered || force) {
+        this.renderItems();
+        this.bindCollectionEvents();
+        this._viewsRendered = true;
+      }
+      return this;
+    },
 
-    createChildViews: function() {
-      this.views = this.views || {};
+    createNestedViews: function() {
+      return _.reduce(this.collection.models, function(views, model) {
+        views[model.cid] = new this.viewClass({model: model});
+        return views;
+      }, {}, this);
+    },
+
+    // Create a view for each model in the collection
+    renderItems: function() {
       ensureViewClass(this);
       ensureCollection(this);
-      // Create all of the children views, and add their el's to a fragment first
+      // Create all of the children views
+      this.setupNestedViews();
+      // add their el's to a fragment first
       var fragment = document.createDocumentFragment();
-      _.each(this.collection.models, function(model) {
-        this.views[model.cid] = new this.viewClass({model: model});
-        fragment.appendChild(this.views[model.cid].el);
-      }, this);
+      _.each(this.nestedViews, function(view) {
+        fragment.appendChild(view.el);
+      });
       // Then add the fragment to the DOM. This cuts down on page redraws
       this.el.appendChild(fragment);
-    },
-
-    // Delegate rendering to each individual child view
-
-    renderChildViews: function() {
-      if (this.views == undefined) throw("ListableView.renderChildViews called on a view without children");
-      _.each(_.keys(this.views), function(subview) {
-        this.views[subview].render();
-      }, this);
     },
 
     // Bind default behaviors to collection events
@@ -67,14 +76,6 @@
 
     // Remove all child views (without destroying the models in the collection)
 
-    empty: function() {
-      _.each(_.keys(this.views), function(subview) {
-        this.views[subview].remove();
-        delete this.views[subview];
-      }, this);
-      $(this.el).empty();
-    },
-
     // Call fetch on the collection to refresh its contents
     // The reset event will cause this view to completely redraw
 
@@ -87,7 +88,7 @@
     // Retrieve the view for a given model
 
     getViewByModel: function(model) {
-      return this.views[model.cid];
+      return this.nestedViews[model.cid];
     }
 
   };
@@ -105,19 +106,19 @@
   // Default handler for when the collection is reset
 
   function collectionReset() {
-    this.empty();
-    this.createChildViews();
+    this.removeNestedViews();
+    this.render(true);
   };
 
   // Default handler for when a model is added to the collection
 
   function collectionAdd(model) {
     var view = new this.viewClass({model: model});
-    this.views[model.cid] = view;
-    var el = this.views[model.cid].el;
+    this.nestedViews[model.cid] = view;
+    var el = this.nestedViews[model.cid].el;
     var position = _(this.collection.models).indexOf(model);
     if (position == 0) {
-      $(this.el).prepend(this.views[model.cid].el);
+      $(this.el).prepend(this.nestedViews[model.cid].el);
     } else {
       var previousElement = $(this.el).children().eq(position-1);
       $(previousElement).after(el);
@@ -127,8 +128,8 @@
   // Default handler for when a model is removed from the collection
 
   function collectionRemove(model) {
-    this.views[model.cid].remove();
-    delete this.views[model.cid];
+    this.nestedViews[model.cid].remove();
+    delete this.nestedViews[model.cid];
   };
 
   // Ensure that the view has obtained its view and collection objects

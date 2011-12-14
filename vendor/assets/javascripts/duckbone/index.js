@@ -7,6 +7,7 @@
 //= require ./view_lifecycle_extensions
 //= require ./handlebars_extensions
 //= require ./template_registry
+//= require ./nestable_view
 //= require ./templateable_view
 //= require ./stylizeable_view
 //= require ./pageable_view
