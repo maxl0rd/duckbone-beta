@@ -64,6 +64,12 @@ Enables any view or application to manage a set of flash messages.
       return flash;
     },
 
+    // #### function activeFlashes
+    // - returns - a jQuery object matching all the active flash notice and alert elements
+    activeFlashes: function() {
+      return $(this.flashOptions.container).find('div.flash_notice, div.flash_alert');
+    },
+
     // #### function clearFlashes
     // Clears all flash notices and alerts.
     //
@@ -73,10 +79,9 @@ Enables any view or application to manage a set of flash messages.
     // This is called on each loadView
     clearFlashes: function(immediately) {
       if (!this.flashOptions) return;
-      var targets = $(this.flashOptions.container).
-        find('div.flash_notice, div.flash_alert')
+      var targets = this.activeFlashes();
       if (immediately) {
-        targets.hide();
+        targets.remove();
       } else {
         targets.fadeOut(this.flashOptions.fadeDuration);
       }

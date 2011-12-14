@@ -30,5 +30,7 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Index extends Duc
 
   @routeAction: (id) ->
     <%= application_name %>.<%= class_name.underscore.pluralize %> ?= new <%= application_name %>.Collections.<%= class_name.pluralize %>
-    <%= application_name %>.app.loadView <%= application_name %>.Views.<%= class_name.pluralize %>Index, collection: <%= application_name %>.<%= class_name.underscore.pluralize %>
-    <%= application_name %>.<%= class_name.underscore.pluralize %>.fetch freshen: true
+    <%= application_name %>.<%= class_name.underscore.pluralize %>.fetch
+      freshen: true
+      success: ->
+        <%= application_name %>.app.loadView <%= application_name %>.Views.<%= class_name.pluralize %>Index, collection: <%= application_name %>.<%= class_name.underscore.pluralize %>

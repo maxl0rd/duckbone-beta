@@ -121,12 +121,24 @@ on itself. For example:
     // Each route action generally results in a call to `loadView()`.
     loadView: function(view, options) {
       if (options === undefined) options = {};
-      if (this.isFlashableView) this.clearFlashes(true);
+      if (this._removableFlashes) {
+        this._removableFlashes.remove();
+        delete this._removableFlashes;
+      }
       if (this.mainView) this.mainView.remove();
       options.application = this;
       this.mainView = new view(options);
       $(this.mainView.el).appendTo(this.mainContainer);
       return this.mainView;
+    },
+
+    // #### function navigate
+    // Simply overrides Backbone's navigate method with a version that clears
+    // flash messages
+    navigate : function(fragment, triggerRoute) {
+      // Next time loadView is called, we want to nix all current flashes.
+      if (this.isFlashableView) this._removableFlashes = this.activeFlashes();
+      Backbone.history.navigate(fragment, triggerRoute);
     },
 
     // #### function bindNavigationBars
