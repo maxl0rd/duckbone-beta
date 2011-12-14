@@ -8,9 +8,6 @@
   // All of the Duckbone mixins ending in -View also mix in this module,
   // as a dependency in their included() callback.
 
-  // These methods will not be set if the developer has previously defined them,
-  // and mixing this in will have no effect.
-
   // There are several callback hooks available that can be defined on the object:
 
   // - beforeCreateChildViews() => called before ListView creates its children
@@ -21,73 +18,57 @@
   // - beforeRemove() => called before the View is removed
   // - afterRemove() => called after the View is removed
 
-  var tryMethod = function(obj, method) {
-    if (obj[method]) obj[method].call(obj);
-  }
-
-  var defaultInitialize = function () {
-
-    this.application = this.options.application;
-
-    if (this.isListableView) {
-      tryMethod(this, 'beforeCreateChildViews'); // User optionally defines this
-      this.createChildViews();
-      this.bindCollectionEvents();
-    }
-    if (this.isEditableView) {
-      tryMethod(this, 'beforeClone'); // User optionally defines this
-      this.cloneModelForEditing();
-      tryMethod(this, 'afterClone'); // User optionally defines this
-    }
-    this.render();
-    if (this.isStylizeableView) {
-      this.applyStyles();
-    }
-    if (this.isBindableView) {
-      this.bindAttributes();
-    }
-    if (this.isEditableView) {
-      this.bindModelSyncEvents();
-      this.createForm();
-      tryMethod(this, 'afterCreateForm'); // User optionally defines this
-    }
-    tryMethod(this, 'afterInitialize'); // User optionally defines this
-  };
-
-  var defaultRender = function() {
-    if (this.isTemplateableView) {
-      this.renderTemplate();
-    }
-    if (this.isStylizeableView) {
-      this.applyStyles();
-    }
-    return this;
-  };
-
-  var defaultRemove = function() {
-    if (this.isEditableView) this.expireClone();
-    tryMethod(this, 'beforeRemove'); // User optionally defines this
-    this.removeWeakBindings();
-    if (this.isListableView) this.empty();
-    if (this.isPageableView) this.empty();
-    Backbone.View.prototype.remove.call(this);
-    tryMethod(this, 'afterRemove'); // User optionally defines this
-    return this;
-  };
-
   Duckbone.ViewLifecycleExtensions = {
     hasViewLifecycleExtensions: true,
 
-    included: function() {
-      this.initialize = this.hasOwnProperty('initialize') ? this.initialize : function() {
-        defaultInitialize.call(this);
+    initialize: function () {
+
+      this.application = this.options.application;
+
+      if (this.isListableView) {
+        tryMethod(this, 'beforeCreateChildViews'); // User optionally defines this
+        this.createChildViews();
+        this.bindCollectionEvents();
       }
-      this.render = this.hasOwnProperty('render') ? this.render : function() {
-        defaultRender.call(this);
+      if (this.isEditableView) {
+        tryMethod(this, 'beforeClone'); // User optionally defines this
+        this.cloneModelForEditing();
+        tryMethod(this, 'afterClone'); // User optionally defines this
       }
-      this.remove = this.hasOwnProperty('remove') ? this.remove : function() {
-        defaultRemove.call(this);
+      this.render();
+      if (this.isStylizeableView) {
+        this.applyStyles();
       }
+      if (this.isBindableView) {
+        this.bindAttributes();
+      }
+      if (this.isEditableView) {
+        this.bindModelSyncEvents();
+        this.createForm();
+        tryMethod(this, 'afterCreateForm'); // User optionally defines this
+      }
+      tryMethod(this, 'afterInitialize'); // User optionally defines this
+    },
+
+    render: function() {
+      if (this.isTemplateableView) {
+        this.renderTemplate();
+      }
+      if (this.isStylizeableView) {
+        this.applyStyles();
+      }
+      return this;
+    },
+
+    remove: function() {
+      if (this.isEditableView) this.expireClone();
+      tryMethod(this, 'beforeRemove'); // User optionally defines this
+      this.removeWeakBindings();
+      if (this.isListableView) this.empty();
+      if (this.isPageableView) this.empty();
+      Backbone.View.prototype.remove.call(this);
+      tryMethod(this, 'afterRemove'); // User optionally defines this
+      return this;
     },
 
     // ### Weak Binding
@@ -135,6 +116,10 @@
       delete this['_weakBindings'];
       this.unbindLiveTimestamps();
     }
+  }
+
+  var tryMethod = function(obj, method) {
+    if (obj[method]) obj[method].call(obj);
   }
 
 }).call();
