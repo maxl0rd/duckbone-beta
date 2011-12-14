@@ -92,14 +92,14 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
         binding.call(this, attrValue);
         // Bind the method to changes.
         this.weakBindToModel('change:'+attr, function() {
-          binding.call(this, attrValue);
+          binding.call(this, Handlebars.Utils.escapeExpression(model.get(attr)));
         }, this);
       } else if (typeof binding == "string") {
         // The binding is a selector. Set value now.
         $(this.el).find(binding).html(attrValue);
         // Bind the selector's html to changes.
         this.weakBindToModel('change:'+attr, function() {
-          $(this.el).find(binding).html(attrValue);
+          $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
         }, this);
       }
     },
