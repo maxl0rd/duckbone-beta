@@ -36,7 +36,7 @@
       $(this.el).append(this.pager.el);
 
       // bind 'changePage' events to navigation state
-      this.application = this.application || this.options.application;
+      this.application = this.options.application || this.application;
       if (this.application) {
         this.collection.bind('pageChange', function(p, options) {
           var newLocation = window.location.hash.split('?')[0] + '?';
@@ -74,7 +74,7 @@
     // Creates a view for the pager element
     // You can set a custom pager view class, or use the supplied default view
     createPagerView: function() {
-      var pagerClass = this.pagerClass || this.options.pagerClass || Pager;
+      var pagerClass = this.options.pagerClass || this.pagerClass || Pager;
       var pager = new pagerClass({
         collection: this.collection,
         pageableView: this

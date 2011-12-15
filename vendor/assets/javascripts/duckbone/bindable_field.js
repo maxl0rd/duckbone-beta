@@ -63,7 +63,7 @@ this module, and any custom form field types used by an EditableView should also
     // (non-undefined, non-NaN) and different from the existing field value.
     // This behavior arrests the circular firing of change events.
     bindToModel: function(attr) {
-      attr = attr || this.modelAttribute || this.options.modelAttribute || this.name || this.options.name;
+      attr = attr || this.options.modelAttribute || this.modelAttribute || this.options.name || this.name;
       if (!attr) throw("Duckbone.BindableField.bindToModel() called without a modelAttribute");
       this.modelAttribute = attr;
       var field = this, model = this.model, changeEvent = 'change:'+attr;
@@ -86,10 +86,10 @@ this module, and any custom form field types used by an EditableView should also
     // and then continually updates on any further changes to the field.
     // The model will generally be set to `null` on an empty field, not undefined.
     bindToDOM: function(attr, changeEvent, el) {
-      attr = attr || this.modelAttribute || this.options.modelAttribute || this.name || this.options.name;
+      attr = attr || this.options.modelAttribute || this.modelAttribute || this.options.name || this.name;
       if (!attr) throw("Duckbone.BindableField.bindToDOM() called without a modelAttribute");
       this.modelAttribute = attr;
-      var changeEvent = this.changeEvent || this.options.changeEvent || 'change';
+      var changeEvent = this.options.changeEvent || this.changeEvent || 'change';
       el = el || this.el; // by default, bind to the parent element
       var field = this, model = this.model;
       $(el).bind(changeEvent, function() { // bind to DOM changes

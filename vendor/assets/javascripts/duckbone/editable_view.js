@@ -162,7 +162,7 @@ Usage examples:
     createForm: function(options) {
       options = options || {};
       var formElement = options.el || $(this.el).find('form').get(0) || $(this.el).get(0);
-      var fieldOptions = options.fields || this.fields || this.options.fields;
+      var fieldOptions = options.fields || this.options.fields || this.fields;
       var model = options.model || this.model;
       var form = new Duckbone.FormManager({
         el: formElement,
@@ -435,7 +435,7 @@ Usage examples:
   // as defined by the view's 'afterSaveDestination' property.
   // Called by `EditableView.cloneModelForEditing`.
   var copyToDestination = function() {
-    var dests = this.afterSaveDestination || this.options.afterSaveDestination;
+    var dests =  this.options.afterSaveDestination || this.afterSaveDestination;
     if (!dests) return;
     if (!(dests instanceof Array)) {
       dests = [dests];

@@ -155,7 +155,7 @@ For example:
     },
 
     // Fetches its template from any of the following places:
-    // this.template, this.options.template, this.templateName, this.options.templateName
+    //  this.options.template, this.template, this.templateName, this.options.templateName
     // Then it renders it in the context of its model.
     // The output replaces the entire html content of the view's container element.
     // Pass a different context param to render from a different context.
@@ -170,7 +170,7 @@ For example:
 
       // Set up context and template
       var context = context || this.model || {};
-      if (!this.template && _.isFunction(this.options.template)) {
+      if (_.isFunction(this.options.template)) {
         this.template = this.options.template;
       } else if (!this.template) {
         this.getTemplate();
@@ -233,7 +233,7 @@ For example:
       }
 
       // Assign a descriptive class name to the element
-      var templateName = this.templateName || this.options.templateName;
+      var templateName = this.options.templateName || this.templateName;
       if (this.templateName) {
         $(this.el).addClass(this.templateName);
       }

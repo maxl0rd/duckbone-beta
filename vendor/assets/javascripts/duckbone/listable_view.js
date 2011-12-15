@@ -132,15 +132,15 @@
   };
 
   // Ensure that the view has obtained its view and collection objects
-  // If it does not have its own properties, check in its "options" property,
+  // Check in its "options" property first, then in the object itself,
   // and then default to a new object
 
   function ensureViewClass(context) {
-    context.viewClass = context.viewClass || context.options.viewClass || new Backbone.View();
+    context.viewClass = context.options.viewClass || context.viewClass || new Backbone.View();
   };
 
   function ensureCollection(context) {
-    context.collection = context.collection || context.options.collection || new Backbone.Collection();
+    context.collection = context.options.collection || context.collection || new Backbone.Collection();
   };
 
 }).call(this);
