@@ -114,7 +114,7 @@
         binding[0].unbind(binding[1],binding[2]);
       });
       delete this['_weakBindings'];
-      this.unbindLiveTimestamps();
+      if (this.isBindableView) this.unbindLiveTimestamps();
     }
   }
 
