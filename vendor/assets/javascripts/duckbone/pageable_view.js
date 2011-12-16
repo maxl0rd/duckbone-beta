@@ -2,6 +2,10 @@
 
   // PageableView works in concert with ListableView to create a container view that
   // manages a list of subviews that represent a paginated collection.
+  //
+  // PageableViews are TemplateableViews, so you can provide your own template if you like.
+  // The default template is simply `{{child "list"}}{{child "pager"}}`.  Your custom
+  // template must contain at least those elements.
 
   // Usage..
   /*
@@ -14,10 +18,10 @@
   Duckbone.PageableView = {
     isPageableView: true,
 
-    // Also include ViewLifecycleExtensions
+    // Also include TemplateableView (which in turn includes ViewLifecycleExtensions)
     included: function() {
-      if (!this.hasViewLifecycleExtensions) {
-        Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
+      if (!this.isTemplateableView) {
+        Duckbone.include(this, Duckbone.TemplateableView);
       }
     },
 
@@ -82,7 +86,7 @@
 
     // Smooth scroll up to the top of the list
     scrollToTopOfList: function() {
-      var offset = $(this.list.el).offset().top - 20;
+      var offset = $(this.nestedViews.list.el).offset().top - 20;
       $('html body').animate({ scrollTop: offset }, 400, 'swing');
     }
 

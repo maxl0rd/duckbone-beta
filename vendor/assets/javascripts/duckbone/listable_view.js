@@ -23,7 +23,10 @@
     render: function(force) {
       if (!this._viewsRendered || force) {
         this.renderItems();
-        this.bindCollectionEvents();
+        if (!this.collectionEventsBound) {
+          this.bindCollectionEvents();
+          this.collectionEventsBound = true;
+        }
         this._viewsRendered = true;
       }
       return this;
@@ -89,6 +92,34 @@
 
     getViewByModel: function(model) {
       return this.nestedViews[model.cid];
+    },
+
+    // Default handler for when the collection is reset
+
+    collectionReset: function() {
+      this.removeNestedViews();
+      this.render(true);
+    },
+
+    // Default handler for when a model is added to the collection
+
+    collectionAdd: function(model) {
+      var view = new this.viewClass({model: model});
+      this.nestedViews[model.cid] = view;
+      var position = _(this.collection.models).indexOf(model);
+      if (position == 0) {
+        $(this.el).prepend(view.el);
+      } else {
+        var previousElement = $(this.el).children().eq(position-1);
+        $(previousElement).after(view.el);
+      }
+    },
+
+    // Default handler for when a model is removed from the collection
+
+    collectionRemove: function(model) {
+      this.nestedViews[model.cid].remove();
+      delete this.nestedViews[model.cid];
     }
 
   };
@@ -98,38 +129,9 @@
   // The collection events to bind to which list methods
 
   var collectionEventHandlers = {
-    'reset': collectionReset,
-    'add': collectionAdd,
-    'remove': collectionRemove
-  };
-
-  // Default handler for when the collection is reset
-
-  function collectionReset() {
-    this.removeNestedViews();
-    this.render(true);
-  };
-
-  // Default handler for when a model is added to the collection
-
-  function collectionAdd(model) {
-    var view = new this.viewClass({model: model});
-    this.nestedViews[model.cid] = view;
-    var el = this.nestedViews[model.cid].el;
-    var position = _(this.collection.models).indexOf(model);
-    if (position == 0) {
-      $(this.el).prepend(this.nestedViews[model.cid].el);
-    } else {
-      var previousElement = $(this.el).children().eq(position-1);
-      $(previousElement).after(el);
-    }
-  };
-
-  // Default handler for when a model is removed from the collection
-
-  function collectionRemove(model) {
-    this.nestedViews[model.cid].remove();
-    delete this.nestedViews[model.cid];
+    'reset': 'collectionReset',
+    'add': 'collectionAdd',
+    'remove': 'collectionRemove'
   };
 
   // Ensure that the view has obtained its view and collection objects

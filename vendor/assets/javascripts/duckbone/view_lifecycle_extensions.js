@@ -59,7 +59,6 @@
       tryMethod(this, 'beforeRemove'); // User optionally defines this
       this.removeWeakBindings();
       if (this.isNestableView) this.removeNestedViews();
-      if (this.isPageableView) this.empty();
       Backbone.View.prototype.remove.call(this);
       tryMethod(this, 'afterRemove'); // User optionally defines this
       return this;
