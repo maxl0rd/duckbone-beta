@@ -24,7 +24,7 @@ class <%= application_name %>.Views.<%= class_name.pluralize %>Index extends Duc
 
   templateName: '<%= class_name.underscore.pluralize %>_index'
 
-  createNestedViews: =>
+  createChildren: =>
     list: new <%= application_name %>.Views.<%= class_name.pluralize %>List(collection: @collection)
 
   @routeAction: (id) ->

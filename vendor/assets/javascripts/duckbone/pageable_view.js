@@ -32,7 +32,7 @@
     },
 
     // Create sub views for render
-    createNestedViews: function() {
+    createChildren: function() {
       // Create child views
       var list = this.createListView();
       var pager = this.createPagerView();
@@ -92,7 +92,7 @@
 
     // Smooth scroll up to the top of the list
     scrollToTopOfList: function() {
-      var offset = $(this.nestedViews.list.el).offset().top - 20;
+      var offset = $(this.children.list.el).offset().top - 20;
       $('html body').animate({ scrollTop: offset }, 400, 'swing');
     }
 

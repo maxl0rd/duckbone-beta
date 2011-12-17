@@ -32,7 +32,7 @@
       return this;
     },
 
-    createNestedViews: function() {
+    createChildren: function() {
       return _.reduce(this.collection.models, function(views, model) {
         views[model.cid] = new this.viewClass({model: model});
         return views;
@@ -47,7 +47,7 @@
       this.setupNestedViews();
       // add their el's to a fragment first
       var fragment = document.createDocumentFragment();
-      _.each(this.nestedViews, function(view) {
+      _.each(this.children, function(view) {
         fragment.appendChild(view.el);
       });
       // Then add the fragment to the DOM. This cuts down on page redraws
@@ -91,7 +91,7 @@
     // Retrieve the view for a given model
 
     getViewByModel: function(model) {
-      return this.nestedViews[model.cid];
+      return this.children[model.cid];
     },
 
     // Default handler for when the collection is reset
@@ -105,7 +105,7 @@
 
     collectionAdd: function(model) {
       var view = new this.viewClass({model: model});
-      this.nestedViews[model.cid] = view;
+      this.children[model.cid] = view;
       var position = _(this.collection.models).indexOf(model);
       if (position == 0) {
         $(this.el).prepend(view.el);
@@ -118,8 +118,8 @@
     // Default handler for when a model is removed from the collection
 
     collectionRemove: function(model) {
-      this.nestedViews[model.cid].remove();
-      delete this.nestedViews[model.cid];
+      this.children[model.cid].remove();
+      delete this.children[model.cid];
     }
 
   };

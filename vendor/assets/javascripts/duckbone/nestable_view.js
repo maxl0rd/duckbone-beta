@@ -2,11 +2,11 @@
 # NestableView
 
 NestableView provides automated setup and teardown of child views.  You just provide
-a `createNestedViews` method that returns an object containing all of your child view
+a `createChildren` method that returns an object containing all of your child view
 instances by name, like this
 
 ```javascript
-createNestedViews: function() {
+createChildren: function() {
   return {
     myStuff: new StuffView({model: user.stuff})
   }
@@ -26,17 +26,17 @@ NestableView works hand-in-hand with TemplateableView's {{child}} helper.
     isNestableView: true,
 
     setupNestedViews: function() {
-      if (this.createNestedViews) {
-        this.nestedViews = this.createNestedViews();
+      if (this.createChildren) {
+        this.children = this.createChildren();
       }
     },
 
     removeNestedViews: function() {
-      if (this.nestedViews) {
-        _.each(this.nestedViews, function(child) {
+      if (this.children) {
+        _.each(this.children, function(child) {
           child.remove();
         });
-        delete this.nestedViews;
+        delete this.children;
       }
     }
   }

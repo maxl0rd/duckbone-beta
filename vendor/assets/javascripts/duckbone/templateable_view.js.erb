@@ -42,7 +42,7 @@ need to do more work in render, just redefine it, calling `renderTemplate()` som
 
 When a view includes another view, use the following technique:
 
-- Define the subview in the parent's `createNestedViews` callback. The view lifecycle will call this
+- Define the subview in the parent's `createChildren` callback. The view lifecycle will call this
   automatically during renderTemplate. Assign the subview to the parent, ie `this.mySubView`
 - Use the `{{child}}` helper in the parent's template, ie {{child "mySubView"}}
 - Teardown is automatic
@@ -52,7 +52,7 @@ For example:
     ParentView = Duckbone.View.extend({
       templateData: '<div>Parent View</div>
         <div class="childStuff">{{child "childView"}}</div>',
-      createNestedViews: function() {
+      createChildren: function() {
         {
           childView: new Duckbone.View()
         }
@@ -212,7 +212,7 @@ For example:
       // Include child views where they belong in the DOM
       $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
         var childName = $(div).attr('data-child-view');
-        var child = this.nestedViews[childName]
+        var child = this.children[childName]
         if (child instanceof Backbone.View) {
           $(div).replaceWith(child.el); // swap placeholder for childView
           $(child.el).attr({'data-child-view': childName});

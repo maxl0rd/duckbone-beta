@@ -32,7 +32,7 @@ describe("Duckbone.ListableView", function () {
   });
 
   it("creates its subviews", function() {
-    expect(_.keys(subject.nestedViews).length).toEqual(subject.collection.length);
+    expect(_.keys(subject.children).length).toEqual(subject.collection.length);
   });
 
   it("creates DOM elements for its subviews", function() {
@@ -42,7 +42,7 @@ describe("Duckbone.ListableView", function () {
   it("adds a new view when a model is added to the collection", function() {
     newModel = new Backbone.Model({id: 4, pet: "fish", age: "1"});
     subject.collection.add(newModel);
-    var newView = subject.nestedViews[newModel.cid];
+    var newView = subject.children[newModel.cid];
     expect(newView.model.id).toEqual(newModel.id);
     expect($(subject.el).find('li').length).toEqual(subject.collection.length);
   });
@@ -50,7 +50,7 @@ describe("Duckbone.ListableView", function () {
   it("removes the view when a model is removed from the collection", function() {
     var removeModel = subject.collection.get(3);
     subject.collection.remove(removeModel);
-    expect(_.keys(subject.nestedViews).length).toEqual(subject.collection.length);
+    expect(_.keys(subject.children).length).toEqual(subject.collection.length);
     expect($(subject.el).find('li').length).toEqual(subject.collection.length);
   });
 
@@ -58,7 +58,7 @@ describe("Duckbone.ListableView", function () {
     subject.collection.reset({
       id: 4, pet: "donkey", age: 5
     });
-    expect(_.keys(subject.nestedViews).length).toEqual(subject.collection.length);
+    expect(_.keys(subject.children).length).toEqual(subject.collection.length);
     expect($(subject.el).find('li').length).toEqual(subject.collection.length);
     expect($(subject.el).find('li:nth-child(1)').html()).toEqual('donkey aged 5');
   });
