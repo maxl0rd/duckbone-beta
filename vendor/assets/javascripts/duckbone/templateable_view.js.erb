@@ -192,6 +192,15 @@ For example:
         <% end %>
       }
 
+      // Establish any data-bindings that are defined by {{attr "attribute"}} helpers
+      if (this.isBindableView && context instanceof Backbone.Model) {
+        $(this.el).find('span[data-bind]').each(_.bind(function(i, span) {
+          var attr = $(span).attr('data-bind').slice(5); // ie data-bind="attr_title"
+          var binding = 'span[data-bind="attr_' + attr + '"]';
+          this.bindAttribute(context, attr, binding )
+        }, this));
+      }
+
       this.setupNestedViews();
 
       // Include child views where they belong in the DOM
@@ -206,15 +215,6 @@ For example:
           throw("Unknown child view " + childName);
         }
       }, this));
-
-      // Establish any data-bindings that are defined by {{attr "attribute"}} helpers
-      if (this.isBindableView && context instanceof Backbone.Model) {
-        $(this.el).find('span[data-bind]').each(_.bind(function(i, span) {
-          var attr = $(span).attr('data-bind').slice(5); // ie data-bind="attr_title"
-          var binding = 'span[data-bind="attr_' + attr + '"]';
-          this.bindAttribute(context, attr, binding )
-        }, this));
-      }
 
       // Assign a descriptive class name to the element
       var templateName = this.options.templateName || this.templateName;
