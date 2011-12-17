@@ -86,20 +86,39 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
       // Get model
       model = model || this.model || new Backbone.Model();
       var attrValue = Handlebars.Utils.escapeExpression(model.get(attr));
+      var handler;
       if (typeof binding == "function") {
         // The binding is a callback function. Set value now.
         binding.call(this, attrValue);
-        // Bind the method to changes.
-        this.weakBindToModel('change:'+attr, function() {
+        handler = function() {
           binding.call(this, Handlebars.Utils.escapeExpression(model.get(attr)));
-        }, this);
+        }
       } else if (typeof binding == "string") {
         // The binding is a selector. Set value now.
         $(this.el).find(binding).html(attrValue);
-        // Bind the selector's html to changes.
-        this.weakBindToModel('change:'+attr, function() {
+        handler = function () {
           $(this.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
-        }, this);
+        }
+      }
+      this._attributeBindings = this._attributeBindings || [];
+      var e = 'change:'+attr;
+      this._attributeBindings.push([model, e, handler]);
+      this.weakBindTo(model, e, handler, this);
+    },
+
+    // #### function unbindAttributes
+    // Unbind all previously-bound attributes.  Used internally to clean up for
+    // re-rendering a template
+    unbindAttributes: function() {
+      if (this._attributeBindings) {
+        _(this._attributeBindings).each(function(binding) {
+          // There is no individual unbind for weakBindings.  The housekeeping
+          // to clean up the metadata would be more expensive than attempting
+          // to unbind all at teardown for most use cases, so we just do a raw
+          // unbind.
+          binding[0].unbind(binding[1], binding[2]);
+        });
+        delete this._attributeBindings;
       }
     },
 

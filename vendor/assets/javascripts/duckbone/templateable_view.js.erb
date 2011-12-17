@@ -175,6 +175,9 @@ For example:
       // Remove child views ...
       this.removeNestedViews();
 
+      // Unbind any previous data bindings
+      if (this.isBindableView) this.unbindAttributes();
+
       // Render the HTML template, and if it fails, output as much info as possible
       // 500 Error on exceptions in production
       try {
@@ -197,7 +200,7 @@ For example:
         $(this.el).find('span[data-bind]').each(_.bind(function(i, span) {
           var attr = $(span).attr('data-bind').slice(5); // ie data-bind="attr_title"
           var binding = 'span[data-bind="attr_' + attr + '"]';
-          this.bindAttribute(context, attr, binding )
+          this.bindAttribute(context, attr, binding);
         }, this));
       }
 
