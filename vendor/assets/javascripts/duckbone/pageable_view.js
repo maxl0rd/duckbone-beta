@@ -25,6 +25,12 @@
       }
     },
 
+    // Override getTemplate to provide a simple default
+    getTemplate: function(templateName) {
+        Duckbone.TemplateableView.getTemplate.call(this, templateName, true);
+        this.template = this.template || Duckbone.Handlebars.compile('{{child "list"}}{{child "pager"}}');
+    },
+
     // Create sub views for render
     createNestedViews: function() {
       // Create child views

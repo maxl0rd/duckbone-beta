@@ -137,14 +137,17 @@ For example:
     templateRegistry: templateRegistry,
 
     // Fetch template out of the View's templateData, options or the templateRegistry
-
-    getTemplate: function(templateName) {
+    // - allowEmpty - if true, don't set a "missing template" template on not-found.
+    getTemplate: function(templateName, allowEmpty) {
       this.templateData = this.options.templateData || this.templateData || null;
       if (this.templateData) {
         this.template = Duckbone.Handlebars.compile(this.templateData);
       } else {
         templateName = templateName || this.options.templateName || this.templateName || "";
         this.template = this.templateRegistry.get(templateName);
+        if (!this.template && !allowEmpty) {
+          this.template = Duckbone.Handlebars.compile("<div>Missing Template \"" + templateName + "\"</div>");
+        }
       }
       return this.template
     },
