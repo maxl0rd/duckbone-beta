@@ -76,8 +76,9 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
   // Creates an HTML `<label>` tag that is associated to the given form field.
   // If label text is omitted, then the prettified form field name is used.
   // For example, `new_account_application` will become "New Account Application".
-  Handlebars.registerHelper('form_label', function(name, text) {
-    if (typeof text == 'object') {
+  Handlebars.registerHelper('form_label', function(name, text_or_block) {
+    var text;
+    if (typeof text_or_block == 'object') {
       text = name; // text is empty. use name
       text = text.replace(/^(.)/, function(c) {
         return c.toUpperCase(); // capitalize first character
@@ -85,6 +86,10 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
       text = text.replace(/(\_[a-z])/g, function($1) {
         return $1.toUpperCase().replace('_',' '); // capitalize each next word, replace _ with space
       });
+    } else if (typeof text_or_block == "function") {
+      text = new Handlebars.SafeString(text_or_block(this));
+    } else {
+      text = text_or_block;
     }
     return new Handlebars.SafeString('<label data-field-name="'+Handlebars.Utils.escapeExpression(name)+'">'+Handlebars.Utils.escapeExpression(text)+'</label>');
   });
