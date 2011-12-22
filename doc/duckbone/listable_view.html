@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -80,6 +81,28 @@
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableView</span><span class="p">);</span>
       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isNestableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">NestableView</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">force</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_viewsRendered</span> <span class="o">||</span> <span class="nx">force</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">renderItems</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">collectionEventsBound</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">bindCollectionEvents</span><span class="p">();</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">collectionEventsBound</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_viewsRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">models</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">views</span><span class="p">,</span> <span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">model</span><span class="p">});</span>
+        <span class="k">return</span> <span class="nx">views</span><span class="p">;</span>
+      <span class="p">},</span> <span class="p">{},</span> <span class="k">this</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -88,11 +111,10 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
-        <p>Create a child view for each model in the collection</p>
+        <p>Create a view for each model in the collection</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">createChildViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">views</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span> <span class="o">||</span> <span class="p">{};</span>
+        <div class='highlight'><pre>    <span class="nx">renderItems</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="nx">ensureViewClass</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
       <span class="nx">ensureCollection</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
       </td>
@@ -102,14 +124,10 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
-        <p>Create all of the children views, and add their el&rsquo;s to a fragment first</p>
+        <p>Create all of the children views</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">fragment</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">();</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">models</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">model</span><span class="p">});</span>
-        <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">].</span><span class="nx">el</span><span class="p">);</span>
-      <span class="p">},</span> <span class="k">this</span><span class="p">);</span></pre></div>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">setupNestedViews</span><span class="p">();</span></pre></div>
       </td>
     </tr>
     <tr id='section-5'>
@@ -117,11 +135,13 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
-        <p>Then add the fragment to the DOM. This cuts down on page redraws</p>
+        <p>add their el&rsquo;s to a fragment first</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">fragment</span><span class="p">);</span>
-    <span class="p">},</span></pre></div>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">fragment</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">();</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fragment</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">});</span></pre></div>
       </td>
     </tr>
     <tr id='section-6'>
@@ -129,14 +149,10 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-6">&#182;</a>
         </div>
-        <p>Delegate rendering to each individual child view</p>
+        <p>Then add the fragment to the DOM. This cuts down on page redraws</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">renderChildViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;ListableView.renderChildViews called on a view without children&quot;</span><span class="p">);</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">subview</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">subview</span><span class="p">].</span><span class="nx">render</span><span class="p">();</span>
-      <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">fragment</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -178,13 +194,7 @@ bindCollectionEvents({
         <p>Remove all child views (without destroying the models in the collection)</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">empty</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">subview</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">subview</span><span class="p">].</span><span class="nx">remove</span><span class="p">();</span>
-        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">subview</span><span class="p">];</span>
-      <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">empty</span><span class="p">();</span>
-    <span class="p">},</span></pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-9'>
@@ -212,10 +222,8 @@ The reset event will cause this view to completely redraw</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">getViewByModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">];</span>
-    <span class="p">}</span>
-
-  <span class="p">};</span></pre></div>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">];</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-11'>
@@ -223,10 +231,13 @@ The reset event will cause this view to completely redraw</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
-        <p>Internal</p>
+        <p>Default handler for when the collection is reset</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre></pre></div>
+        <div class='highlight'><pre>    <span class="nx">collectionReset</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">removeNestedViews</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-12'>
@@ -234,14 +245,20 @@ The reset event will cause this view to completely redraw</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
-        <p>The collection events to bind to which list methods</p>
+        <p>Default handler for when a model is added to the collection</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">collectionEventHandlers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;reset&#39;</span><span class="o">:</span> <span class="nx">collectionReset</span><span class="p">,</span>
-    <span class="s1">&#39;add&#39;</span><span class="o">:</span> <span class="nx">collectionAdd</span><span class="p">,</span>
-    <span class="s1">&#39;remove&#39;</span><span class="o">:</span> <span class="nx">collectionRemove</span>
-  <span class="p">};</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">collectionAdd</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">model</span><span class="p">});</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">]</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">position</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">models</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">model</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">previousElement</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">eq</span><span class="p">(</span><span class="nx">position</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">previousElement</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-13'>
@@ -249,12 +266,14 @@ The reset event will cause this view to completely redraw</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
-        <p>Default handler for when the collection is reset</p>
+        <p>Default handler for when a model is removed from the collection</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">collectionReset</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">createChildViews</span><span class="p">();</span>
+        <div class='highlight'><pre>    <span class="nx">collectionRemove</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">].</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">];</span>
+    <span class="p">}</span>
+
   <span class="p">};</span></pre></div>
       </td>
     </tr>
@@ -263,21 +282,10 @@ The reset event will cause this view to completely redraw</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
-        <p>Default handler for when a model is added to the collection</p>
+        <p>Internal</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">collectionAdd</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">view</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewClass</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">model</span><span class="p">});</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">]</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">].</span><span class="nx">el</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">position</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">models</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">model</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">].</span><span class="nx">el</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">previousElement</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">eq</span><span class="p">(</span><span class="nx">position</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="nx">previousElement</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">};</span></pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-15'>
@@ -285,12 +293,13 @@ The reset event will cause this view to completely redraw</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
-        <p>Default handler for when a model is removed from the collection</p>
+        <p>The collection events to bind to which list methods</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">collectionRemove</span><span class="p">(</span><span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">].</span><span class="nx">remove</span><span class="p">();</span>
-    <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">model</span><span class="p">.</span><span class="nx">cid</span><span class="p">];</span>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">collectionEventHandlers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;reset&#39;</span><span class="o">:</span> <span class="s1">&#39;collectionReset&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;add&#39;</span><span class="o">:</span> <span class="s1">&#39;collectionAdd&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;remove&#39;</span><span class="o">:</span> <span class="s1">&#39;collectionRemove&#39;</span>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
@@ -300,17 +309,17 @@ The reset event will cause this view to completely redraw</p>
           <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Ensure that the view has obtained its view and collection objects
-If it does not have its own properties, check in its &ldquo;options&rdquo; property,
+Check in its &ldquo;options&rdquo; property first, then in the object itself,
 and then default to a new object</p>
 
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">ensureViewClass</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">context</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">||</span> <span class="nx">context</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">();</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">||</span> <span class="nx">context</span><span class="p">.</span><span class="nx">viewClass</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">();</span>
   <span class="p">};</span>
 
   <span class="kd">function</span> <span class="nx">ensureCollection</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">context</span><span class="p">.</span><span class="nx">collection</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">collection</span> <span class="o">||</span> <span class="nx">context</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">collection</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">();</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">collection</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">collection</span> <span class="o">||</span> <span class="nx">context</span><span class="p">.</span><span class="nx">collection</span> <span class="o">||</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">();</span>
   <span class="p">};</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>

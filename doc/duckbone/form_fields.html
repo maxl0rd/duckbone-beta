@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -142,7 +143,7 @@ whenever the form is submitted and found to be invalid.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;form_error_banner&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span> <span class="o">||</span> <span class="s2">&quot;Please fix the errors below&quot;</span><span class="p">;</span>
+    <span class="nx">text</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">text</span> <span class="o">:</span> <span class="s2">&quot;Please fix the errors below&quot;</span><span class="p">;</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;error_banner&quot; style=&quot;display: none&quot;&gt;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
   <span class="p">});</span></pre></div>
       </td>

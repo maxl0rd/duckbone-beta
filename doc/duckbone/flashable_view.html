@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -160,6 +161,23 @@
     <span class="p">},</span></pre></div>
       </td>
     </tr>
+    <tr id='section-function_activeFlashes'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_activeFlashes">&#182;</a>
+        </div>
+        <h4>function activeFlashes</h4>
+
+<ul>
+<li>returns &ndash; a jQuery object matching all the active flash notice and alert elements</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">activeFlashes</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div.flash_notice, div.flash_alert&#39;</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-function_clearFlashes'>
       <td class=docs>
         <div class="pilwrap">
@@ -179,10 +197,9 @@ faded out according to the fadeDuration</li>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">clearFlashes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">container</span><span class="p">).</span>
-        <span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div.flash_notice, div.flash_alert&#39;</span><span class="p">)</span>
+      <span class="kd">var</span> <span class="nx">targets</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">activeFlashes</span><span class="p">();</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">immediately</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">targets</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+        <span class="nx">targets</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nx">targets</span><span class="p">.</span><span class="nx">fadeOut</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">flashOptions</span><span class="p">.</span><span class="nx">fadeDuration</span><span class="p">);</span>
       <span class="p">}</span>

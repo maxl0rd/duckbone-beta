@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -85,20 +86,26 @@
     <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">src</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">locateTemplates</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
       <span class="nx">compilePartials</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-      <span class="nx">compileTemplates</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">src</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">compiledTemplates</span><span class="p">[</span><span class="nx">src</span><span class="p">])</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">compiledTemplates</span><span class="p">[</span><span class="nx">src</span><span class="p">];</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="s2">&quot;&lt;div&gt;Missing Template &quot;</span> <span class="o">+</span> <span class="nx">src</span> <span class="o">+</span> <span class="s2">&quot; &lt;/div&gt;&quot;</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">});</span></pre></div>
+      <span class="nx">compileTemplates</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">src</span><span class="p">);</span></pre></div>
       </td>
     </tr>
     <tr id='section-2'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>This may return undefined</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">compiledTemplates</span><span class="p">[</span><span class="nx">src</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
         <p>Internal functions</p>
       </td>
@@ -119,10 +126,10 @@
     <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">templatesData</span> <span class="o">&amp;&amp;</span> <span class="nx">src</span><span class="p">)</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-3'>
+    <tr id='section-4'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
+          <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
         <p>compile one template</p>
       </td>
@@ -131,10 +138,10 @@
     <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">templatesData</span><span class="p">)</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-5'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
         <p>compile all of them</p>
 
@@ -160,7 +167,7 @@
 
   <span class="kd">function</span> <span class="nx">compileTemplate</span><span class="p">(</span><span class="nx">templateData</span><span class="p">,</span> <span class="nx">src</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">templateData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">templateData</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">try</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="nx">templateData</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>

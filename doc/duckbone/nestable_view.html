@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>nestable_view.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="bindable_field.html">bindable_field.js</a>
+          <a class="source" href="bindable_view.html">bindable_view.js</a>
+          <a class="source" href="collection.html">collection.js</a>
+          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="flashable_view.html">flashable_view.js</a>
+          <a class="source" href="form_fields.html">form_fields.js</a>
+          <a class="source" href="form_validations.html">form_validations.js</a>
+          <a class="source" href="handlebars.html">handlebars.js</a>
+          <a class="source" href="handlebars_extensions.html">handlebars_extensions.js</a>
+          <a class="source" href="index.html">index.js</a>
+          <a class="source" href="listable_view.html">listable_view.js</a>
+          <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
+          <a class="source" href="pageable_collection.html">pageable_collection.js</a>
+          <a class="source" href="pageable_view.html">pageable_view.js</a>
+          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="routeable_application.html">routeable_application.js</a>
+          <a class="source" href="simple_queue.html">simple_queue.js</a>
+          <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
+          <a class="source" href="syncable.html">syncable.js</a>
+          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
+          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="validateable_field.html">validateable_field.js</a>
+          <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>nestable_view.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-Duckbone.NestableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.NestableView">&#182;</a>
+        </div>
+        <h1>Duckbone.NestableView</h1>
+
+<p>NestableView provides automated setup and teardown of child views.  You just provide
+a <code>createChildren</code> method that returns an object containing all of your child view
+instances by name, like this</p>
+
+<p><code>javascript
+createChildren: function() {
+  return {
+    myStuff: new StuffView({model: user.stuff})
+  }
+}
+</code></p>
+
+<p>NestableView works hand-in-hand with TemplateableView&rsquo;s {{child}} helper.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">NestableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-property_isNestableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-property_isNestableView">&#182;</a>
+        </div>
+        <h4>property isNestableView</h4>
+
+<p>Indicates a view with this mixin included</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">isNestableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+    <span class="nx">setupNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="nx">removeNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">child</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+        <span class="p">});</span>
+        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+<span class="p">})();</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

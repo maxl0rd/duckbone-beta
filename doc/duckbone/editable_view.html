@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -275,7 +276,7 @@ methods during the view&rsquo;s initialize and remove</p>
         <div class='highlight'><pre>    <span class="nx">createForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
       <span class="kd">var</span> <span class="nx">formElement</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">el</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">fieldOptions</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">fields</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">fields</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">fieldOptions</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">fields</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">fields</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormManager</span><span class="p">({</span>
         <span class="nx">el</span><span class="o">:</span> <span class="nx">formElement</span><span class="p">,</span>
@@ -301,8 +302,8 @@ defined on the view&rsquo;s <code>modelSyncEvents</code> property.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">bindModelSyncEvents</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="nx">bindEvents</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span> <span class="nx">defaultModelSyncEvents</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelSyncEvents</span><span class="p">)</span> <span class="nx">bindEvents</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelSyncEvents</span><span class="p">);</span>
+      <span class="nx">bindEvents</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">defaultModelSyncEvents</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">modelSyncEvents</span><span class="p">)</span> <span class="nx">bindEvents</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">modelSyncEvents</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -334,7 +335,7 @@ refers to the original model.</p>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Found not, has your model been. Cloned, it can not be.&quot;</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">originalModel</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">originalModel</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;sync:success&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">weakBindToModel</span><span class="p">(</span><span class="s1">&#39;sync:success&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">attributes</span><span class="p">);</span>
         <span class="nx">_</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">fields</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">field</span><span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">temporary</span><span class="p">)</span> <span class="p">{</span>
@@ -785,7 +786,7 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">copyToDestination</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">dests</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">afterSaveDestination</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">afterSaveDestination</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">dests</span> <span class="o">=</span>  <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">afterSaveDestination</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">afterSaveDestination</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">dests</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">dests</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">))</span> <span class="p">{</span>
       <span class="nx">dests</span> <span class="o">=</span> <span class="p">[</span><span class="nx">dests</span><span class="p">];</span>
@@ -827,10 +828,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
         <p>Binds default events to the model</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">bindEvents</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">events</span><span class="p">)</span> <span class="p">{</span>
+        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">bindEvents</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">events</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">event</span> <span class="k">in</span> <span class="nx">events</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">view</span><span class="p">[</span><span class="nx">events</span><span class="p">[</span><span class="nx">event</span><span class="p">]];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="nx">view</span><span class="p">.</span><span class="nx">weakBindToModel</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">view</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">};</span></pre></div>
       </td>

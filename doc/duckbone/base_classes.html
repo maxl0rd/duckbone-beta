@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -60,8 +61,12 @@ to include the most commonly used modules of Duckbone.  Most apps will
 simply extend these base classes instead of the Backbone base classes directly
 unless they desire a high degree of customized behavior.</p>
 
-<p>Additionally, this file defines <code>Duckbone.FormView</code>, which mixes in all the
-functionality required for editing and/or saving models via web forms.</p>
+<p>This file also defines some other Duckbone core classes:</p>
+
+<p><code>Duckbone.FormView</code>, which mixes in all the
+functionality required for editing and/or saving models via web forms.
+<code>Duckbone.Application</code>, which extends the Backbone router with declarative route actions
+and flash notice/alert management</p>
       </td>
       <td class=code>
         <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
@@ -131,14 +136,48 @@ and <code>Syncable</code></p>
         <h3>Duckbone.FormView</h3>
 
 <p>further extends <code>Duckbone.View</code> with <code>EditableView</code></p>
-
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormView</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
 
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FormView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
     <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">EditableView</span>
-  <span class="p">);</span>
+  <span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.ListView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.ListView">&#182;</a>
+        </div>
+        <h3>Duckbone.ListView</h3>
+
+<p>Provides rendering of sets of submodels for lists and feeds</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListView</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ListableView</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BindableView</span>
+  <span class="p">);</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Duckbone.Application'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Duckbone.Application">&#182;</a>
+        </div>
+        <h3>Duckbone.Application</h3>
+
+<p>Provides core functionality of a duckbone app</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Application</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">()</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">RouteableApplication</span><span class="p">,</span>
+    <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">FlashableView</span><span class="p">)</span>
 
 <span class="p">})();</span></pre></div>
       </td>

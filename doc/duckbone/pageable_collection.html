@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -48,38 +49,60 @@
     </tr>
   </thead>
   <tbody>
-    <tr id='section-1'>
+    <tr id='section-Duckbone.PageableCollection'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-1">&#182;</a>
+          <a class="pilcrow" href="#section-Duckbone.PageableCollection">&#182;</a>
         </div>
-        
+        <h1>Duckbone.PageableCollection</h1>
+
+<p>PageableCollection enhances a Backbone Collection so that it understands its connection to a server-paginated endpoint.
+It should be used in conjunction with the Rails library found in Duckbone.PageableCollection, and either
+of the standard will_paginate or kaminari gems.</p>
+
+<h2>Usage</h2>
+
+<p>First, establish pagination in your controller action.</p>
+
+<p>Then use <code>fetchPage()</code> to fetch the collection.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PageableCollection</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-2'>
+    <tr id='section-property_isPageableCollection'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-2">&#182;</a>
+          <a class="pilcrow" href="#section-property_isPageableCollection">&#182;</a>
         </div>
-        <p>A Pageable collection interacts with a server side model that is paginated
-(ie with will_paginate or kaminari)
-Use the Rails class Duckbone::PageableCollection to assist in
-rendering json responses for these collections</p>
+        <h4>property isPageableCollection</h4>
+
+<p>Indicates the presence of this mixin</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PageableCollection</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">isPageableCollection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">isPageableCollection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
       </td>
     </tr>
-    <tr id='section-3'>
+    <tr id='section-function_parse'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
+          <a class="pilcrow" href="#section-function_parse">&#182;</a>
         </div>
-        <p>Example response:
+        <h4>function parse</h4>
+
+<ul>
+<li>resp &ndash; the response object</li>
+<li>xhr &ndash; the jQuery XHR object</li>
+<li>returns &ndash; an object representing the parsed data</li>
+</ul>
+
+<p>When PageableCollection is used in a Rails controller, it wraps the response in an object
+that contains the collection&rsquo;s pagination meta-data. This overridden parse method extracts
+the meta-data into the object, and passes the records on to the normal behavior.</p>
+
+<p>An example response might look like this:
 {num<em>pages: 4, limit</em>value: 25, current_page: 1, records: [{&hellip;}, {&hellip;}]}</p>
       </td>
       <td class=code>
@@ -89,12 +112,43 @@ rendering json responses for these collections</p>
       <span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">current_page</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">totalCount</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">total_count</span><span class="p">;</span>
       <span class="k">return</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">records</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_fetch'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_fetch">&#182;</a>
+        </div>
+        <h4>function fetch</h4>
 
-    <span class="nx">fetchPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+<p>Delegate <code>fetch()</code> to <code>fetchPage()</code>. The normal options to fetch are discarded if passed.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">fetch</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_fetchPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_fetchPage">&#182;</a>
+        </div>
+        <h4>function fetchPage</h4>
+
+<ul>
+<li>pageNum &ndash; the page ordinal requested, begining with 1</li>
+<li>params &ndash; an object representing the query params to be passed to the server,
+defaulting to the params defined on the collection.params (by setParam)</li>
+<li>returns &ndash; nothing</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">fetchPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">pageNum</span> <span class="o">=</span> <span class="nx">pageNum</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
       <span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span> <span class="o">||</span> <span class="nx">_</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span>
+      <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span>
         <span class="nx">url</span><span class="o">:</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="o">:</span> <span class="nx">pageNum</span><span class="p">})),</span>
         <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">c</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;pageChange&#39;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nx">currentPage</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
@@ -103,36 +157,124 @@ rendering json responses for these collections</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-function_setParam'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-function_setParam">&#182;</a>
         </div>
-        <p>Set additonal query params on the collection, ie search string
-These will be sent to the server on fetch and show up in the url</p>
+        <h4>function setParam</h4>
 
+<ul>
+<li>param &ndash; query parameter name</li>
+<li>val &ndash; query parameter value</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Set additonal query params on the collection, ie search string.
+These will be sent to the server on fetch and show up in the url.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">setParam</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{};</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">[</span><span class="nx">param</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_setPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_setPage">&#182;</a>
+        </div>
+        <h4>function setPage</h4>
 
-    <span class="nx">setPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+<ul>
+<li>p &ndash; ordinal page number requested</li>
+<li>returns &ndash; the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+
+<p>Sets the collection to the given page number, and fetches those models</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">setPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">p</span> <span class="o">!=</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span> <span class="o">&lt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">numPages</span><span class="p">)</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_nextPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_nextPage">&#182;</a>
+        </div>
+        <h4>function nextPage</h4>
 
-    <span class="nx">nextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<ul>
+<li>returns &ndash; the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+
+<p>Sets the collection to the next page, and fetches those models</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">nextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_prevPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_prevPage">&#182;</a>
+        </div>
+        <h4>function prevPage</h4>
 
-    <span class="nx">prevPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<ul>
+<li>returns &ndash; the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+
+<p>Sets the collection to the previous page, and fetches those models</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">prevPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchPage</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">currentPage</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_updateTotalCountOnCollectionEvents'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_updateTotalCountOnCollectionEvents">&#182;</a>
+        </div>
+        <h4>function updateTotalCountOnCollectionEvents</h4>
+
+<p>Since the collection&rsquo;s <code>totalCount</code> property is only updated during fetch/parse,
+when models are added and removed from the collection, then it is possible for this
+number to become out of sync with the number of actual objects logically part of the collection.
+Call this function to maintain the totalCount as models are added and removed from the collection
+in between calls to fetch(). Since this behavior is application dependent, the use of this
+method is left to the developer&rsquo;s discretion.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">updateTotalCountOnCollectionEvents</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">totalCount</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">totalCount</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">totalCount</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">totalCount</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
     <span class="p">}</span>
 
-  <span class="p">};</span>
+  <span class="p">};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Internal'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Internal">&#182;</a>
+        </div>
+        <h3>Internal</h3>
 
-  <span class="kd">function</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="kd">function</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
     <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">()</span> <span class="o">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">url</span> <span class="o">+=</span> <span class="s1">&#39;?&#39;</span><span class="p">;</span>

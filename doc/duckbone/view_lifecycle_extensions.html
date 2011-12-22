@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -64,8 +65,8 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-2">&#182;</a>
         </div>
-        <p>This module adds default initialize() and remove() methods to any View class.
-These methods try to call all of the initializers on all other Duckbone mixins
+        <p>This module adds default initialize(), render(), and remove() methods to any View class.
+These methods call any lifecycle hooks on other Duckbone mixins
 that are present on the View class. These are called in the correct order, so
 that everything instantiates smoothly, without the developer needing to write initialize().</p>
       </td>
@@ -90,8 +91,7 @@ as a dependency in their included() callback.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
-        <p>These methods will not be set if the developer has previously defined them,
-and mixing this in will have no effect.</p>
+        <p>There are several callback hooks available that can be defined on the object:</p>
       </td>
       <td class=code>
         <div class='highlight'><pre></pre></div>
@@ -102,96 +102,154 @@ and mixing this in will have no effect.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
-        <p>There are several callback hooks available that can be defined on the object:</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre></pre></div>
-      </td>
-    </tr>
-    <tr id='section-6'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
-        </div>
         <ul>
-<li>beforeCreateChildViews() =&gt; called before ListView creates its children</li>
 <li>beforeClone() =&gt; called before EditableView clones its model for editing</li>
+<li>afterClone() =&gt; called after EditableView clones its model for editing</li>
 <li>afterCreateForm() =&gt; called after EditableView renders its form elements</li>
 <li>afterInitialize() =&gt; called after all other initializations are complete</li>
 <li>beforeRemove() =&gt; called before the View is removed</li>
 <li>afterRemove() =&gt; called after the View is removed</li>
 </ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">hasViewLifecycleExtensions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">application</span><span class="p">;</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">cloneModelForEditing</span><span class="p">();</span>
+        <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bindAttributes</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bindModelSyncEvents</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
+        <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterCreateForm&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="p">}</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterInitialize&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+    <span class="p">},</span>
+
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">expireClone</span><span class="p">();</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">removeWeakBindings</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isNestableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeNestedViews</span><span class="p">();</span>
+      <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Weak_Binding'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Weak_Binding">&#182;</a>
+        </div>
+        <h3>Weak Binding</h3>
+
+<p>Weak bindings are a key feature of the Duckbone view lifecycle.  Weak bindings
+may be created against any object that responds to bind() and unbind() &ndash; most
+notably Backbone and jQuery objects.  When a weak binding is made in the context
+of a view, it will automatically be unbound when that view is removed to prevent
+zombie callbacks from causing trouble.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_weakBindToModel'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_weakBindToModel">&#182;</a>
+        </div>
+        <h4>function weakBindToModel</h4>
+
+<p>Because binding to a view&rsquo;s model is so common, this shortcut method is provided.
+It has the same method signature as <code>model.bind()</code>
+&ndash; event &ndash; event to bind to, ie &lsquo;change:foo&rsquo;
+&ndash; callback &ndash; callback function
+&ndash; context &ndash; optional <code>this</code> context for the callback, defaults to the view
+&ndash; returns &ndash; nothing</p>
+
+<p>Creates a binding on the view&rsquo;s model that is unbound when the view is removed</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">weakBindToModel</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">weakBindTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_weakBindTo'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_weakBindTo">&#182;</a>
+        </div>
+        <h4>function weakBindTo</h4>
+
+<ul>
+<li>obj &ndash; An object responding to <code>bind()</code>, e.g. a jQuery object or anything that
+includes Backbone.Events</li>
+<li>event &ndash; event to bind to, ie &lsquo;change:foo&rsquo;</li>
+<li>callback &ndash; callback function</li>
+<li>context &ndash; optional <code>this</code> context for the callback, defaults to the view</li>
+<li>returns &ndash; nothing</li>
+</ul>
+
+<p>Creates a binding on the object that is unbound when the view is removed</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">weakBindTo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span> <span class="o">||</span> <span class="p">[];</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">]);</span>
+      <span class="nx">obj</span><span class="p">.</span><span class="nx">bind</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_removeWeakBindings'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_removeWeakBindings">&#182;</a>
+        </div>
+        <h4>function removeWeakBindings</h4>
+
+<ul>
+<li>returns &ndash; nothing
+Unbinds all weak bindings created by this view</li>
+</ul>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">tryMethod</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">])</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+        <div class='highlight'><pre>    <span class="nx">removeWeakBindings</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_weakBindings</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">binding</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">binding</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">unbind</span><span class="p">(</span><span class="nx">binding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="nx">binding</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+      <span class="p">});</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;_weakBindings&#39;</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">unbindLiveTimestamps</span><span class="p">();</span>
+    <span class="p">}</span>
   <span class="p">}</span>
 
-  <span class="kd">var</span> <span class="nx">defaultInitialize</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-
-    <span class="k">this</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">application</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isListableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeCreateChildViews&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">createChildViews</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">bindCollectionEvents</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">cloneModelForEditing</span><span class="p">();</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterClone&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-    <span class="p">}</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">bindAttributes</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">bindModelSyncEvents</span><span class="p">();</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
-      <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterCreateForm&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-    <span class="p">}</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterInitialize&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-  <span class="p">};</span>
-
-  <span class="kd">var</span> <span class="nx">defaultRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isTemplateableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isStylizeableView</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">applyStyles</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-  <span class="p">};</span>
-
-  <span class="kd">var</span> <span class="nx">defaultRemove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isEditableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">expireClone</span><span class="p">();</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;beforeRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">removeWeakBindings</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isListableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isPageableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-    <span class="nx">tryMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;afterRemove&#39;</span><span class="p">);</span> <span class="c1">// User optionally defines this</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-  <span class="p">};</span>
-
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">hasViewLifecycleExtensions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-
-    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;initialize&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">defaultInitialize</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;render&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">defaultRender</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">remove</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">defaultRemove</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">tryMethod</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">])</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
   <span class="p">}</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>

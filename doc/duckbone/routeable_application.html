@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -173,22 +174,25 @@ $(function() {
 
 <p>Each route key is defined in the same way as the Backbone routes map.
 The value of each route key is the view class for the route.
-Each view should have a <code>routeName</code> and a <code>routeAction</code> defined on its class.</p>
+Each view should have a <code>routeName</code> and a <code>routeAction</code> defined on its class.
+If your view prototype has a <code>templateName</code>, Duckbone will fall back to using
+it as a routeName in its absence.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">mapRoutes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">routingTable</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">routingTable</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">route</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">try</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeName</span><span class="p">)</span>
+          <span class="kd">var</span> <span class="nx">routeName</span> <span class="o">=</span> <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeName</span> <span class="o">||</span> <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">templateName</span>
+          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">routeName</span><span class="p">)</span>
             <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Missing or bad routeName for &quot;</span> <span class="o">+</span> <span class="nx">route</span><span class="p">);</span>
           <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeAction</span> <span class="o">!=</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span>
             <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Missing or bad routeAction for &quot;</span> <span class="o">+</span> <span class="nx">route</span><span class="p">);</span>
           <span class="k">this</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="c1">// draw the normal route</span>
-            <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeName</span><span class="p">,</span>
+            <span class="nx">routeName</span><span class="p">,</span>
             <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeAction</span>
           <span class="p">);</span>
           <span class="k">this</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="nx">route</span><span class="o">+</span><span class="s1">&#39;?*params&#39;</span><span class="p">,</span> <span class="c1">// draw the route with a query string</span>
-            <span class="nx">routingTable</span><span class="p">[</span><span class="nx">route</span><span class="p">].</span><span class="nx">routeName</span><span class="p">,</span>
+            <span class="nx">routeName</span><span class="p">,</span>
             <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// call the routeAction with the query params appended to arguments</span>
               <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
               <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
@@ -199,6 +203,7 @@ Each view should have a <code>routeName</code> and a <code>routeAction</code> de
             <span class="p">}</span>
           <span class="p">);</span>
         <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
           <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Bad route for &quot;</span> <span class="o">+</span> <span class="nx">route</span><span class="p">);</span>
         <span class="p">}</span>
       <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
@@ -223,12 +228,42 @@ Each view should have a <code>routeName</code> and a <code>routeAction</code> de
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">loadView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">clearFlashes</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span><span class="p">;</span>
+      <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
       <span class="nx">options</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">view</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
       <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainContainer</span><span class="p">);</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_navigate'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_navigate">&#182;</a>
+        </div>
+        <h4>function navigate</h4>
+
+<p>Simply overrides Backbone&rsquo;s navigate method with a version that clears
+flash messages</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">navigate</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fragment</span><span class="p">,</span> <span class="nx">triggerRoute</span><span class="p">)</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Next time loadView is called, we want to nix all current flashes.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">activeFlashes</span><span class="p">();</span>
+      <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">navigate</span><span class="p">(</span><span class="nx">fragment</span><span class="p">,</span> <span class="nx">triggerRoute</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>

@@ -26,6 +26,7 @@
           <a class="source" href="index.html">index.js</a>
           <a class="source" href="listable_view.html">listable_view.js</a>
           <a class="source" href="model.html">model.js</a>
+          <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
           <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
@@ -105,7 +106,7 @@ need to do more work in render, just redefine it, calling <code>renderTemplate()
 <li>Define the subview in the parent&rsquo;s <code>createChildren</code> callback. The view lifecycle will call this
 automatically during renderTemplate. Assign the subview to the parent, ie <code>this.mySubView</code></li>
 <li>Use the <code>{{child}}</code> helper in the parent&rsquo;s template, ie {{child &ldquo;mySubView&rdquo;}}</li>
-<li>Tear down the child view in <code>afterRemove</code></li>
+<li>Teardown is automatic</li>
 </ul>
 
 <p>For example:</p>
@@ -114,10 +115,9 @@ automatically during renderTemplate. Assign the subview to the parent, ie <code>
   templateData: &lsquo;&lt;div&gt;Parent View&lt;/div&gt;
     &lt;div class=&ldquo;childStuff&rdquo;&gt;{{child &ldquo;childView&rdquo;}}&lt;/div&gt;&rsquo;,
   createChildren: function() {
-    this.childView = new Duckbone.View();
-  },
-  afterRemove: function() {
-    if (this.childView) this.childView.remove();
+    {
+      childView: new Duckbone.View()
+    }
   }
 })
 </code></pre>
@@ -200,7 +200,7 @@ and replace this element</p>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
-        <span class="s1">&#39;&lt;div data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span>
+        <span class="s1">&#39;&lt;script type=&quot;text/x-placeholder&quot; data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/script&gt;&#39;</span>
       <span class="p">);</span>
     <span class="p">});</span></pre></div>
       </td>
@@ -241,6 +241,9 @@ Doc above</p>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasViewLifecycleExtensions</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span><span class="p">);</span>
       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isNestableView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">NestableView</span><span class="p">);</span>
+      <span class="p">}</span>
     <span class="p">},</span>
 
     <span class="nx">templateRegistry</span><span class="o">:</span> <span class="nx">templateRegistry</span><span class="p">,</span></pre></div>
@@ -251,12 +254,22 @@ Doc above</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-9">&#182;</a>
         </div>
-        <p>Default render method calls renderTemplate</p>
+        <p>Fetch template out of the View&rsquo;s templateData, options or the templateRegistry
+&ndash; allowEmpty &ndash; if true, don&rsquo;t set a &ldquo;missing template&rdquo; template on not-found.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">renderTemplate</span><span class="p">();</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+        <div class='highlight'><pre>    <span class="nx">getTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">templateName</span><span class="p">,</span> <span class="nx">allowEmpty</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateData</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateData</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">templateName</span> <span class="o">=</span> <span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateRegistry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">templateName</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">allowEmpty</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="s2">&quot;&lt;div&gt;Missing Template \&quot;&quot;</span> <span class="o">+</span> <span class="nx">templateName</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&lt;/div&gt;&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -265,28 +278,8 @@ Doc above</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
-        <p>Fetch template out of the View&rsquo;s templateData, options or the templateRegistry</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">getTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateData</span> <span class="o">||</span> <span class="kc">null</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateData</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateData</span><span class="p">);</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">templateName</span> <span class="o">=</span> <span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateRegistry</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">templateName</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span>
-    <span class="p">},</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-11'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-11">&#182;</a>
-        </div>
         <p>Fetches its template from any of the following places:
-this.template, this.options.template, this.templateName, this.options.templateName
+ this.options.template, this.template, this.templateName, this.options.templateName
 Then it renders it in the context of its model.
 The output replaces the entire html content of the view&rsquo;s container element.
 Pass a different context param to render from a different context.
@@ -296,10 +289,10 @@ ie this.renderTemplate({some_different: &ldquo;data&rdquo;});</p>
         <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-12'>
+    <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-12">&#182;</a>
+          <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
         <p>Attempts to replicate typical server-side templating behavior in which
 errors in development will show as error messages in place in the template,
@@ -310,16 +303,16 @@ Also prints useful error messages to the console.</p>
         <div class='highlight'><pre>    <span class="nx">renderTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>Set up context and template</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span> <span class="o">||</span> <span class="p">{};</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">&amp;&amp;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">template</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">template</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">template</span><span class="p">;</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">getTemplate</span><span class="p">();</span>
@@ -327,23 +320,26 @@ Also prints useful error messages to the console.</p>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;renderTemplate called without a template.&quot;</span><span class="p">)</span></pre></div>
       </td>
     </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Remove child views &hellip;</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">removeNestedViews</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
-        <p>Remove child views &hellip;</p>
+        <p>Unbind any previous data bindings</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;*[data-child-view]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">childName</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">div</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-child-view&#39;</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">this</span><span class="p">[</span><span class="nx">childName</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">child</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">child</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Unknown child view &quot;</span> <span class="o">+</span> <span class="nx">childName</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">},</span> <span class="k">this</span><span class="p">));</span></pre></div>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">unbindAttributes</span><span class="p">();</span></pre></div>
       </td>
     </tr>
     <tr id='section-15'>
@@ -376,10 +372,18 @@ Also prints useful error messages to the console.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
-        <p>Call createChildren, which should instantiate any child views</p>
+        <p>Establish any data-bindings that are defined by {{attr &ldquo;attribute&rdquo;}} helpers</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span></pre></div>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span> <span class="o">&amp;&amp;</span> <span class="nx">context</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span[data-bind]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">span</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">span</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-bind&#39;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// ie data-bind=&quot;attr_title&quot;</span>
+          <span class="kd">var</span> <span class="nx">binding</span> <span class="o">=</span> <span class="s1">&#39;span[data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">;</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">bindAttribute</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">binding</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">));</span>
+      <span class="p">}</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">setupNestedViews</span><span class="p">();</span></pre></div>
       </td>
     </tr>
     <tr id='section-17'>
@@ -392,7 +396,7 @@ Also prints useful error messages to the console.</p>
       <td class=code>
         <div class='highlight'><pre>      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;*[data-child-view]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">div</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">childName</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">div</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-child-view&#39;</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">this</span><span class="p">[</span><span class="nx">childName</span><span class="p">]</span>
+        <span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">childName</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">child</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">$</span><span class="p">(</span><span class="nx">div</span><span class="p">).</span><span class="nx">replaceWith</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span> <span class="c1">// swap placeholder for childView</span>
           <span class="nx">$</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">attr</span><span class="p">({</span><span class="s1">&#39;data-child-view&#39;</span><span class="o">:</span> <span class="nx">childName</span><span class="p">});</span>
@@ -408,27 +412,10 @@ Also prints useful error messages to the console.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-18">&#182;</a>
         </div>
-        <p>Establish any data-bindings that are defined by {{attr &ldquo;attribute&rdquo;}} helpers</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span> <span class="o">&amp;&amp;</span> <span class="nx">context</span> <span class="k">instanceof</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;span[data-bind]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">span</span><span class="p">)</span> <span class="p">{</span>
-          <span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">span</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-bind&#39;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// ie data-bind=&quot;attr_title&quot;</span>
-          <span class="kd">var</span> <span class="nx">binding</span> <span class="o">=</span> <span class="s1">&#39;span[data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">;</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">bindAttribute</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">binding</span> <span class="p">)</span>
-        <span class="p">},</span> <span class="k">this</span><span class="p">));</span>
-      <span class="p">}</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-19'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
-        </div>
         <p>Assign a descriptive class name to the element</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
+        <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">);</span>
       <span class="p">}</span>
@@ -436,10 +423,10 @@ Also prints useful error messages to the console.</p>
       <span class="k">this</span><span class="p">.</span><span class="nx">templateRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-19'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-19">&#182;</a>
         </div>
         <p>return self, so the final call in render in coffee will return itself by convention</p>
       </td>
@@ -449,10 +436,10 @@ Also prints useful error messages to the console.</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-20'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>Calls <code>renderTemplate</code> if it hasn&rsquo;t been called before.  This is useful in a
 custom render method if you want to render a template when the view is initialized
