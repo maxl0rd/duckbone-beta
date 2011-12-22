@@ -1,5 +1,5 @@
 /**
-# NestableView
+# Duckbone.NestableView
 
 NestableView provides automated setup and teardown of child views.  You just provide
 a `createChildren` method that returns an object containing all of your child view
