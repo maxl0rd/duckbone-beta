@@ -62,14 +62,61 @@ of the standard will_paginate or kaminari gems.</p>
 
 <h2>Usage</h2>
 
-<p>First, establish pagination in your controller action.</p>
+<p>First, establish pagination in your controller action. Wrap the JSON response in the PageableCollection presenter.
+For example:</p>
 
-<p>Then use <code>fetchPage()</code> to fetch the collection.</p>
+<pre><code>class TicketsController &lt; ApplicationController
+  def index
+    @tickets = Ticket.all.page params[:page]
+    render :json =&gt; Duckbone::PageableCollection.new(@tickets)
+  end
+end
+</code></pre>
+
+<p>Then create a pageable collection and use <code>fetchPage()</code> to fetch the collection. For example:</p>
+
+<pre><code>tickets = new Duckbone.Collection({url: &lsquo;/tickets&rsquo;});
+Duckbone.include(tickets, Duckbone.PageableCollection);
+tickets.fetchPage(1);
+</code></pre>
+
+<p>The JSON response will look something like this:</p>
+
+<pre><code>{ num_pages: 4, limit_value: 25,
+  current_page: 1, total_count: 99,
+  records: [ {&hellip;}, {&hellip;} ] }
+</code></pre>
+
+<p>At that point, you can then use <code>nextPage()</code>, <code>prevPage()</code>, or <code>setPage()</code> to fetch any other set of items
+into the collection. The collection will trigger both <em>pageChange</em> and <em>reset</em> events, when the records are refreshed.</p>
+
+<h3>Displaying the total count</h3>
+
+<p>The collection maintains its <code>totalCount</code> property and updates it whenever it fetches new data from the server.
+However, manually adding and removing items from the collection can cause this number to fall out of sync. Use the
+method <code>updateTotalCountOnCollectionEvents</code> to create bindings that will keep this number in sync in the event
+that it is visible in the UI.</p>
+
+<h3>PageableView</h3>
+
+<p>To create a paging UI with traditional page links and next/previous navigation, use this class in concert with
+a Duckbone.PageableView.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">PageableCollection</span> <span class="o">=</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Mixin'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Mixin">&#182;</a>
+        </div>
+        <h3>Mixin</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-property_isPageableCollection'>
@@ -83,6 +130,17 @@ of the standard will_paginate or kaminari gems.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">isPageableCollection</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Public_Methods'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Public_Methods">&#182;</a>
+        </div>
+        <h3>Public Methods</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-function_parse'>
@@ -101,9 +159,6 @@ of the standard will_paginate or kaminari gems.</p>
 <p>When PageableCollection is used in a Rails controller, it wraps the response in an object
 that contains the collection&rsquo;s pagination meta-data. This overridden parse method extracts
 the meta-data into the object, and passes the records on to the normal behavior.</p>
-
-<p>An example response might look like this:
-{num<em>pages: 4, limit</em>value: 25, current_page: 1, records: [{&hellip;}, {&hellip;}]}</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">parse</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">resp</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">)</span>  <span class="p">{</span>
@@ -139,17 +194,15 @@ the meta-data into the object, and passes the records on to the normal behavior.
 
 <ul>
 <li>pageNum &ndash; the page ordinal requested, begining with 1</li>
-<li>params &ndash; an object representing the query params to be passed to the server,
-defaulting to the params defined on the collection.params (by setParam)</li>
-<li>returns &ndash; nothing</li>
+<li>returns &ndash; the jQuery XHR object for the fetch</li>
 </ul>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">fetchPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">pageNum</span> <span class="o">=</span> <span class="nx">pageNum</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span> <span class="o">||</span> <span class="nx">_</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
+        <div class='highlight'><pre>    <span class="nx">fetchPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">;</span>
+      <span class="nx">params</span><span class="p">.</span><span class="nx">page</span> <span class="o">=</span> <span class="nx">pageNum</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
       <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fetch</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span>
-        <span class="nx">url</span><span class="o">:</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="o">:</span> <span class="nx">pageNum</span><span class="p">})),</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="nx">buildUrl</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">),</span>
         <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">c</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;pageChange&#39;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nx">currentPage</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
         <span class="p">}</span>
@@ -166,17 +219,21 @@ defaulting to the params defined on the collection.params (by setParam)</li>
 
 <ul>
 <li>param &ndash; query parameter name</li>
-<li>val &ndash; query parameter value</li>
+<li>val &ndash; query parameter value, or falsy value to remove the param</li>
 <li>returns &ndash; nothing</li>
 </ul>
 
-<p>Set additonal query params on the collection, ie search string.
+<p>Set additional query params on the collection, ie search string.
 These will be sent to the server on fetch and show up in the url.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">setParam</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">param</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{};</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">[</span><span class="nx">param</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">[</span><span class="nx">param</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">[</span><span class="nx">param</span><span class="p">];</span>
+      <span class="p">}</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -245,12 +302,7 @@ These will be sent to the server on fetch and show up in the url.</p>
         </div>
         <h4>function updateTotalCountOnCollectionEvents</h4>
 
-<p>Since the collection&rsquo;s <code>totalCount</code> property is only updated during fetch/parse,
-when models are added and removed from the collection, then it is possible for this
-number to become out of sync with the number of actual objects logically part of the collection.
-Call this function to maintain the totalCount as models are added and removed from the collection
-in between calls to fetch(). Since this behavior is application dependent, the use of this
-method is left to the developer&rsquo;s discretion.</p>
+<p>Create bindings that update the totalCount as models are added and removed from the collection.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">updateTotalCountOnCollectionEvents</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -265,12 +317,12 @@ method is left to the developer&rsquo;s discretion.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-Internal'>
+    <tr id='section-Internal_Functions'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-Internal">&#182;</a>
+          <a class="pilcrow" href="#section-Internal_Functions">&#182;</a>
         </div>
-        <h3>Internal</h3>
+        <h3>Internal Functions</h3>
 
       </td>
       <td class=code>

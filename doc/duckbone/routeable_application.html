@@ -247,11 +247,17 @@ it as a routeName in its absence.</p>
         </div>
         <h4>function navigate</h4>
 
-<p>Simply overrides Backbone&rsquo;s navigate method with a version that clears
-flash messages</p>
+<ul>
+<li>fragment &ndash; the url fragment to navigate to</li>
+<li>triggerRoute &ndash; true if the router should trigger the route when navigating here</li>
+<li>params &ndash; optional object of pseudo query params</li>
+</ul>
+
+<p>Overrides Backbone&rsquo;s navigate method with a version that clears flash messages,
+and also accepts optional pseudo query params.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">navigate</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fragment</span><span class="p">,</span> <span class="nx">triggerRoute</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">navigate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fragment</span><span class="p">,</span> <span class="nx">triggerRoute</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
     <tr id='section-8'>
@@ -262,7 +268,21 @@ flash messages</p>
         <p>Next time loadView is called, we want to nix all current flashes.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">activeFlashes</span><span class="p">();</span>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isFlashableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">_removableFlashes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">activeFlashes</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Add psuedo query params if given</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">urlEncodedOptions</span> <span class="o">=</span> <span class="nx">_</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">params</span><span class="p">)).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="nx">p</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nx">params</span><span class="p">[</span><span class="nx">p</span><span class="p">]}).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">);</span>
+        <span class="nx">fragment</span> <span class="o">=</span> <span class="nx">fragment</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="nx">urlEncodedOptions</span>
+      <span class="p">}</span>
       <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">navigate</span><span class="p">(</span><span class="nx">fragment</span><span class="p">,</span> <span class="nx">triggerRoute</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
