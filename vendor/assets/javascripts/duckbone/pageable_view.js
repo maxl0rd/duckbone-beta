@@ -1,62 +1,81 @@
+/**
+# Duckbone.PageableView
+
+This module provides all the functionality to create a list of views representing a paginated collection,
+and navigation controls to view the different pages.
+
+It manages two child views: a list view of all the subviews, and a pager view that contains the navigation
+controls.
+
+## Usage
+
+First, create a PageableCollection to hold the model data. For example:
+
+    tickets = new Duckbone.Collection({url: '/tickets'});
+    Duckbone.include(tickets, Duckbone.PageableCollection);
+
+Next, create a class to serve as the sub-view in the list:
+
+    ticketView = Duckbone.View.extend({
+      templateData: 'Ticket number {{attr "id"}}'
+    });
+
+Finally, create a PageableView using these two elements, and load the first page of models.
+
+    pagedTickets = new Duckbone.View.extend({
+      collection: tickets,
+      viewClass: ticketView
+    });
+    pagedTickets.fetchPage(1);
+
+If you wish to create your own Pager class, then you may also set this on the view's `pagerClass`.
+See the default pager code at the end of this file and follow its example.
+
+### Updating the URL Hash
+
+Call `bindPageChangeToHashChange` on the view to create bindings that update the location bar when
+the pagination options are changed. This facility uses the pseudo query-string feature of
+Duckbone.RouteableApplication to pass the current page through the URL hash. When uses in conjunction
+with a route action that respects these params, it is easy to create bookmarkable urls to any page.
+*/
+
 (function() {
 
-  // PageableView works in concert with ListableView to create a container view that
-  // manages a list of subviews that represent a paginated collection.
-  //
-  // PageableViews are TemplateableViews, so you can provide your own template if you like.
-  // The default template is simply `{{child "list"}}{{child "pager"}}`.  Your custom
-  // template must contain at least those elements.
-
-  // Usage..
-  /*
-  myPageableView = Backbone.View.extend({
-    ...
-  });
-  Duckbone.include(myPageableView.prototype, Duckbone.PageableView)
-  */
-
   Duckbone.PageableView = {
+
+    // ### Mixin
+
+    // #### property isPageableView
+    // Indicates the presence of this mixin
     isPageableView: true,
 
-    // Also include TemplateableView (which in turn includes ViewLifecycleExtensions)
+    // #### function included
+    // Also includes TemplateableView which also includes NestableView and ViewLifecycleExtensions
     included: function() {
       if (!this.isTemplateableView) {
         Duckbone.include(this, Duckbone.TemplateableView);
       }
     },
 
-    // Override getTemplate to provide a simple default
-    getTemplate: function(templateName) {
-        Duckbone.TemplateableView.getTemplate.call(this, templateName, true);
-        this.template = this.template || Duckbone.Handlebars.compile('{{child "list"}}{{child "pager"}}');
-    },
+    // ### Default Template
+    // The default template for this view simply includes the two child views.
+    // To add additional markup to this template, simply override this property
+    // and provide your own template. Be sure to include these two `{{child}}` elements.
+    templateData: '{{child "list"}}{{child "pager"}}',
 
-    // Create sub views for render
+    // ### Public Methods
+
+    // #### function createChildren
+    // Creates and returns the list view and the pager view.
     createChildren: function() {
-      // Create child views
-      var list = this.createListView();
-      var pager = this.createPagerView();
-
-      // bind 'changePage' events to navigation state
-      this.application = this.options.application || this.application;
-      if (this.application) {
-        this.collection.bind('pageChange', function(p, options) {
-          var newLocation = window.location.hash.split('?')[0] + '?';
-          var urlEncodedOptions = _(_.keys(options)).map(function(o) {
-            return o + '=' + options[o]
-          }).join('&');
-          newLocation += urlEncodedOptions;
-          this.application.navigate(newLocation, false);
-        }, this);
-      }
-
       return {
-        list: list,
-        pager: pager
+        list: this.createListView(),
+        pager: this.createPagerView()
       }
     },
 
-    // Creates a list view container for the elements
+    // #### function createListView
+    // Creates the list view container for the elements
     createListView: function() {
       return new Duckbone.ListView({
         viewClass: this.viewClass,
@@ -67,8 +86,9 @@
       });
     },
 
-    // Creates a view for the pager element
-    // You can set a custom pager view class, or use the supplied default view
+    // #### function createPagerView
+    // Creates a view for the pager element. Uses the default pager class,
+    // or the supplied user class set on `pagerClass`
     createPagerView: function() {
       var pagerClass = this.options.pagerClass || this.pagerClass || Pager;
       return new pagerClass({
@@ -77,20 +97,22 @@
       });
     },
 
-    showPage: function(p) {
-      p = parseInt(p) || 1;
-      this.collection.setPage(p);
+    // #### function bindPageChangeToHashChange
+    // Create bindings that update the location hash to reflect the pagination options.
+    // TODO: improve this so all params get in ...
+    bindPageChangeToHashChange: function() {
+      // bind 'changePage' events to navigation state
+      this.application = this.options.application || this.application;
+      if (this.application) {
+        this.collection.bind('pageChange', function(p, params) {
+          var newLocation = window.location.hash.split('?')[0];
+          this.application.navigate(newLocation, false, params);
+        }, this);
+      }
     },
 
-    showNextPage: function() {
-      this.showPage(this.collection.currentPage+1);
-    },
-
-    showPreviousPage: function() {
-      this.showPage(this.collection.currentPage-1);
-    },
-
-    // Smooth scroll up to the top of the list
+    // #### function scrollToTopOfList
+    // Smoothly scrolls up to the top of the list, so that newer items are visible when the page changes.
     scrollToTopOfList: function() {
       var offset = $(this.children.list.el).offset().top - 20;
       $('html body').animate({ scrollTop: offset }, 400, 'swing');
@@ -171,21 +193,21 @@
     showPage: function(e) {
       e.preventDefault();
       var p = parseInt($(e.target).data('page'));
-      this.options.pageableView.showPage(p);
+      this.options.collection.setPage(p);
       this.options.pageableView.scrollToTopOfList();
       return false;
     },
 
     showPreviousPage: function(e) {
       e.preventDefault();
-      this.options.pageableView.showPreviousPage();
+      this.options.collection.prevPage();
       this.options.pageableView.scrollToTopOfList();
       return false;
     },
 
     showNextPage: function(e) {
       e.preventDefault();
-      this.options.pageableView.showNextPage();
+      this.options.collection.nextPage();
       this.options.pageableView.scrollToTopOfList();
       return false;
     }

@@ -7,19 +7,55 @@ of the standard will_paginate or kaminari gems.
 
 ## Usage
 
-First, establish pagination in your controller action.
+First, establish pagination in your controller action. Wrap the JSON response in the PageableCollection presenter.
+For example:
 
-Then use `fetchPage()` to fetch the collection.
+    class TicketsController < ApplicationController
+      def index
+        @tickets = Ticket.all.page params[:page]
+        render :json => Duckbone::PageableCollection.new(@tickets)
+      end
+    end
 
+Then create a pageable collection and use `fetchPage()` to fetch the collection. For example:
+
+    tickets = new Duckbone.Collection({url: '/tickets'});
+    Duckbone.include(tickets, Duckbone.PageableCollection);
+    tickets.fetchPage(1);
+
+The JSON response will look something like this:
+
+    { num_pages: 4, limit_value: 25,
+      current_page: 1, total_count: 99,
+      records: [ {...}, {...} ] }
+
+At that point, you can then use `nextPage()`, `prevPage()`, or `setPage()` to fetch any other set of items
+into the collection. The collection will trigger both _pageChange_ and _reset_ events, when the records are refreshed.
+
+### Displaying the total count
+
+The collection maintains its `totalCount` property and updates it whenever it fetches new data from the server.
+However, manually adding and removing items from the collection can cause this number to fall out of sync. Use the
+method `updateTotalCountOnCollectionEvents` to create bindings that will keep this number in sync in the event
+that it is visible in the UI.
+
+### PageableView
+
+To create a paging UI with traditional page links and next/previous navigation, use this class in concert with
+a Duckbone.PageableView.
 */
 
 (function() {
 
   Duckbone.PageableCollection = {
 
+    // ### Mixin
+
     // #### property isPageableCollection
     // Indicates the presence of this mixin
     isPageableCollection: true,
+
+    // ### Public Methods
 
     // #### function parse
     // - resp - the response object
@@ -29,9 +65,6 @@ Then use `fetchPage()` to fetch the collection.
     // When PageableCollection is used in a Rails controller, it wraps the response in an object
     // that contains the collection's pagination meta-data. This overridden parse method extracts
     // the meta-data into the object, and passes the records on to the normal behavior.
-    //
-    // An example response might look like this:
-    // {num_pages: 4, limit_value: 25, current_page: 1, records: [{...}, {...}]}
     parse: function(resp, xhr)  {
       this.numPages = resp.num_pages;
       this.limitValue = resp.limit_value;
@@ -48,14 +81,12 @@ Then use `fetchPage()` to fetch the collection.
 
     // #### function fetchPage
     // - pageNum - the page ordinal requested, begining with 1
-    // - params - an object representing the query params to be passed to the server,
-    //   defaulting to the params defined on the collection.params (by setParam)
-    // - returns - nothing
-    fetchPage: function(pageNum, params) {
-      pageNum = pageNum || 1;
-      params = params || _.clone(this.params) || {};
+    // - returns - the jQuery XHR object for the fetch
+    fetchPage: function(pageNum) {
+      var params = this.params;
+      params.page = pageNum || 1;
       return Backbone.Collection.prototype.fetch.call(this, {
-        url: buildUrl(this, _.extend(params, {'page': pageNum})),
+        url: buildUrl(this, this.params),
         success: function(c) {
           c.trigger('pageChange', c.currentPage, params);
         }
@@ -64,14 +95,18 @@ Then use `fetchPage()` to fetch the collection.
 
     // #### function setParam
     // - param - query parameter name
-    // - val - query parameter value
+    // - val - query parameter value, or falsy value to remove the param
     // - returns - nothing
     //
-    // Set additonal query params on the collection, ie search string.
+    // Set additional query params on the collection, ie search string.
     // These will be sent to the server on fetch and show up in the url.
     setParam: function(param, val) {
       this.params = this.params || {};
-      this.params[param] = val;
+      if (val) {
+        this.params[param] = val;
+      } else {
+        delete this.params[param];
+      }
     },
 
     // #### function setPage
@@ -100,12 +135,7 @@ Then use `fetchPage()` to fetch the collection.
     },
 
     // #### function updateTotalCountOnCollectionEvents
-    // Since the collection's `totalCount` property is only updated during fetch/parse,
-    // when models are added and removed from the collection, then it is possible for this
-    // number to become out of sync with the number of actual objects logically part of the collection.
-    // Call this function to maintain the totalCount as models are added and removed from the collection
-    // in between calls to fetch(). Since this behavior is application dependent, the use of this
-    // method is left to the developer's discretion.
+    // Create bindings that update the totalCount as models are added and removed from the collection.
     updateTotalCountOnCollectionEvents: function() {
       this.bind('add', function() {
         if (this.totalCount) this.totalCount += 1;
@@ -117,7 +147,7 @@ Then use `fetchPage()` to fetch the collection.
 
   };
 
-  // ### Internal
+  // ### Internal Functions
 
   function buildUrl(context, options) {
     options = options || {};

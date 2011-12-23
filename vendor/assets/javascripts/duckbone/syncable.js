@@ -73,6 +73,7 @@ The following events are available on all Syncable models and collections:
 - 'sync:read' - triggered at the start of a read request
 - 'sync:update' - triggered at the start of an update request
 - 'sync:destroy' - triggered at the start of a destroy request
+- 'sync:complete' - triggered at the completion of any request
 - 'sync:invalid' - triggered when a request returns invalid (422)
 - 'sync:error' - triggered when a request returns an error (ie 404, 500)
 

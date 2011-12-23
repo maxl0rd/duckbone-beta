@@ -133,11 +133,20 @@ on itself. For example:
     },
 
     // #### function navigate
-    // Simply overrides Backbone's navigate method with a version that clears
-    // flash messages
-    navigate : function(fragment, triggerRoute) {
+    // - fragment - the url fragment to navigate to
+    // - triggerRoute - true if the router should trigger the route when navigating here
+    // - params - optional object of pseudo query params
+    //
+    // Overrides Backbone's navigate method with a version that clears flash messages,
+    // and also accepts optional pseudo query params.
+    navigate: function(fragment, triggerRoute, params) {
       // Next time loadView is called, we want to nix all current flashes.
       if (this.isFlashableView) this._removableFlashes = this.activeFlashes();
+      // Add psuedo query params if given
+      if (params) {
+        var urlEncodedOptions = _(_.keys(params)).map(function(p) {return p + '=' + params[p]}).join('&');
+        fragment = fragment + "?" + urlEncodedOptions
+      }
       Backbone.history.navigate(fragment, triggerRoute);
     },
 
