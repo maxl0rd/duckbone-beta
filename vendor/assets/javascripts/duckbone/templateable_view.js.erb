@@ -62,69 +62,21 @@ For example:
 */
 (function() {
 
-  // Create a registry that only lives in this context
+  // ### Template Registry
+
+  // Create a template registry that only lives in this context
   var templateRegistry = new Duckbone.TemplateRegistry();
 
-  // Create Handlebars helpers if we're using Handlebars.
-  // These helpers make working with models and collections easier.
-
-  if (Handlebars) {
-
-    // Fix broken if and unless behavior in the stock handlebars
-    // Now #if can reference a function property that returns true or false
-
-    Handlebars.helpers['oldIf'] = Handlebars.helpers['if']
-
-    Handlebars.registerHelper('if', function(context, fn, inverse) {
-      var condition = typeof context === "function" ? context.call(this) : context;
-      return Handlebars.helpers['oldIf'].call(this, condition, fn, inverse);
-    });
-
-    // The "attr" helper renders a model's attribute,
-    // and binds the view to any changes on that attribute.
-    // Handlebars can automatically find attributes, so
-    // this is only necessary if you want to bind to changes.
-    //
-    // usage: {{attr "foo"}}
-
-    Handlebars.registerHelper('attr', function(attribute) {
-      return new Handlebars.SafeString(
-        '<span data-bind="attr_' + Handlebars.Utils.escapeExpression(attribute) + '">' +
-        Handlebars.Utils.escapeExpression(this.get(attribute)) +
-        '</span>'
-      );
-    });
-
-    // The "child" helper indicates where sub-views should be included in a template
-    // renderTemplate() will look for a view with this name defined as a prop on the parent view
-    // and replace this element
-
-    Handlebars.registerHelper('child', function(childName) {
-      return new Handlebars.SafeString(
-        '<script type="text/x-placeholder" data-child-view="' + Handlebars.Utils.escapeExpression(childName) + '"></script>'
-      );
-    });
-
-
-    // Make each capable of handling collections
-
-    Handlebars.helpers['oldEach'] = Handlebars.helpers['each']
-
-    Handlebars.registerHelper('each', function(context, fn, inverse) {
-      if (context.models) {
-        context = context.models;
-      }
-      return Handlebars.helpers['oldEach'].call(this, context, fn, inverse);
-    });
-
-  }
-
-  // Duckbone.TemplateableView
-  // Doc above
-
   Duckbone.TemplateableView = {
+
+    // ### Mixin
+
+    // #### property isTemplateableView
+    // Indicates the presence of this mixin
     isTemplateableView: true,
 
+    // ##### function included
+    // Also includes ViewLifecycleExtensions and NestableView
     included: function() {
       if (!this.hasViewLifecycleExtensions) {
         Duckbone.include(this, Duckbone.ViewLifecycleExtensions);
@@ -134,10 +86,18 @@ For example:
       }
     },
 
+    // #### property templateRegistry
+    // Give every TemplateableView access to the global template registry.
+    // This can be overridden to specify a different source of templates.
     templateRegistry: templateRegistry,
 
-    // Fetch template out of the View's templateData, options or the templateRegistry
-    // - allowEmpty - if true, don't set a "missing template" template on not-found.
+    // #### function getTemplate
+    // - templateName - the string name of the template in the templateRegistry
+    // - allowEmpty - if true, don't set a "missing template" template on not-found
+    // - returns - a compiled Handlebars template
+    //
+    // Finds the template in the View's templateData, options or the templateRegistry.
+    // Returns a "missing template" if none is found, unless `allowEmpty` is true.
     getTemplate: function(templateName, allowEmpty) {
       this.templateData = this.options.templateData || this.templateData || null;
       if (this.templateData) {
@@ -152,18 +112,20 @@ For example:
       return this.template
     },
 
-    // Fetches its template from any of the following places:
-    //  this.options.template, this.template, this.templateName, this.options.templateName
-    // Then it renders it in the context of its model.
+    // #### function renderTemplate
+    // - context - the object to use as a template context, defaulting to the view's `model` property
+    // - returns - the view itself, for compatibility with the `render` return convention
+    //
+    // The template can be found in any of the following places:
+    //  `this.options.template`, `this.template`, `this.templateName`, `this.options.templateName`.
+    // Then it renders the template in the context of its model.
     // The output replaces the entire html content of the view's container element.
     // Pass a different context param to render from a different context.
-    // ie this.renderTemplate({some_different: "data"});
-
+    // ie `this.renderTemplate({some_different: "data"});`
     // Attempts to replicate typical server-side templating behavior in which
     // errors in development will show as error messages in place in the template,
     // and errors in a production environments will result in a server error.
     // Also prints useful error messages to the console.
-
     renderTemplate: function(context) {
 
       // Set up context and template
@@ -175,7 +137,7 @@ For example:
       }
       if (!this.template) throw("renderTemplate called without a template.")
 
-      // Remove child views ...
+      // Remove any existing child views
       this.removeNestedViews();
 
       // Unbind any previous data bindings
@@ -207,6 +169,7 @@ For example:
         }, this));
       }
 
+      // Create the child views
       this.setupNestedViews();
 
       // Include child views where they belong in the DOM
@@ -228,22 +191,66 @@ For example:
         $(this.el).addClass(this.templateName);
       }
 
+      // Mark rendered and return self, so the final call in render in coffee returns itself by convention
       this.templateRendered = true;
-
-      // return self, so the final call in render in coffee will return itself by convention
       return this
-
     },
 
+    // #### function renderTemplateOnce
+    // - context - the template rendering context
+    // - returns - the view itself
+    //
     // Calls `renderTemplate` if it hasn't been called before.  This is useful in a
     // custom render method if you want to render a template when the view is initialized
-    // and then use DOM manipulation to keep the HTML up to date in subsequent renders
-
+    // and then use DOM manipulation to keep the HTML up to date in subsequent renders.
     renderTemplateOnce: function (context) {
       if (!this.templateRendered) this.renderTemplate(context);
       return this;
     }
 
   }
+
+  // ### Handlebars Helpers
+
+  // #### helper {{#if}}
+  // Allow #if to reference a function property that returns true or false.
+  Handlebars.helpers['oldIf'] = Handlebars.helpers['if']
+  Handlebars.registerHelper('if', function(context, fn, inverse) {
+    var condition = typeof context === "function" ? context.call(this) : context;
+    return Handlebars.helpers['oldIf'].call(this, condition, fn, inverse);
+  });
+
+  // #### helper {{#each}}
+  // Improve the standard `each` helper so that it understands Backbone collections.
+  // This will iterate over the models in a Backbone collection.
+  Handlebars.helpers['oldEach'] = Handlebars.helpers['each']
+  Handlebars.registerHelper('each', function(context, fn, inverse) {
+    if (context.models) {
+      context = context.models;
+    }
+    return Handlebars.helpers['oldEach'].call(this, context, fn, inverse);
+  });
+
+  // #### helper {{attr}}
+  // The "attr" helper renders a model's attribute, and binds the view to any changes on that
+  // attribute. Handlebars can automatically find attributes as paths, so this is only necessary
+  // if you want to bind to changes.
+  Handlebars.registerHelper('attr', function(attribute) {
+    return new Handlebars.SafeString(
+      '<span data-bind="attr_' + Handlebars.Utils.escapeExpression(attribute) + '">' +
+      Handlebars.Utils.escapeExpression(this.get(attribute)) +
+      '</span>'
+    );
+  });
+
+  // #### helper {{child}}
+  // The "child" helper indicates where sub-views should be included in a template.
+  // `renderTemplate()` will look for a view with this name defined as a prop on the parent view
+  // and replace this placeholder element.
+  Handlebars.registerHelper('child', function(childName) {
+    return new Handlebars.SafeString(
+      '<script type="text/x-placeholder" data-child-view="' + Handlebars.Utils.escapeExpression(childName) + '"></script>'
+    );
+  });
 
 }).call(this);
