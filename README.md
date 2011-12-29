@@ -56,6 +56,13 @@ Duckbone works with all browsers that Backbone supports and is presently well-te
 - Apple Safari 4+
 - Google Chrome
 
+It also makes a great platform for modern mobile development. Duckbone is presently well-tested on
+the following platforms:
+
+- iOS
+- Android 2.2+
+- Windows Phone 7.5+
+- Blackberry 6+
 
 ## Features
 
