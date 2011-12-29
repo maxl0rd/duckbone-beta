@@ -126,15 +126,15 @@ automatically during renderTemplate. Assign the subview to the parent, ie <code>
         <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-2'>
+    <tr id='section-Template_Registry'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-2">&#182;</a>
+          <a class="pilcrow" href="#section-Template_Registry">&#182;</a>
         </div>
-        <p>Create a registry that only lives in this context</p>
+        <h3>Template Registry</h3>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">templateRegistry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateRegistry</span><span class="p">();</span></pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-3'>
@@ -142,120 +142,87 @@ automatically during renderTemplate. Assign the subview to the parent, ie <code>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
-        <p>Create Handlebars helpers if we&rsquo;re using Handlebars.
-These helpers make working with models and collections easier.</p>
+        <p>Create a template registry that only lives in this context</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="k">if</span> <span class="p">(</span><span class="nx">Handlebars</span><span class="p">)</span> <span class="p">{</span></pre></div>
+        <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">templateRegistry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateRegistry</span><span class="p">();</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-Mixin'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-Mixin">&#182;</a>
         </div>
-        <p>Fix broken if and unless behavior in the stock handlebars
-Now #if can reference a function property that returns true or false</p>
+        <h3>Mixin</h3>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldIf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;if&#39;</span><span class="p">]</span>
-
-    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;if&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">condition</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">context</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="o">?</span> <span class="nx">context</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">context</span><span class="p">;</span>
-      <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldIf&#39;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">condition</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">);</span>
-    <span class="p">});</span></pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-5'>
+    <tr id='section-property_isTemplateableView'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-5">&#182;</a>
+          <a class="pilcrow" href="#section-property_isTemplateableView">&#182;</a>
         </div>
-        <p>The &ldquo;attr&rdquo; helper renders a model&rsquo;s attribute,
-and binds the view to any changes on that attribute.
-Handlebars can automatically find attributes, so
-this is only necessary if you want to bind to changes.</p>
+        <h4>property isTemplateableView</h4>
 
-<p>usage: {{attr &ldquo;foo&rdquo;}}</p>
+<p>Indicates the presence of this mixin</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
-        <span class="s1">&#39;&lt;span data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
-        <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">))</span> <span class="o">+</span>
-        <span class="s1">&#39;&lt;/span&gt;&#39;</span>
-      <span class="p">);</span>
-    <span class="p">});</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">isTemplateableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-function_included'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-function_included">&#182;</a>
         </div>
-        <p>The &ldquo;child&rdquo; helper indicates where sub-views should be included in a template
-renderTemplate() will look for a view with this name defined as a prop on the parent view
-and replace this element</p>
+        <h5>function included</h5>
+
+<p>Also includes ViewLifecycleExtensions and NestableView</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
-        <span class="s1">&#39;&lt;script type=&quot;text/x-placeholder&quot; data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/script&gt;&#39;</span>
-      <span class="p">);</span>
-    <span class="p">});</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-7'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
-        </div>
-        <p>Make each capable of handling collections</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldEach&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;each&#39;</span><span class="p">]</span>
-
-    <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;each&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">models</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldEach&#39;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">);</span>
-    <span class="p">});</span>
-
-  <span class="p">}</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-8'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
-        </div>
-        <p>Duckbone.TemplateableView
-Doc above</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">isTemplateableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-
-    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <div class='highlight'><pre>    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasViewLifecycleExtensions</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ViewLifecycleExtensions</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isNestableView</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">NestableView</span><span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">},</span>
-
-    <span class="nx">templateRegistry</span><span class="o">:</span> <span class="nx">templateRegistry</span><span class="p">,</span></pre></div>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-9'>
+    <tr id='section-property_templateRegistry'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-9">&#182;</a>
+          <a class="pilcrow" href="#section-property_templateRegistry">&#182;</a>
         </div>
-        <p>Fetch template out of the View&rsquo;s templateData, options or the templateRegistry
-&ndash; allowEmpty &ndash; if true, don&rsquo;t set a &ldquo;missing template&rdquo; template on not-found.</p>
+        <h4>property templateRegistry</h4>
+
+<p>Give every TemplateableView access to the global template registry.
+This can be overridden to specify a different source of templates.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">templateRegistry</span><span class="o">:</span> <span class="nx">templateRegistry</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_getTemplate'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_getTemplate">&#182;</a>
+        </div>
+        <h4>function getTemplate</h4>
+
+<ul>
+<li>templateName &ndash; the string name of the template in the templateRegistry</li>
+<li>allowEmpty &ndash; if true, don&rsquo;t set a &ldquo;missing template&rdquo; template on not-found</li>
+<li>returns &ndash; a compiled Handlebars template</li>
+</ul>
+
+<p>Finds the template in the View&rsquo;s templateData, options or the templateRegistry.
+Returns a &ldquo;missing template&rdquo; if none is found, unless <code>allowEmpty</code> is true.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">getTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">templateName</span><span class="p">,</span> <span class="nx">allowEmpty</span><span class="p">)</span> <span class="p">{</span>
@@ -273,28 +240,25 @@ Doc above</p>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-10'>
+    <tr id='section-function_renderTemplate'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
+          <a class="pilcrow" href="#section-function_renderTemplate">&#182;</a>
         </div>
-        <p>Fetches its template from any of the following places:
- this.options.template, this.template, this.templateName, this.options.templateName
-Then it renders it in the context of its model.
+        <h4>function renderTemplate</h4>
+
+<ul>
+<li>context &ndash; the object to use as a template context, defaulting to the view&rsquo;s <code>model</code> property</li>
+<li>returns &ndash; the view itself, for compatibility with the <code>render</code> return convention</li>
+</ul>
+
+<p>The template can be found in any of the following places:
+ <code>this.options.template</code>, <code>this.template</code>, <code>this.templateName</code>, <code>this.options.templateName</code>.
+Then it renders the template in the context of its model.
 The output replaces the entire html content of the view&rsquo;s container element.
 Pass a different context param to render from a different context.
-ie this.renderTemplate({some_different: &ldquo;data&rdquo;});</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre></pre></div>
-      </td>
-    </tr>
-    <tr id='section-11'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-11">&#182;</a>
-        </div>
-        <p>Attempts to replicate typical server-side templating behavior in which
+ie <code>this.renderTemplate({some_different: &ldquo;data&rdquo;});</code>
+Attempts to replicate typical server-side templating behavior in which
 errors in development will show as error messages in place in the template,
 and errors in a production environments will result in a server error.
 Also prints useful error messages to the console.</p>
@@ -303,10 +267,10 @@ Also prints useful error messages to the console.</p>
         <div class='highlight'><pre>    <span class="nx">renderTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-12'>
+    <tr id='section-10'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-12">&#182;</a>
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Set up context and template</p>
       </td>
@@ -320,21 +284,21 @@ Also prints useful error messages to the console.</p>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">)</span> <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;renderTemplate called without a template.&quot;</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
-        <p>Remove child views &hellip;</p>
+        <p>Remove any existing child views</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">removeNestedViews</span><span class="p">();</span></pre></div>
       </td>
     </tr>
-    <tr id='section-14'>
+    <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>Unbind any previous data bindings</p>
       </td>
@@ -342,10 +306,10 @@ Also prints useful error messages to the console.</p>
         <div class='highlight'><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isBindableView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">unbindAttributes</span><span class="p">();</span></pre></div>
       </td>
     </tr>
-    <tr id='section-15'>
+    <tr id='section-13'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-15">&#182;</a>
+          <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
         <p>Render the HTML template, and if it fails, output as much info as possible
 500 Error on exceptions in production</p>
@@ -367,10 +331,10 @@ Also prints useful error messages to the console.</p>
       <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-16'>
+    <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-16">&#182;</a>
+          <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
         <p>Establish any data-bindings that are defined by {{attr &ldquo;attribute&rdquo;}} helpers</p>
       </td>
@@ -381,15 +345,24 @@ Also prints useful error messages to the console.</p>
           <span class="kd">var</span> <span class="nx">binding</span> <span class="o">=</span> <span class="s1">&#39;span[data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">attr</span> <span class="o">+</span> <span class="s1">&#39;&quot;]&#39;</span><span class="p">;</span>
           <span class="k">this</span><span class="p">.</span><span class="nx">bindAttribute</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">attr</span><span class="p">,</span> <span class="nx">binding</span><span class="p">);</span>
         <span class="p">},</span> <span class="k">this</span><span class="p">));</span>
-      <span class="p">}</span>
-
-      <span class="k">this</span><span class="p">.</span><span class="nx">setupNestedViews</span><span class="p">();</span></pre></div>
+      <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-17'>
+    <tr id='section-15'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-17">&#182;</a>
+          <a class="pilcrow" href="#section-15">&#182;</a>
+        </div>
+        <p>Create the child views</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">setupNestedViews</span><span class="p">();</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-16'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Include child views where they belong in the DOM</p>
       </td>
@@ -407,10 +380,10 @@ Also prints useful error messages to the console.</p>
       <span class="p">},</span> <span class="k">this</span><span class="p">));</span></pre></div>
       </td>
     </tr>
-    <tr id='section-18'>
+    <tr id='section-17'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-18">&#182;</a>
+          <a class="pilcrow" href="#section-17">&#182;</a>
         </div>
         <p>Assign a descriptive class name to the element</p>
       </td>
@@ -418,33 +391,37 @@ Also prints useful error messages to the console.</p>
         <div class='highlight'><pre>      <span class="kd">var</span> <span class="nx">templateName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">templateName</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">templateName</span><span class="p">);</span>
-      <span class="p">}</span>
-
-      <span class="k">this</span><span class="p">.</span><span class="nx">templateRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span></pre></div>
+      <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-19'>
+    <tr id='section-18'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
+          <a class="pilcrow" href="#section-18">&#182;</a>
         </div>
-        <p>return self, so the final call in render in coffee will return itself by convention</p>
+        <p>Mark rendered and return self, so the final call in render in coffee returns itself by convention</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">return</span> <span class="k">this</span>
-
+        <div class='highlight'><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">templateRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">return</span> <span class="k">this</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-function_renderTemplateOnce'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-function_renderTemplateOnce">&#182;</a>
         </div>
-        <p>Calls <code>renderTemplate</code> if it hasn&rsquo;t been called before.  This is useful in a
-custom render method if you want to render a template when the view is initialized
-and then use DOM manipulation to keep the HTML up to date in subsequent renders</p>
+        <h4>function renderTemplateOnce</h4>
 
+<ul>
+<li>context &ndash; the template rendering context</li>
+<li>returns &ndash; the view itself</li>
+</ul>
+
+<p>Calls <code>renderTemplate</code> if it hasn&rsquo;t been called before.  This is useful in a
+custom render method if you want to render a template when the view is initialized
+and then use DOM manipulation to keep the HTML up to date in subsequent renders.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">renderTemplateOnce</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
@@ -452,7 +429,96 @@ and then use DOM manipulation to keep the HTML up to date in subsequent renders<
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-  <span class="p">}</span>
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-Handlebars_Helpers'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-Handlebars_Helpers">&#182;</a>
+        </div>
+        <h3>Handlebars Helpers</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{#if}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{#if}}">&#182;</a>
+        </div>
+        <h4>helper {{#if}}</h4>
+
+<p>Allow #if to reference a function property that returns true or false.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldIf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;if&#39;</span><span class="p">]</span>
+  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;if&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">condition</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">context</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="o">?</span> <span class="nx">context</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">context</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldIf&#39;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">condition</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{#each}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{#each}}">&#182;</a>
+        </div>
+        <h4>helper {{#each}}</h4>
+
+<p>Improve the standard <code>each</code> helper so that it understands Backbone collections.
+This will iterate over the models in a Backbone collection.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldEach&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;each&#39;</span><span class="p">]</span>
+  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;each&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">context</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">models</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="s1">&#39;oldEach&#39;</span><span class="p">].</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">inverse</span><span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{attr}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{attr}}">&#182;</a>
+        </div>
+        <h4>helper {{attr}}</h4>
+
+<p>The &ldquo;attr&rdquo; helper renders a model&rsquo;s attribute, and binds the view to any changes on that
+attribute. Handlebars can automatically find attributes as paths, so this is only necessary
+if you want to bind to changes.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
+      <span class="s1">&#39;&lt;span data-bind=&quot;attr_&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="o">+</span>
+      <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">))</span> <span class="o">+</span>
+      <span class="s1">&#39;&lt;/span&gt;&#39;</span>
+    <span class="p">);</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{child}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{child}}">&#182;</a>
+        </div>
+        <h4>helper {{child}}</h4>
+
+<p>The &ldquo;child&rdquo; helper indicates where sub-views should be included in a template.
+<code>renderTemplate()</code> will look for a view with this name defined as a prop on the parent view
+and replace this placeholder element.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">SafeString</span><span class="p">(</span>
+      <span class="s1">&#39;&lt;script type=&quot;text/x-placeholder&quot; data-child-view=&quot;&#39;</span> <span class="o">+</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Utils</span><span class="p">.</span><span class="nx">escapeExpression</span><span class="p">(</span><span class="nx">childName</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/script&gt;&#39;</span>
+    <span class="p">);</span>
+  <span class="p">});</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span></pre></div>
       </td>

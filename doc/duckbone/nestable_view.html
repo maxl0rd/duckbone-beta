@@ -56,19 +56,27 @@
         </div>
         <h1>Duckbone.NestableView</h1>
 
-<p>NestableView provides automated setup and teardown of child views.  You just provide
-a <code>createChildren</code> method that returns an object containing all of your child view
-instances by name, like this</p>
+<p>In the Duckbone View lifecycle, it is critical that the appropriate setup and teardown
+happens for all views. Without this, weak bindings will not get unbound and many other
+&ldquo;zombie code&rdquo; bugs will plague the developer. NestableView provides automated setup and
+teardown of child views. This is primarily used by TemplateableView, and its <code>{{child}}</code> helper.</p>
 
-<p><code>javascript
-createChildren: function() {
+<p>This mixin is included in <code>Duckbone.View</code>.</p>
+
+<h1>Usage</h1>
+
+<p>Provide a <code>createChildren</code> method that returns an object containing child view
+instances by name. For example:</p>
+
+<pre><code>createChildren: function() {
   return {
     myStuff: new StuffView({model: user.stuff})
   }
 }
-</code></p>
+</code></pre>
 
-<p>NestableView works hand-in-hand with TemplateableView&rsquo;s {{child}} helper.</p>
+<p>The <code>renderTemplate</code> method of TemplateableView will call
+<code>setupNestedViews()</code> and <code>removeNestedViews()</code> as needed.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -83,19 +91,41 @@ createChildren: function() {
         </div>
         <h4>property isNestableView</h4>
 
-<p>Indicates a view with this mixin included</p>
-
+<p>Indicates the presence of this mixin</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">isNestableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <div class='highlight'><pre>    <span class="nx">isNestableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_setupNestedViews'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_setupNestedViews">&#182;</a>
+        </div>
+        <h4>function setupNestedViews</h4>
 
-    <span class="nx">setupNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p>Call <code>createChildren</code> and assign the returned views to the <code>children</code> property.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">setupNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
       <span class="p">}</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_removeNestedViews'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_removeNestedViews">&#182;</a>
+        </div>
+        <h4>function removeNestedViews</h4>
 
-    <span class="nx">removeNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p>Call <code>remove</code> on each child view.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">removeNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">child</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
