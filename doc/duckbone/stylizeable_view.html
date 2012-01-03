@@ -49,26 +49,80 @@
     </tr>
   </thead>
   <tbody>
-    <tr id='section-1'>
+    <tr id='section-Duckbone.StylizeableView'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-1">&#182;</a>
+          <a class="pilcrow" href="#section-Duckbone.StylizeableView">&#182;</a>
         </div>
-        
+        <h1>Duckbone.StylizeableView</h1>
+
+<p>Some developers prefer to package their stylesheets in the code along with
+the views that they affect. This technique can avoid the common situation in
+which a monolithic stylesheet devolves into a mess of spaghetti with
+many dependencies that are difficult to resolve. The disadvantage of this
+approach is that it prohibits the use of newer CSS tools such as Compass,
+SASS, LESS, etc. that are easily leveraged through the asset pipeline.</p>
+
+<p>Duckbone.View comes with StylizeableView support, but a project can work
+equally well with or without using it.</p>
+
+<h2>Usage</h2>
+
+<p>Specify styles to be applied to all elements of the view in the <code>styles</code>
+property. This object is simply a map of selectors and the styles to apply.
+The syntax should be identical to that which would be passed to <code>jquery.css()</code>.</p>
+
+<p>Use the special selector &lsquo;el&rsquo; to apply styles to the root element.
+&lsquo;el.className&rsquo; also works</p>
+
+<p>For example:</p>
+
+<pre><code>styles: {
+  &lsquo;el&rsquo;:      {&lsquo;padding&rsquo;: &lsquo;5px&rsquo;, &lsquo;margin&rsquo;: &lsquo;5px&rsquo;},
+  &lsquo;el.hot&rsquo;:  {&lsquo;color&rsquo;: &lsquo;red&rsquo;},
+  &lsquo;b.money&rsquo;: {&lsquo;color&rsquo;: &lsquo;green&rsquo;},
+  &lsquo;li&rsquo;:      {&lsquo;margin&rsquo;: &lsquo;10px&rsquo;}
+}
+</code></pre>
       </td>
       <td class=code>
         <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
- <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">StylizeableView</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">isStylizeableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+ <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">StylizeableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-2'>
+    <tr id='section-Mixin'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-2">&#182;</a>
+          <a class="pilcrow" href="#section-Mixin">&#182;</a>
         </div>
-        <p>Also include ViewLifecycleExtensions</p>
+        <h3>Mixin</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-property_isStylizeableView'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-property_isStylizeableView">&#182;</a>
+        </div>
+        <h4>property isStylizeableView</h4>
+
+<p>Indicates the presence of this mixin</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">isStylizeableView</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_included'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_included">&#182;</a>
+        </div>
+        <h4>function included</h4>
+
+<p>Also include ViewLifecycleExtensions</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">included</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -78,33 +132,18 @@
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-3'>
+    <tr id='section-function_applyStyles'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
+          <a class="pilcrow" href="#section-function_applyStyles">&#182;</a>
         </div>
-        <p>Apply stylesheets that are contained on the view itself
-These only apply to elements that are children of the view
-Add them to the styles property as a hash of jquery selectors and css
-Use the selector &lsquo;el&rsquo; to apply styles to the root element
-&lsquo;el.className&rsquo; also works
-styles: {
-  &lsquo;el&rsquo;:      {&lsquo;padding&rsquo;: &lsquo;5px&rsquo;},
-  &lsquo;el.hot&rsquo;:  {&lsquo;color&rsquo;: &lsquo;red&rsquo;},
-  &lsquo;b.money&rsquo;: {&lsquo;color&rsquo;: &lsquo;green&rsquo;},
-  &lsquo;li&rsquo;:      {&lsquo;margin&rsquo;: &lsquo;10px&rsquo;}
-}</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre></pre></div>
-      </td>
-    </tr>
-    <tr id='section-4'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
-        </div>
-        <p>Apply the CSS to children of the view. Formatted as above</p>
+        <h4>function applyStyles</h4>
+
+<ul>
+<li>styles &ndash; a map of styles to apply to the children of this view,
+defaulting to the view&rsquo;s <code>styles</code> property.</li>
+<li>returns &ndash; nothing</li>
+</ul>
 
       </td>
       <td class=code>

@@ -49,15 +49,20 @@
     </tr>
   </thead>
   <tbody>
-    <tr id='section-1'>
+    <tr id='section-Handlebars_Extensions'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-1">&#182;</a>
+          <a class="pilcrow" href="#section-Handlebars_Extensions">&#182;</a>
         </div>
-        
+        <h1>Handlebars Extensions</h1>
+
+<p>Provides additional functionality to the Handlebars core as needed by Duckbone.
+Parts of this are heavily inspired by SproutCore&rsquo;s use of Handlebars.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span> <span class="o">=</span> <span class="p">{};</span></pre></div>
       </td>
     </tr>
     <tr id='section-2'>
@@ -65,28 +70,43 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-2">&#182;</a>
         </div>
-        <p>Heavily inspired by SproutCore&rsquo;s use of Handlebars</p>
-
+        <p>Extend the existing JavaScriptCompiler</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span> <span class="o">=</span> <span class="p">{};</span>
-
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
   <span class="nx">ctor</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
   <span class="nx">ctor</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ctor</span><span class="p">();</span>
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compiler</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">;</span>
-
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">nameLookup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">compiler</span> <span class="o">=</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Extend nameLookup to use <code>getAttr</code></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">nameLookup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;context&#39;</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="s2">&quot;Duckbone.Handlebars.getAttr(&quot;</span> <span class="o">+</span> <span class="nx">parent</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">quotedString</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;);&quot;</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">nameLookup</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">parent</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">type</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">};</span>
-
-
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">getAttr</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">};</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Extend name resolution so that Backbone model attributes are detected when specified
+as normal Handlebars paths, for example &ldquo;{{mymodel/myattribute}}&rdquo;</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">getAttr</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="sr">/^[0-9]+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">object</span><span class="p">[</span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">key</span><span class="p">)];</span>
     <span class="p">}</span>
@@ -98,9 +118,19 @@
       <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">object</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-  <span class="p">}</span>
+  <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Use the extended JavascriptCompiler</p>
 
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">ast</span> <span class="o">=</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">string</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">environment</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">Compiler</span><span class="p">().</span><span class="nx">compile</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">JavaScriptCompiler</span><span class="p">().</span><span class="nx">compile</span><span class="p">(</span><span class="nx">environment</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>

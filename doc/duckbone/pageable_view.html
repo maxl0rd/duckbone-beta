@@ -278,12 +278,23 @@ TODO: improve this so all params get in &hellip;</p>
   <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-Default_Pager_View_Class'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-Default_Pager_View_Class">&#182;</a>
         </div>
-        <p>Default Pager template</p>
+        <h3>Default Pager View Class</h3>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-14">&#182;</a>
+        </div>
+        <p>Handlebars template</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">pagerTemplateData</span> <span class="o">=</span>
@@ -305,18 +316,9 @@ TODO: improve this so all params get in &hellip;</p>
 <span class="s1">    {{else}}\</span>
 <span class="s1">      &lt;span class=&quot;inactive&quot;&gt;Next&amp;nbsp;&amp;raquo;&lt;/span&gt;\</span>
 <span class="s1">    {{/if}}\</span>
-<span class="s1">  &lt;/div&gt;&#39;</span><span class="p">;</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-14'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
-        </div>
-        <p>Default Pager view class</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre>  <span class="nx">Pager</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="s1">  &lt;/div&gt;&#39;</span><span class="p">;</span>
+
+  <span class="nx">Pager</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
 
     <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;&lt;div class=&quot;pager_view&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">,</span>
     <span class="nx">templateData</span><span class="o">:</span> <span class="nx">pagerTemplateData</span><span class="p">,</span>
@@ -325,21 +327,34 @@ TODO: improve this so all params get in &hellip;</p>
       <span class="s1">&#39;click a.previous_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showPreviousPage&#39;</span><span class="p">,</span>
       <span class="s1">&#39;click a.next_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showNextPage&#39;</span><span class="p">,</span>
       <span class="s1">&#39;click a.page_link&#39;</span><span class="o">:</span> <span class="s1">&#39;showPage&#39;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_initialize'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_initialize">&#182;</a>
+        </div>
+        <h4>function initialize</h4>
 
-    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p>Render the view, and then bind render to all collection events.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-15'>
+    <tr id='section-function_render'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-15">&#182;</a>
+          <a class="pilcrow" href="#section-function_render">&#182;</a>
         </div>
-        <p>Only render if pagination data is present and fetched</p>
+        <h4>function render</h4>
 
+<p>Only renders if pagination data is present and fetched.
+Hide the pager if there is only 1 page of data present.</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -350,9 +365,22 @@ TODO: improve this so all params get in &hellip;</p>
         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
       <span class="p">}</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_paginationData'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_paginationData">&#182;</a>
+        </div>
+        <h4>function paginationData</h4>
 
-    <span class="nx">paginationData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<ul>
+<li>returns &ndash; a data object suitable for passing to a template to render the pager</li>
+</ul>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">paginationData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">numPages</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">numPages</span><span class="p">;</span>
       <span class="kd">var</span> <span class="nx">pageData</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">showPrevious</span><span class="o">:</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">currentPage</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">),</span>
@@ -367,33 +395,76 @@ TODO: improve this so all params get in &hellip;</p>
         <span class="p">},</span> <span class="k">this</span><span class="p">)</span>
       <span class="p">};</span>
       <span class="k">return</span> <span class="nx">pageData</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_showPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_showPage">&#182;</a>
+        </div>
+        <h4>function showPage</h4>
 
-    <span class="nx">showPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<p>Event handler for a click on any page number link</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">showPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
       <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">));</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">setPage</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
       <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_showPreviousPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_showPreviousPage">&#182;</a>
+        </div>
+        <h4>function showPreviousPage</h4>
 
-    <span class="nx">showPreviousPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<p>Event handler for a click on the previous page link</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">showPreviousPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">prevPage</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
       <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">},</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-function_showNextPage'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-function_showNextPage">&#182;</a>
+        </div>
+        <h4>function showNextPage</h4>
 
-    <span class="nx">showNextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<p>Event handler for a click on the next page link</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">showNextPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">nextPage</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">pageableView</span><span class="p">.</span><span class="nx">scrollToTopOfList</span><span class="p">();</span>
       <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
 
-  <span class="p">});</span>
+  <span class="p">});</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-21'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-21">&#182;</a>
+        </div>
+        <p>Make it a TemplateableView</p>
 
-  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Pager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span><span class="p">);</span>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">include</span><span class="p">(</span><span class="nx">Pager</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span><span class="p">);</span>
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
       </td>
