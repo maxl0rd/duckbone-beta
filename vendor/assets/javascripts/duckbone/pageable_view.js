@@ -120,8 +120,9 @@ with a route action that respects these params, it is easy to create bookmarkabl
 
   }
 
-  // Default Pager template
+  // ### Default Pager View Class
 
+  // Handlebars template
   var pagerTemplateData =
   '<div class="pager">&nbsp;<br/>\
     {{#if showPrevious}}\
@@ -143,8 +144,6 @@ with a route action that respects these params, it is easy to create bookmarkabl
     {{/if}}\
   </div>';
 
-  // Default Pager view class
-
   Pager = Backbone.View.extend({
 
     el: '<div class="pager_view"></div>',
@@ -156,13 +155,16 @@ with a route action that respects these params, it is easy to create bookmarkabl
       'click a.page_link': 'showPage'
     },
 
+    // #### function initialize
+    // Render the view, and then bind render to all collection events.
     initialize: function() {
       this.render();
       this.collection.bind('all', this.render, this);
     },
 
-    // Only render if pagination data is present and fetched
-
+    // #### function render
+    // Only renders if pagination data is present and fetched.
+    // Hide the pager if there is only 1 page of data present.
     render: function() {
       if (this.collection.numPages) this.renderTemplate(this.paginationData());
       if (this.collection.numPages > 1) {
@@ -173,6 +175,8 @@ with a route action that respects these params, it is easy to create bookmarkabl
       return this;
     },
 
+    // #### function paginationData
+    // - returns - a data object suitable for passing to a template to render the pager
     paginationData: function() {
       var numPages = this.collection.numPages;
       var pageData = {
@@ -190,6 +194,8 @@ with a route action that respects these params, it is easy to create bookmarkabl
       return pageData;
     },
 
+    // #### function showPage
+    // Event handler for a click on any page number link
     showPage: function(e) {
       e.preventDefault();
       var p = parseInt($(e.target).data('page'));
@@ -198,6 +204,8 @@ with a route action that respects these params, it is easy to create bookmarkabl
       return false;
     },
 
+    // #### function showPreviousPage
+    // Event handler for a click on the previous page link
     showPreviousPage: function(e) {
       e.preventDefault();
       this.options.collection.prevPage();
@@ -205,6 +213,8 @@ with a route action that respects these params, it is easy to create bookmarkabl
       return false;
     },
 
+    // #### function showNextPage
+    // Event handler for a click on the next page link
     showNextPage: function(e) {
       e.preventDefault();
       this.options.collection.nextPage();
@@ -214,6 +224,7 @@ with a route action that respects these params, it is easy to create bookmarkabl
 
   });
 
+  // Make it a TemplateableView
   Duckbone.include(Pager.prototype, Duckbone.TemplateableView);
 
 }).call();

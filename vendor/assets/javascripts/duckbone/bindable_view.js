@@ -150,8 +150,9 @@ view to view. All of the bindings defined in `attributeChanges` use weak binding
   };
 
   // #### helper {{live\_timestamp}}
-  // Creates a partial that can be used to insert a live timestamp
-  // Bindable view can use this to update it once per minute
+  // Creates a partial that can be used to insert a live timestamp.
+  // Bindable view can use this to update it once per minute.
+  // The timestamp must be in a format natively parseable by Date.
   // usage {{live_timestamp "created_at"}}
   if (Handlebars) {
     Handlebars.registerHelper("live_timestamp", function(timestamp) {

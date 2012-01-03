@@ -1,8 +1,15 @@
+/**
+# Duckbone.TemplateRegistry
+The TemplateRegistry manages a set of packaged template data and serves
+compiled templates to be used by TemplateableView.
+*/
 (function() {
 
+  // Template Data is by default in Duckbone.TemplatesData
   var TEMPLATES_DATA = "TemplatesData";
   var PARTIALS_DATA = "PartialsData";
 
+  // ### TemplateRegistry
   Duckbone.TemplateRegistry = function(options) {
     options = options || {};
     this.compiledTemplates = {};
@@ -14,21 +21,32 @@
 
   _.extend(Duckbone.TemplateRegistry.prototype, {
 
+    // #### function refresh
+    // Discard all compiled templates, and look for new templates
     refresh: function() {
+      this.compiledTemplates = {};
       this.templatesCompiled = false;
       this.partialsCompiled = false;
       locateTemplates(this);
     },
 
+    // #### function compile
+    // Compile all templates found in the registry immediately
     compile: function() {
       compileTemplates(this);
     },
 
+    // #### function get
+    // - src - a template name
+    // - returns - the compiled template for the given name
+    //
+    // Note that a side effect of calling `get` is that all partials are compiled,
+    // since Handlebars requires this before compiling any templates.
+    // However, get will only compile the desired template as needed.
     get: function(src) {
       locateTemplates(this);
       compilePartials(this);
       compileTemplates(this, src);
-      // This may return undefined
       return this.compiledTemplates[src];
     }
   });

@@ -1,3 +1,24 @@
+/**
+# Templates
+This file packages all Handlebars templates for the asset pipeline. It creates
+two objects, which hold all templates and partials as strings. All templates are
+passed through ERB, regardless of their file extension.
+
+## Usage
+
+To include templates, simply add `//= require templates` to your application.js
+manifest, typically at the end.
+
+All templates should be defined somewhere in `/app/assets/javascripts`,
+typically `/app/assets/javascripts/backbone/templates`. Files beginning with an
+underscore will be treated as partials, and all other files ending in .hbs will
+become full templates.
+
+This script will detect any changes to existing templates and recompile.
+However, when new templates are added, it may be necessary to call
+`rake assets:clean` for the new templates to be detected.
+*/
+
 <% require 'duckbone/templates' %>
 <% Duckbone::Templates.depend_on_all_handlebars_files self %>
 

@@ -1,15 +1,13 @@
 module Duckbone
   class PageableCollection
 
+    # Constructor
     # collection => the given collection of paged items from will_paginate or kaminari
-    # count => the pre-calculated count of items in the collection
-
     def initialize (collection)
       @collection = collection
     end
 
     # Render either a will_paginate or kaminari collection for a Duckbone.PageableCollection
-
     def as_json(opts = {})
       {
         :num_pages => @collection.respond_to?(:num_pages) ? @collection.num_pages : @collection.total_pages,
