@@ -81,12 +81,12 @@ a Duckbone.PageableView.
 
     // #### function fetchPage
     // - pageNum - the page ordinal requested, begining with 1
-    // - returns - the jQuery XHR object for the fetch
+    // - returns - the jQuery XHR object for fetch
     fetchPage: function(pageNum) {
-      var params = this.params;
+      var params = this.params = this.params || {};
       params.page = pageNum || 1;
       return Backbone.Collection.prototype.fetch.call(this, {
-        url: buildUrl(this, this.params),
+        url: buildUrl(this, params),
         success: function(c) {
           c.trigger('pageChange', c.currentPage, params);
         }
@@ -95,17 +95,17 @@ a Duckbone.PageableView.
 
     // #### function setParam
     // - param - query parameter name
-    // - val - query parameter value, or falsy value to remove the param
+    // - val - query parameter value, or null to remove the param
     // - returns - nothing
     //
     // Set additional query params on the collection, ie search string.
     // These will be sent to the server on fetch and show up in the url.
     setParam: function(param, val) {
       this.params = this.params || {};
-      if (val) {
-        this.params[param] = val;
-      } else {
+      if (_.isNull(val) || _.isUndefined(val)) {
         delete this.params[param];
+      } else {
+        this.params[param] = val;
       }
     },
 

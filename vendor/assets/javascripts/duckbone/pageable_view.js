@@ -57,11 +57,13 @@ with a route action that respects these params, it is easy to create bookmarkabl
       }
     },
 
-    // ### Default Template
-    // The default template for this view simply includes the two child views.
-    // To add additional markup to this template, simply override this property
-    // and provide your own template. Be sure to include these two `{{child}}` elements.
-    templateData: '{{child "list"}}{{child "pager"}}',
+    // #### function getTemplate
+    // Override getTemplate to provide a simple default
+    // This way any of templateName, templateDatam or template can still work as an override
+    getTemplate: function(templateName) {
+      Duckbone.TemplateableView.getTemplate.call(this, templateName, true);
+      this.template = this.template || Duckbone.Handlebars.compile('{{child "list"}}{{child "pager"}}');
+    },
 
     // ### Public Methods
 
