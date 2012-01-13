@@ -143,19 +143,21 @@ with a route action that respects these params, it is easy to create bookmarkabl
     <span class="p">},</span></pre></div>
       </td>
     </tr>
-    <tr id='section-Default_Template'>
+    <tr id='section-function_getTemplate'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-Default_Template">&#182;</a>
+          <a class="pilcrow" href="#section-function_getTemplate">&#182;</a>
         </div>
-        <h3>Default Template</h3>
+        <h4>function getTemplate</h4>
 
-<p>The default template for this view simply includes the two child views.
-To add additional markup to this template, simply override this property
-and provide your own template. Be sure to include these two <code>{{child}}</code> elements.</p>
+<p>Override getTemplate to provide a simple default
+This way any of templateName, templateDatam or template can still work as an override</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="nx">templateData</span><span class="o">:</span> <span class="s1">&#39;{{child &quot;list&quot;}}{{child &quot;pager&quot;}}&#39;</span><span class="p">,</span></pre></div>
+        <div class='highlight'><pre>    <span class="nx">getTemplate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">templateName</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">TemplateableView</span><span class="p">.</span><span class="nx">getTemplate</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">templateName</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">||</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="s1">&#39;{{child &quot;list&quot;}}{{child &quot;pager&quot;}}&#39;</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>
       </td>
     </tr>
     <tr id='section-Public_Methods'>

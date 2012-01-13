@@ -90,6 +90,8 @@ For example:
     // Tells Backbone to use this class name. Can be overriden.
     className: 'listable_view',
 
+    // ### Public Methods
+
     // #### function render
     // - force - forces a re-render even if the view is already rendered
     render: function(force) {
@@ -113,15 +115,10 @@ For example:
       }, {}, this);
     },
 
-    // Bind default behaviors to collection events
-    // Can also override or extend behavior by calling with a hash of event names and callbacks
-    // Callbacks are always called in the context of the ListableView
-    // usage:
-    // bindCollectionEvents({
-    //  reset: function() { // do stuff }
-    //  add: 'myMethod' // or a method on this class
-    // });
-
+    // #### function bindCollectionEvents
+    // - eventHandlers - an object containing handlers, or default behavior otherwise
+    //
+    // Binds behaviors to collection events. Callbacks are always called in the context of the ListableView
     bindCollectionEvents: function(eventHandlers) {
       var handler;
       ensureCollection(this);
@@ -145,9 +142,8 @@ For example:
 
   };
 
-  // Internal
+  // ### Internal
 
-  // #### function renderItems
   // Renders each individual view
   function renderItems() {
     ensureViewClass(this);
@@ -199,6 +195,7 @@ For example:
   function ensureViewClass(context) {
     context.viewClass = context.options.viewClass || context.viewClass || new Backbone.View();
   };
+
   function ensureCollection(context) {
     context.collection = context.options.collection || context.collection || new Backbone.Collection();
   };
