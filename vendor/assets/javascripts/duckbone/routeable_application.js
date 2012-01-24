@@ -128,7 +128,14 @@ on itself. For example:
       if (this.mainView) this.mainView.remove();
       options.application = this;
       this.mainView = new view(options);
-      $(this.mainView.el).appendTo(this.mainContainer);
+      var layoutConstructor = view.layout || this.defaultLayout;
+      if (!(this.layoutView instanceof layoutConstructor)) {
+        if (this.layoutView)
+          this.layoutView.remove();
+        this.layoutView = new layoutConstructor();
+      }
+      this.layoutView.setMainView(this.mainView);
+      $(this.layoutView.el).appendTo(this.mainContainer);
       return this.mainView;
     },
 
@@ -153,9 +160,13 @@ on itself. For example:
         $('nav ul li').removeClass('current');
         $('nav ul li.'+routeName).addClass('current');
       });
-    }
+    },
 
+    defaultLayout: Backbone.View.extend({
+      setMainView: function(mainView) {
+        this.el = mainView.el;
+      }
+    })
   };
-
 
 }).call();
