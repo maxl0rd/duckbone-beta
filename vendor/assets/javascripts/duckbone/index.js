@@ -23,3 +23,5 @@
 //= require ./remoteable_view
 //= require ./simple_queue
 //= require ./base_classes
+//= require ./error_list
+//= require ./base_errors_view
