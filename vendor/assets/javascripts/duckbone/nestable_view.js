@@ -26,18 +26,18 @@ NestableView works hand-in-hand with TemplateableView's {{child}} helper.
     isNestableView: true,
 
     setupNestedViews: function() {
-      if (this.createChildren) {
-        this.children = this.createChildren();
-      }
+      this.children = this.createChildren();
+    },
+
+    createChildren: function() {
+      return {};
     },
 
     removeNestedViews: function() {
-      if (this.children) {
-        _.each(this.children, function(child) {
-          child.remove();
-        });
-        delete this.children;
-      }
+      _.each(this.children, function(child) {
+        child.remove();
+      });
+      this.children = {};
     }
   }
 

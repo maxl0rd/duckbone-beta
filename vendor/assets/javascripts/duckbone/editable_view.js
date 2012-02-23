@@ -184,12 +184,7 @@ Usage examples:
 
     // Override NestableView.setupNestedViews to include base errors
     setupNestedViews: function() {
-      if (this.createChildren) {
-        this.children = this.createChildren();
-      }
-      if (_.isUndefined(this.children)) {
-        this.children = {};
-      }
+      this.children = this.createChildren();
       this.children._baseErrors = new Duckbone.BaseErrorsView({ model: new Duckbone.ErrorList(this.model) });
     },
 
