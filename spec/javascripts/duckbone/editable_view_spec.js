@@ -140,6 +140,31 @@ describe("Duckbone Form View System", function() {
 
       expect(otherModel.subjectModel.cid).toEqual(subject.originalModel.cid);
     });
+
+    it("Can render base errors in a view without other children", function() {
+      var model = new Duckbone.Model();
+      var testViewClass = Duckbone.FormView.extend({
+        templateData: '{{child "_baseErrors"}}'
+      });
+      var testView = new testViewClass({ model: model });
+      expect(testView.el).toContain("div[data-child-view=_baseErrors]");
+    });
+
+    it("Can render base errors in a view with other children", function() {
+      var model = new Duckbone.Model();
+      var childView = new Duckbone.View({ templateData: "hello" });
+      var testViewClass = Duckbone.FormView.extend({
+        templateData: '{{child "_baseErrors"}}{{child "myChild"}}',
+        createChildren: function() {
+          return {
+            myChild: childView
+          };
+        }
+      });
+      var testView = new testViewClass({ model: model });
+      expect(testView.el).toContain("div[data-child-view=_baseErrors]");
+      expect(testView.el).toContain("div[data-child-view=myChild]:contains('hello')");
+    });
   });
 
 });

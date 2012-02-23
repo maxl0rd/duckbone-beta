@@ -174,6 +174,17 @@ Usage examples:
       return form;
     },
 
+    // Override NestableView.setupNestedViews to include base errors
+    setupNestedViews: function() {
+      if (this.createChildren) {
+        this.children = this.createChildren();
+      }
+      if (_.isUndefined(this.children)) {
+        this.children = {};
+      }
+      this.children._baseErrors = new Duckbone.BaseErrorsView({ model: new Duckbone.ErrorList(this.model) });
+    },
+
     // #### function bindModelSyncEvents
     // Binds the events triggered by a Syncable-enhanced Model to those default
     // behaviors defined below. Additionally binds user defined model sync events,
