@@ -131,6 +131,14 @@ Usage examples:
 
 (function() {
 
+  // #### helper {{base\_errors}}
+  //
+  // This helper creates a ul containing each base error on the form's model.
+  Handlebars.registerHelper('base_errors', function() {
+    return Handlebars.helpers.child("_baseErrors");
+  });
+
+
   Duckbone.EditableView = {
 
     // ### Mixin

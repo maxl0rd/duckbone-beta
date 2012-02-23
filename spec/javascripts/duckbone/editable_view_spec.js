@@ -154,7 +154,7 @@ describe("Duckbone Form View System", function() {
       var model = new Duckbone.Model();
       var childView = new Duckbone.View({ templateData: "hello" });
       var testViewClass = Duckbone.FormView.extend({
-        templateData: '{{child "_baseErrors"}}{{child "myChild"}}',
+        templateData: '{{base_errors}}{{child "myChild"}}',
         createChildren: function() {
           return {
             myChild: childView
