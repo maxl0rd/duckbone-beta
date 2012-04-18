@@ -38,6 +38,12 @@ describe("Duckbone.ErrorList", function() {
     expect(changeTriggered).toBeTruthy();
   });
 
+  it("ignores non-JSON responses", function() {
+    var errors = ["one", "two"];
+    model.triggerInvalidResponse();
+    expect(list.baseMessages()).toEqual([]);
+  });
+
   beforeEach(function() {
     model = new FakeModel();
     list = new Duckbone.ErrorList(model);
@@ -47,6 +53,11 @@ describe("Duckbone.ErrorList", function() {
   _.extend(FakeModel.prototype, Backbone.Events, {
     triggerBaseMessages: function(errors) {
       this.trigger("error", model, responseWithBaseMessages(errors));
+    },
+
+    triggerInvalidResponse: function() {
+      var invalidResponse = { responseText: 'not JSON' };
+      this.trigger("error", model, invalidResponse);
     },
 
     triggerChange: function() {

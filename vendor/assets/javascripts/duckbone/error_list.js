@@ -18,7 +18,11 @@
     },
 
     updateMessages: function(model, response) {
-      this.messages = JSON.parse(response.responseText).errors;
+      try {
+        this.messages = JSON.parse(response.responseText).errors;
+      } catch(e) {
+        this.messages = {};
+      }
       this.trigger("change");
     },
 
