@@ -39,7 +39,6 @@ describe("Duckbone.ErrorList", function() {
   });
 
   it("ignores non-JSON responses", function() {
-    var errors = ["one", "two"];
     model.triggerInvalidResponse();
     expect(list.baseMessages()).toEqual([]);
   });
