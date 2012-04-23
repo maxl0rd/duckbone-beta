@@ -12,6 +12,11 @@ describe("Duckbone.ErrorList", function() {
     expect(list.hasBaseMessages()).toBeTruthy();
   });
 
+  it("handles singular error messages", function() {
+    model.triggerSingularError("Login is invalid");
+    expect(list.baseMessages()).toEqual(["Login is invalid"]);
+  });
+
   it("clears errors after the model changes", function() {
     model.triggerBaseMessages();
     model.triggerChange();
@@ -54,6 +59,10 @@ describe("Duckbone.ErrorList", function() {
       this.trigger("error", model, responseWithBaseMessages(errors));
     },
 
+    triggerSingularError: function(error) {
+      this.trigger("error", model, responseWithSingularError(error));
+    },
+
     triggerInvalidResponse: function() {
       var invalidResponse = { responseText: 'not JSON' };
       this.trigger("error", model, invalidResponse);
@@ -67,6 +76,11 @@ describe("Duckbone.ErrorList", function() {
   var responseWithBaseMessages = function(errors) {
     var errorString = JSON.stringify(errors || ["error"]);
     return { responseText: '{"errors":{"base":' + errorString + '}}' };
+  }
+
+  var responseWithSingularError = function(error) {
+    var errorString = JSON.stringify(error || "an error");
+    return { responseText: '{"error":' + errorString + '}' };
   }
 
   var list, model;

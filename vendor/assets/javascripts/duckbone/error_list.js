@@ -19,7 +19,12 @@
 
     updateMessages: function(model, response) {
       try {
-        this.messages = JSON.parse(response.responseText).errors;
+        var parsedResponse = JSON.parse(response.responseText)
+        if (parsedResponse.error) {
+          this.messages = { base: [parsedResponse.error] }
+        } else {
+          this.messages = parsedResponse.errors;
+        }
       } catch(e) {
         this.messages = {};
       }
