@@ -13,11 +13,13 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="base_errors_view.html">base_errors_view.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
@@ -196,7 +198,23 @@ view.afterSaveDestination = [
 </code></pre>
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-helper_{{base_errors}}'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-helper_{{base_errors}}">&#182;</a>
+        </div>
+        <h4>helper {{base_errors}}</h4>
+
+<p>This helper creates a ul containing each base error on the form&rsquo;s model.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="s1">&#39;base_errors&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">Handlebars</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">child</span><span class="p">(</span><span class="s2">&quot;_baseErrors&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+
 
   <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">EditableView</span> <span class="o">=</span> <span class="p">{</span></pre></div>
       </td>
@@ -286,6 +304,20 @@ methods during the view&rsquo;s initialize and remove</p>
       <span class="p">});</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">||</span> <span class="nx">form</span><span class="p">;</span>
       <span class="k">return</span> <span class="nx">form</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Override NestableView.setupNestedViews to include base errors</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="nx">setupNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">_baseErrors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">BaseErrorsView</span><span class="p">({</span> <span class="nx">model</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ErrorList</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">)</span> <span class="p">});</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -541,10 +573,10 @@ The developer may also wish to explicitly set() and get() field values at times.
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-22'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-22">&#182;</a>
         </div>
         <p>Mix in Backbone.Events</p>
       </td>
@@ -567,10 +599,10 @@ The developer may also wish to explicitly set() and get() field values at times.
         <div class='highlight'><pre>    <span class="nx">createFields</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-24'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-24">&#182;</a>
         </div>
         <p>Create all of the model fields</p>
       </td>
@@ -581,10 +613,10 @@ The developer may also wish to explicitly set() and get() field values at times.
       <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-23'>
+    <tr id='section-25'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-23">&#182;</a>
+          <a class="pilcrow" href="#section-25">&#182;</a>
         </div>
         <p>Create the submit button fields</p>
       </td>
@@ -600,10 +632,10 @@ The developer may also wish to explicitly set() and get() field values at times.
       <span class="p">});</span></pre></div>
       </td>
     </tr>
-    <tr id='section-24'>
+    <tr id='section-26'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-24">&#182;</a>
+          <a class="pilcrow" href="#section-26">&#182;</a>
         </div>
         <p>Assign ids and names to form labels</p>
       </td>
@@ -775,10 +807,10 @@ are called subsequent to all default form behaviors.</p>
         <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-31'>
+    <tr id='section-33'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-31">&#182;</a>
+          <a class="pilcrow" href="#section-33">&#182;</a>
         </div>
         <p>Copys the model to the final place it should arrive at once it is saved,
 as defined by the view&rsquo;s &lsquo;afterSaveDestination&rsquo; property.
@@ -802,10 +834,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-32'>
+    <tr id='section-34'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-32">&#182;</a>
+          <a class="pilcrow" href="#section-34">&#182;</a>
         </div>
         <p>Default model sync events that are bound when bindModelSyncEvents() is called</p>
       </td>
@@ -820,10 +852,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-33'>
+    <tr id='section-35'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-33">&#182;</a>
+          <a class="pilcrow" href="#section-35">&#182;</a>
         </div>
         <p>Binds default events to the model</p>
       </td>
@@ -836,10 +868,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-34'>
+    <tr id='section-36'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-34">&#182;</a>
+          <a class="pilcrow" href="#section-36">&#182;</a>
         </div>
         <p>Concatenates the form and field names into an id for each form field DOM element</p>
       </td>
@@ -849,10 +881,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-35'>
+    <tr id='section-37'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-35">&#182;</a>
+          <a class="pilcrow" href="#section-37">&#182;</a>
         </div>
         <p>Returns a jQuery selector for the given form field name</p>
       </td>
@@ -862,10 +894,10 @@ Called by <code>EditableView.cloneModelForEditing</code>.</p>
   <span class="p">};</span></pre></div>
       </td>
     </tr>
-    <tr id='section-36'>
+    <tr id='section-38'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-36">&#182;</a>
+          <a class="pilcrow" href="#section-38">&#182;</a>
         </div>
         <p>Inspects a DOM element and determines the form field type based upon its class name.
 The handlebars form helpers insert a class name, ie &ldquo;form<em>text&rdquo; or &ldquo;form</em>select&rdquo;</p>
@@ -888,10 +920,10 @@ The handlebars form helpers insert a class name, ie &ldquo;form<em>text&rdquo; o
         <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-38'>
+    <tr id='section-40'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-38">&#182;</a>
+          <a class="pilcrow" href="#section-40">&#182;</a>
         </div>
         <p>Time to scroll to the top of the form in milliseconds</p>
       </td>
@@ -899,10 +931,10 @@ The handlebars form helpers insert a class name, ie &ldquo;form<em>text&rdquo; o
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">SCROLL_TIME</span> <span class="o">=</span> <span class="mi">400</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-39'>
+    <tr id='section-41'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-39">&#182;</a>
+          <a class="pilcrow" href="#section-41">&#182;</a>
         </div>
         <p>Easing function to use</p>
       </td>
@@ -910,10 +942,10 @@ The handlebars form helpers insert a class name, ie &ldquo;form<em>text&rdquo; o
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">SCROLL_EASING</span> <span class="o">=</span> <span class="s1">&#39;swing&#39;</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-40'>
+    <tr id='section-42'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-40">&#182;</a>
+          <a class="pilcrow" href="#section-42">&#182;</a>
         </div>
         <p>Number of pixels above the top of the form element we scroll to</p>
       </td>
@@ -921,10 +953,10 @@ The handlebars form helpers insert a class name, ie &ldquo;form<em>text&rdquo; o
         <div class='highlight'><pre>  <span class="kd">var</span> <span class="nx">SCROLL_BREATHING_ROOM</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-41'>
+    <tr id='section-43'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-41">&#182;</a>
+          <a class="pilcrow" href="#section-43">&#182;</a>
         </div>
         <p>Smooth scrolls the browser window so that the top of the form is visible.
 Called when a form is invalid and all errors should be shown.</p>

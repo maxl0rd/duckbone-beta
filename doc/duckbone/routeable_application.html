@@ -13,11 +13,13 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="base_errors_view.html">base_errors_view.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
@@ -235,7 +237,14 @@ it as a routeName in its absence.</p>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
       <span class="nx">options</span><span class="p">.</span><span class="nx">application</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">view</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainContainer</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">layoutConstructor</span> <span class="o">=</span> <span class="nx">view</span><span class="p">.</span><span class="nx">layout</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">defaultLayout</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span> <span class="k">instanceof</span> <span class="nx">layoutConstructor</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span><span class="p">)</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">layoutConstructor</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span><span class="p">.</span><span class="nx">setMainView</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">layoutView</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mainContainer</span><span class="p">);</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">mainView</span><span class="p">;</span>
     <span class="p">},</span></pre></div>
       </td>
@@ -288,10 +297,14 @@ A <code>current</code> class will be assigned to the current route.</p>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;nav ul li&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;current&#39;</span><span class="p">);</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;nav ul li.&#39;</span><span class="o">+</span><span class="nx">routeName</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;current&#39;</span><span class="p">);</span>
       <span class="p">});</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
 
+    <span class="nx">defaultLayout</span><span class="o">:</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+      <span class="nx">setMainView</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">mainView</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">el</span> <span class="o">=</span> <span class="nx">mainView</span><span class="p">.</span><span class="nx">el</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
   <span class="p">};</span>
-
 
 <span class="p">}).</span><span class="nx">call</span><span class="p">();</span></pre></div>
       </td>
