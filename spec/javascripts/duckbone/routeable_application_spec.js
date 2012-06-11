@@ -1,4 +1,14 @@
 describe("Duckbone.RouteableApplication", function() {
+
+  it("triggers viewLoaded after the view is appended", function() {
+    var application = createDuckboneApplication();
+    var viewClass = Backbone.View.extend({}, { layout: MockLayout });
+    var viewLoaded = false;
+    application.bind('viewLoaded', function() { viewLoaded = true; })
+    application.loadView(viewClass);
+    expect(viewLoaded).toBeTruthy();
+  })
+
   it("renders a view within its layout", function() {
     var mainViewConstructor = Backbone.View.extend({}, { layout: MockLayout });
     var application = loadView(mainViewConstructor);

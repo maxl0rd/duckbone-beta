@@ -136,6 +136,7 @@ on itself. For example:
       }
       this.layoutView.setMainView(this.mainView);
       $(this.layoutView.el).appendTo(this.mainContainer);
+      this.trigger('viewLoaded');
       return this.mainView;
     },
 
