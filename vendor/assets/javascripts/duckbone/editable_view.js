@@ -283,7 +283,7 @@ Usage examples:
           }
         }, this);
       }, this);
-      this.showErrorBanner();
+      this.form.showErrorBanner();
     },
 
     // #### function defaultModelSyncSuccessHandler
