@@ -13,11 +13,13 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="base_errors_view.html">base_errors_view.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
@@ -108,9 +110,11 @@ instances by name. For example:</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">setupNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
-      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createChildren</span><span class="p">();</span>
+    <span class="p">},</span>
+
+    <span class="nx">createChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{};</span>
     <span class="p">},</span></pre></div>
       </td>
     </tr>
@@ -126,12 +130,10 @@ instances by name. For example:</p>
       </td>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">removeNestedViews</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">child</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
-        <span class="p">});</span>
-        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">;</span>
-      <span class="p">}</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">child</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+      <span class="p">});</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="p">}</span>
   <span class="p">}</span>
 

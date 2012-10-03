@@ -34,20 +34,20 @@ The `renderTemplate` method of TemplateableView will call
     // #### function setupNestedViews
     // Call `createChildren` and assign the returned views to the `children` property.
     setupNestedViews: function() {
-      if (this.createChildren) {
-        this.children = this.createChildren();
-      }
+      this.children = this.createChildren();
+    },
+
+    createChildren: function() {
+      return {};
     },
 
     // #### function removeNestedViews
     // Call `remove` on each child view.
     removeNestedViews: function() {
-      if (this.children) {
-        _.each(this.children, function(child) {
-          child.remove();
-        });
-        delete this.children;
-      }
+      _.each(this.children, function(child) {
+        child.remove();
+      });
+      this.children = {};
     }
   }
 

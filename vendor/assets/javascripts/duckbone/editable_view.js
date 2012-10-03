@@ -131,6 +131,14 @@ Usage examples:
 
 (function() {
 
+  // #### helper {{base\_errors}}
+  //
+  // This helper creates a ul containing each base error on the form's model.
+  Handlebars.registerHelper('base_errors', function() {
+    return Handlebars.helpers.child("_baseErrors");
+  });
+
+
   Duckbone.EditableView = {
 
     // ### Mixin
@@ -174,6 +182,12 @@ Usage examples:
       return form;
     },
 
+    // Override NestableView.setupNestedViews to include base errors
+    setupNestedViews: function() {
+      this.children = this.createChildren();
+      this.children._baseErrors = new Duckbone.BaseErrorsView({ model: new Duckbone.ErrorList(this.model) });
+    },
+
     // #### function bindModelSyncEvents
     // Binds the events triggered by a Syncable-enhanced Model to those default
     // behaviors defined below. Additionally binds user defined model sync events,
@@ -194,16 +208,22 @@ Usage examples:
       if (!this.model) throw("Found not, has your model been. Cloned, it can not be.");
       this.originalModel = this.model;
       this.model = this.originalModel.clone();
-      this.weakBindToModel('sync:success', function() {
-        var attrs = _.clone(this.model.attributes);
-        _(this.form.fields).each(function(field) {
-          if (field.options.temporary) {
-            delete attrs[field.modelAttribute];
-          }
-        });
-        this.originalModel.set(attrs);
-        copyToDestination.call(this);
-      }, this);
+      this.weakBindToModel('sync:success', this.saveClone, this);
+    },
+
+    // #### function saveClone
+    // Automatically called when the model is successfully synced, or `finishEditing()` is called.
+    // This saves the edited attributes from the clone back to the original model
+    // and copies the original model to the requested afterSaveDestination.
+    saveClone: function() {
+      var attrs = _.clone(this.model.attributes);
+      _(this.form.fields).each(function(field) {
+        if (field.options.temporary) {
+          delete attrs[field.modelAttribute];
+        }
+      });
+      this.originalModel.set(attrs);
+      copyToDestination.call(this);
     },
 
     // #### function expireClone
@@ -258,13 +278,13 @@ Usage examples:
         _.each(this.model.errors[modelAttribute], function(error) {
           if (field && field.isValidateableField) {
               field.addError(error);
+              field.form.trigger('fieldValidityChanged', field);
           } else {
             _.log("Cannot add error for field " + modelAttribute + ": " + error);
           }
         }, this);
       }, this);
-      $(this.el).find('div.error_banner').show();
-      scrollToTop(this.el);
+      this.form.showErrorBanner();
     },
 
     // #### function defaultModelSyncSuccessHandler
@@ -400,6 +420,25 @@ Usage examples:
       return this.isValid;
     },
 
+    // #### function finishEditing
+    //
+    // Validates the model locally.  If valid, saves the clone back to the originalModel.
+    // Otherwise displays errors and returns false.
+    finishEditing: function() {
+      if (this.validate()) {
+        this.view.saveClone();
+        return true;
+      } else {
+        this.showErrorBanner();
+        return false;
+      }
+    },
+
+    showErrorBanner: function() {
+      $(this.el).find('div.error_banner').show();
+      scrollToTop(this.el);
+    },
+
     // #### function submit
     // - options - An options object for `model.save`
     //
@@ -422,9 +461,7 @@ Usage examples:
         }, this);
         this.model.save(null, options);
       } else {
-        _.log("Form is invalid.")
-        $(this.el).find('div.error_banner').show();
-        scrollToTop(this.el);
+        this.showErrorBanner();
       }
     }
   });

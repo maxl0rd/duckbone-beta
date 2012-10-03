@@ -132,6 +132,13 @@ describe("Duckbone Form Fields", function() {
          $(subject.el).val("catFood").change();
          expect(model.get("food")).toEqual("catFood");
        });
+
+       it("updates the fields when told", function() {
+          subject.setOptions({horseFood: "Flesh", birdFood: "Brains"});
+          expect(model.get("food")).toEqual('horseFood');
+          model.set({food: "birdFood"});
+          expect(subject.get()).toEqual("birdFood");
+       })
     });
 
     describe("with functional options", function() {
@@ -162,6 +169,13 @@ describe("Duckbone Form Fields", function() {
          $(subject.el).val("catFood").change();
          expect(model.get("food")).toEqual("catFood");
        });
+
+       it("updates the fields when told", function() {
+          subject.setOptions(function() { return {horseFood: "Flesh", birdFood: "Brains"} });
+          expect(model.get("food")).toEqual('horseFood');
+          model.set({food: "birdFood"});
+          expect(subject.get()).toEqual("birdFood");
+       })
     });
   });
 

@@ -229,12 +229,31 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
     // Adds all of the child `<option>` elements to the `<select>` element,
     // as defined by the field's `selectOptions` property.
     createChildren: function() {
-      var opts = this.options.selectOptions;
-      var selectOptions = (typeof opts == "function") ? opts.call(this) : opts;
-      for (var opt in selectOptions) {
+      this.createOptions(this.options.selectOptions);
+    },
+
+    createOptions: function(newOptions) {
+      var newOptions = (typeof newOptions == "function") ? newOptions.call(this) : newOptions;
+      for (var opt in newOptions) {
         var optionEl = $('<option></option>').attr({value: opt});
-        optionEl.html(Handlebars.Utils.escapeExpression(selectOptions[opt]));
+        optionEl.html(Handlebars.Utils.escapeExpression(newOptions[opt]));
         $(this.el).append(optionEl);
+      }
+    },
+
+    setOptions: function(selectOptions) {
+      $(this.el).empty();
+      this.createOptions(selectOptions);
+      this.synchronizeSelectionWithModel();
+    },
+
+    synchronizeSelectionWithModel: function() {
+      var modelValue = this.model.get(this.modelAttribute);
+      this.set(modelValue);
+      if (this.get() != this.modelValue) {
+        var oneAttr = {}
+        oneAttr[this.modelAttribute] = this.get();
+        this.model.set(oneAttr);
       }
     }
   });

@@ -13,11 +13,13 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="base_errors_view.html">base_errors_view.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
@@ -101,7 +103,7 @@ fields: {
       <span class="k">return</span> <span class="sr">/^(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[12][0-9]|3[01])\/\d{2}?\d{2}$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
     <span class="p">},</span>
     <span class="nx">email</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="sr">/^([A-Za-z0-9\.%\+\-]+)@([A-Za-z0-9\-]+\.)+([A-Za-z]{2,})$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+      <span class="k">return</span> <span class="sr">/^([A-Za-z0-9\.%\+\-\_]+)@([A-Za-z0-9\-]+\.)+([A-Za-z]{2,})$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
     <span class="p">},</span>
     <span class="nx">numeric</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">NaN</span><span class="p">);</span>

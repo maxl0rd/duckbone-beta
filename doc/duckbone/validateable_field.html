@@ -13,11 +13,13 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="base_classes.html">base_classes.js</a>
+          <a class="source" href="base_errors_view.html">base_errors_view.js</a>
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
           <a class="source" href="core.js.html">core.js.erb</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
+          <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
           <a class="source" href="form_fields.html">form_fields.js</a>
           <a class="source" href="form_validations.html">form_validations.js</a>
@@ -197,6 +199,7 @@ will be added to its DOM, unless <code>silent</code> is true.</p>
       <td class=code>
         <div class='highlight'><pre>    <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">silent</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">silent</span> <span class="o">=</span> <span class="nx">silent</span> <span class="o">||</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">originalValidity</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">valid</span><span class="p">;</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">silent</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">clearErrors</span><span class="p">();</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// assume valid unless method fails</span>
       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">validate</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">required</span><span class="p">)</span> <span class="p">{</span>
@@ -214,6 +217,7 @@ will be added to its DOM, unless <code>silent</code> is true.</p>
         <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">ModelHelpers</span><span class="p">.</span><span class="nx">isValidAttribute</span><span class="p">(</span><span class="nx">val</span><span class="p">))</span> <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">valid</span> <span class="o">!=</span> <span class="nx">originalValidity</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;fieldValidityChanged&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">valid</span><span class="p">;</span>
     <span class="p">},</span></pre></div>
       </td>
