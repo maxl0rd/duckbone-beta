@@ -87,6 +87,7 @@ in special cases the developer might call `validate` or `addError` on the field 
     // will be added to its DOM, unless `silent` is true.
     validate: function(method, silent) {
       silent = silent || false;
+      var originalValidity = this.valid;
       if (!silent) this.clearErrors();
       this.valid = true; // assume valid unless method fails
       if (!this.options.validate && this.options.required) {
@@ -104,6 +105,7 @@ in special cases the developer might call `validate` or `addError` on the field 
         var val = this.get();
         if (Duckbone.ModelHelpers.isValidAttribute(val)) this.set(val);
       }
+      if (this.valid != originalValidity) this.form.trigger('fieldValidityChanged', this);
       return this.valid;
     },
 
