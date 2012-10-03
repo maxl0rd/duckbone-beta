@@ -278,6 +278,7 @@ Usage examples:
         _.each(this.model.errors[modelAttribute], function(error) {
           if (field && field.isValidateableField) {
               field.addError(error);
+              field.form.trigger('fieldValidityChanged', field);
           } else {
             _.log("Cannot add error for field " + modelAttribute + ": " + error);
           }
