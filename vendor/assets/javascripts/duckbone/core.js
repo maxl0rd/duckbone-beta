@@ -27,9 +27,9 @@ This file is loaded first and just establishes some namespaces and useful helper
     serverError: function(message) {
       _.log("500 Server Error");
       if (message) _.log(message);
-      <% if Rails.env.production? %>
+      if (Duckbone.Rails.isProduction()) {
         window.location = "/500.html"
-      <% end %>
+      }
     },
 
     // #### function serverError
@@ -42,9 +42,9 @@ This file is loaded first and just establishes some namespaces and useful helper
     fileNotFound: function(message) {
       _.log("404 File Not Found");
       if (message) _.log(message);
-      <% if Rails.env.production? %>
+      if (Duckbone.Rails.isProduction()) {
         window.location = "/404.html"
-      <% end %>
+      }
     },
 
     // #### function register
@@ -105,7 +105,7 @@ This file is loaded first and just establishes some namespaces and useful helper
     // Suppress logs if console.log is undefined.
     // Suppress logs in production environments.
     log: function(msg) {
-      if (<%= Rails.env.development? ? false : true %>) return;
+      if (Duckbone.Rails.isProduction()) return;
       if (window.console && console.log) console.log(msg);
     },
 

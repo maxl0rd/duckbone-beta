@@ -1,7 +1,6 @@
 require 'duckbone/version'
 require 'rails'
 require 'duckbone/pageable_collection'
-require 'backbone-rails'
 
 module Duckbone
   class Engine < Rails::Engine

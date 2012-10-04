@@ -26,7 +26,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should form restful json urls for read", function() {
       server.respondWith('GET', '/goals/3',
-        [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+        [200, {'Content-Type': 'application/json'}, '{}'])
       jqXHR = subject.fetch();
       server.respond();
       expect(jqXHR.status).toEqual(200);
@@ -34,7 +34,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should form restful json urls for update", function() {
       server.respondWith('PUT', '/goals/3',
-        [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+        [200, {'Content-Type': 'application/json'}, '{}'])
       jqXHR = subject.save();
       server.respond();
       expect(jqXHR.status).toEqual(200);
@@ -42,7 +42,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should form restful json urls for delete", function() {
       server.respondWith('DELETE', '/goals/3',
-        [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+        [200, {'Content-Type': 'application/json'}, '{}'])
       jqXHR = subject.destroy();
       server.respond();
       expect(jqXHR.status).toEqual(200);
@@ -51,7 +51,7 @@ describe("Duckbone.Syncable", function() {
     // Use spies to ensure callbacks are called
 
     it("should call the success handler on success", function() {
-      server.respondWith('GET', '/goals/3', [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+      server.respondWith('GET', '/goals/3', [200, {'Content-Type': 'application/json'}, '{}'])
       var success = sinon.spy();
       subject.fetch({success: success});
       server.respond();
@@ -98,7 +98,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should trigger a sync:success event when it is a 200", function() {
       server.respondWith('GET', '/goals/3',
-        [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+        [200, {'Content-Type': 'application/json'}, '{}'])
       var handler = sinon.spy();
       subject.bind('sync:success', handler);
       subject.fetch();
@@ -108,7 +108,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should trigger a sync:complete event when it is done", function() {
       server.respondWith('GET', '/goals/3',
-        [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+        [200, {'Content-Type': 'application/json'}, '{}'])
       var handler = sinon.spy();
       subject.bind('sync:complete', handler);
       subject.fetch();
@@ -118,7 +118,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should trigger a sync:invalid event when it is a 422", function() {
       server.respondWith('PUT', '/goals/3',
-        [422, {'Content-Type': 'application/json'},  is.jasmine.responses.goal_error])
+        [422, {'Content-Type': 'application/json'},  '{}'])
       var handler = sinon.spy();
       subject.bind('sync:invalid', handler);
       subject.save();
@@ -138,7 +138,7 @@ describe("Duckbone.Syncable", function() {
 
     it("should add the errors to the model when invalid", function() {
       server.respondWith('PUT', '/goals/3',
-        [422, {'Content-Type': 'application/json'},  is.jasmine.responses.goal_error])
+        [422, {'Content-Type': 'application/json'},  '{}'])
       subject.save();
       server.respond();
       expect(subject.errors).toBeDefined();
@@ -159,7 +159,7 @@ describe("Duckbone.Syncable", function() {
 
      it("should form restful json urls for create", function() {
        server.respondWith('POST', '/goals',
-         [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+         [200, {'Content-Type': 'application/json'}, '{}'])
        var model = new modelClass();
        subject.create(model);
        server.respond();
@@ -168,9 +168,9 @@ describe("Duckbone.Syncable", function() {
 
      it("should form restful json urls for the models it creates", function() {
        server.respondWith('POST', '/goals',
-         [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+         [200, {'Content-Type': 'application/json'}, '{}'])
        server.respondWith('PUT', '/goals/3',
-         [200, {'Content-Type': 'application/json'}, is.jasmine.responses.goal])
+         [200, {'Content-Type': 'application/json'}, '{}'])
        var model = new modelClass();
        subject.create(model);
        server.respond();

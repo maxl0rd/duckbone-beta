@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency('rails', '>= 3.1.0')
-  s.add_dependency('rails-backbone', '~> 0.5.0')
   s.add_development_dependency('rocco', '~> 0.8.2')
+  s.add_development_dependency('jasmine-rails')
 end
+

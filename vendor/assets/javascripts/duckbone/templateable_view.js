@@ -152,12 +152,12 @@ For example:
         _.log(e.message);
         _.log("Context:");
         _.log(context);
-        <% if Rails.env.development? %>
+        if (Duckbone.Rails.isDevelopment()) {
           $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + e.message + '</div>');
-        <% else %>
+        } else {
           Duckbone.serverError();
           throw(e);
-        <% end %>
+        }
       }
 
       // Establish any data-bindings that are defined by {{attr "attribute"}} helpers

@@ -60,11 +60,11 @@ result in only a single render.
           $(this.el).html(responseHTML);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          <% if Rails.env.development? %>
+          if (Duckbone.Rails.isDevelopment()) {
             $(this.el).html('Error rendering from ' + this.url);
-          <% else %>
+          } else {
             Duckbone.serverError();
-          <% end %>
+          }
         }
       })
       return this;

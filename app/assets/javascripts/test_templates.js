@@ -1,0 +1,3 @@
+Duckbone.TemplatesData = {};
+Duckbone.PartialsData = {};
+
