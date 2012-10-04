@@ -13,6 +13,16 @@ This file is loaded first and just establishes some namespaces and useful helper
   Duckbone.TemplatesData = Duckbone.TemplatesData || {};
   Duckbone.PartialsData = Duckbone.PartialsData || {};
 
+  // Establish Rails environment.
+  // Default to 'production' if 'environment.js' has not been loaded
+  Duckbone.Rails = Duckbone.Rails || {};
+  Duckbone.Rails.environment = Duckbone.Rails.environment || 'production';
+  _.extend(Duckbone.Rails, {
+    isDevelopment: function() { return (this.environment == 'development') },
+    isTest: function()        { return (this.environment == 'test')        },
+    isProduction: function()  { return (this.environment == 'production')  }
+  });
+
   // The top level Duckbone object dispatches some events
   _.extend(Duckbone, Backbone.Events);
 
