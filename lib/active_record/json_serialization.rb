@@ -1,8 +1,11 @@
-if defined?(ActiveRecord)
+if defined?(ActiveRecord) && ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 1
 
   # ActiveRecord normally suppresses included assocations from JSON if they have no values.
   # Duckbone expects to be told if an association becomes empty or null,
   # so this change causes AR to always serialize empty associations as null or empty array.
+
+  # Implementation changed in ActiveRecord 3.2
+  # TODO: Refactor this implementation for 3.2 or in a version-independent fashion
 
   ActiveRecord::Serialization.module_eval do
     def serializable_hash(options = nil)
