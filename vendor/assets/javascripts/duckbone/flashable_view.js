@@ -30,10 +30,10 @@ Enables any view or application to manage a set of flash messages.
       } else if (typeof options.noticeTemplate == 'function') {
         FlashNoticeView.prototype.template = options.noticeTemplate
       }
-      if (options.errorTemplate && typeof options.errorTemplate == 'string') {
-        FlashErrorView.prototype.templateData = options.errorTemplate;
-      } else if (typeof options.errorTemplate == 'function') {
-        FlashErrorView.prototype.template = options.errorTemplate
+      if (options.alertTemplate && typeof options.alertTemplate == 'string') {
+        FlashAlertView.prototype.templateData = options.alertTemplate;
+      } else if (typeof options.alertTemplate == 'function') {
+        FlashAlertView.prototype.template = options.alertTemplate
       }
     },
 
