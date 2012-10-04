@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <title>templateable_view.js.erb</title>
+  <title>templateable_view.js</title>
   <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
           <a class="source" href="bindable_field.html">bindable_field.js</a>
           <a class="source" href="bindable_view.html">bindable_view.js</a>
           <a class="source" href="collection.html">collection.js</a>
-          <a class="source" href="core.js.html">core.js.erb</a>
+          <a class="source" href="core.html">core.js</a>
           <a class="source" href="editable_view.html">editable_view.js</a>
           <a class="source" href="error_list.html">error_list.js</a>
           <a class="source" href="flashable_view.html">flashable_view.js</a>
@@ -31,13 +31,13 @@
           <a class="source" href="nestable_view.html">nestable_view.js</a>
           <a class="source" href="pageable_collection.html">pageable_collection.js</a>
           <a class="source" href="pageable_view.html">pageable_view.js</a>
-          <a class="source" href="remoteable_view.js.html">remoteable_view.js.erb</a>
+          <a class="source" href="remoteable_view.html">remoteable_view.js</a>
           <a class="source" href="routeable_application.html">routeable_application.js</a>
           <a class="source" href="simple_queue.html">simple_queue.js</a>
           <a class="source" href="stylizeable_view.html">stylizeable_view.js</a>
           <a class="source" href="syncable.html">syncable.js</a>
-          <a class="source" href="template_registry.js.html">template_registry.js.erb</a>
-          <a class="source" href="templateable_view.js.html">templateable_view.js.erb</a>
+          <a class="source" href="template_registry.html">template_registry.js</a>
+          <a class="source" href="templateable_view.html">templateable_view.js</a>
           <a class="source" href="validateable_field.html">validateable_field.js</a>
           <a class="source" href="view_lifecycle_extensions.html">view_lifecycle_extensions.js</a>
       </div>
@@ -46,7 +46,7 @@
   <table cellspacing=0 cellpadding=0>
   <thead>
     <tr>
-      <th class=docs><h1>templateable_view.js.erb</h1></th>
+      <th class=docs><h1>templateable_view.js</h1></th>
       <th class=code></th>
     </tr>
   </thead>
@@ -324,12 +324,12 @@ Also prints useful error messages to the console.</p>
         <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
         <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Context:&quot;</span><span class="p">);</span>
         <span class="nx">_</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
-        <span class="o">&lt;%</span> <span class="k">if</span> <span class="nx">Rails</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">development</span><span class="o">?</span> <span class="o">%&gt;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">Duckbone</span><span class="p">.</span><span class="nx">Rails</span><span class="p">.</span><span class="nx">isDevelopment</span><span class="p">())</span> <span class="p">{</span>
           <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;duckbone_error&quot;&gt;Handlebars exception: &#39;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">);</span>
-        <span class="o">&lt;%</span> <span class="k">else</span> <span class="o">%&gt;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
           <span class="nx">Duckbone</span><span class="p">.</span><span class="nx">serverError</span><span class="p">();</span>
           <span class="k">throw</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-        <span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span>
+        <span class="p">}</span>
       <span class="p">}</span></pre></div>
       </td>
     </tr>
