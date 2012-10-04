@@ -97,7 +97,21 @@ compiled templates to be used by TemplateableView.
       } catch (e) {
         _.log("Syntax Error in Template " + src);
         _.log(e.message);
-        return Duckbone.Handlebars.compile('<div class="duckbone_error">Syntax Error in Template ' + src + '<div class="duckbone_message">' + e.message + '</div></div>');
+        if (Duckbone.Rails.isProduction()) {
+          Duckbone.serverError();
+          return "";
+        } else {
+          return Duckbone.Handlebars.compile('<div class="duckbone_error">Syntax Error in Template ' +
+            src + '<div class="duckbone_message">' + e.message + '</div></div>');
+        }
+      }
+    } else {
+       _.log("Missing Handlebars template " + src);
+      if (Duckbone.Rails.isProduction()) {
+        Duckbone.serverError();
+        return "";
+      } else {
+        return Duckbone.Handlebars.compile('<div class="duckbone_error">Missing Template ' + src + ' </div>');
       }
     }
   }
