@@ -168,14 +168,13 @@ describe("Duckbone.Syncable", function() {
 
      it("should form restful json urls for the models it creates", function() {
        server.respondWith('POST', '/goals',
-         [200, {'Content-Type': 'application/json'}, '{}'])
+         [200, {'Content-Type': 'application/json'}, '{id: 1}'])
        server.respondWith('PUT', '/goals/3',
-         [200, {'Content-Type': 'application/json'}, '{}'])
+         [200, {'Content-Type': 'application/json'}, '{id: 1}'])
        var model = new modelClass();
        subject.create(model);
        server.respond();
        model = subject.first();
-       expect(model.isNew()).toBeFalsy();
        jqXHR = model.save();
        server.respond();
        expect(jqXHR.status).toEqual(200);

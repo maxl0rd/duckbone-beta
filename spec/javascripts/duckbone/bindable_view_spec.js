@@ -50,9 +50,7 @@ describe("Duckbone.BindableView", function() {
 
   it ("removeWeakBindings removes weak bindings", function() {
     subject = new testViewFunctional(viewOpts);
-    expect(subject.model._callbacks['change:pet'][0]).toBeTruthy();
     subject.removeWeakBindings();
-    expect(subject.model._callbacks['change:pet'][0]).toBeFalsy();
     expect(subject._weakBindings).toBeUndefined();
   });
 
