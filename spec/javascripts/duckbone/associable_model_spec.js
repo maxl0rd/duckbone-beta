@@ -137,7 +137,26 @@ describe("Duckbone.AssociableModel", function() {
         });
 
       });
+    });
 
+    describe(".destroy", function() {
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasOne({associated_model: {model: AssociatedModel}});
+      });
+
+      it("nulls the association when the associated model is destroyed", function() {
+        subject.associatedModel.destroy();
+        expect(subject.hasOwnProperty('associatedModel')).toBeTruthy()
+        expect(subject.associatedModel).toEqual(null);
+      });
+
+      it("triggers a remove event when the associated model is destroyed", function() {
+        var callback = sinon.spy();
+        subject.bind('remove:associatedModel', callback);
+        subject.associatedModel.destroy();
+        expect(callback.called).toBeTruthy();
+      });
     });
   });
 

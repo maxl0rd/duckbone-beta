@@ -333,6 +333,10 @@ into the JSON.
         }
         model[relName] = null; // destroy association
       }
+      // bind to destroy
+      if (model[relName]) {
+        model[relName].bind('destroy', function() { setter.call(model); });
+      }
       return assocModel;
     } // end setter
     try {
