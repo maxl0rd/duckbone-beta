@@ -1,6 +1,6 @@
 describe("Duckbone.AssociableModel", function() {
 
-  var subject, SubjectModel, AssociatedModel, AssociatedCollection;
+  var SubjectModel, AssociatedModel, AssociatedCollection;
 
   var fixture = {
     id: 1,
@@ -32,165 +32,199 @@ describe("Duckbone.AssociableModel", function() {
     });
   });
 
-  it("should create a null property for the association with no data", function() {
-    subject = new SubjectModel();
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    expect(subject.hasOwnProperty('associatedModel')).toBeTruthy()
-    expect(subject.associatedModel).toEqual(null);
+  describe(".hasOne", function() {
+    describe("initializing with association data", function() {
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasOne({associated_model: {model: AssociatedModel}});
+      });
+
+      it("creates a setter on the association name", function() {
+        expect(typeof subject.setAssociatedModel).toEqual('function');
+      });
+
+      it("creates the associated model", function() {
+        expect(subject.associatedModel).toBeDefined();
+        expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
+      });
+
+      it("moves the attributes to the associated model", function() {
+        expect(subject.associatedModel.attributes.title).toEqual(fixture.associated_model.title);
+        expect(subject.associatedModel.attributes.associated_model).toEqual(undefined);
+      });
+
+      it("creates a reciprocal belongsTo relation", function() {
+        expect(subject.associatedModel.subject).toBeDefined();
+      });
+    });
+
+    describe("initializing without association data", function() {
+      beforeEach(function() {
+        subject = new SubjectModel();
+        subject.hasOne({associated_model: {model: AssociatedModel}});
+      });
+
+      it("creates a null property for the association", function() {
+        expect(subject.hasOwnProperty('associatedModel')).toBeTruthy()
+        expect(subject.associatedModel).toEqual(null);
+      });
+    });
+
+    describe(".set", function() {
+      describe("with an associated model", function() {
+        beforeEach(function() {
+          subject = new SubjectModel(fixture);
+          subject.hasOne({associated_model: {model: AssociatedModel}});
+        });
+
+        it("updates the association when its attribute changes", function() {
+          var associationIdBefore = subject.associatedModel.cid;
+          subject.set({associated_model: {title: 'The New Title'}});
+          var associationIdAfter = subject.associatedModel.cid;
+          expect(subject.associatedModel.get('title')).toEqual('The New Title');
+          expect(associationIdAfter).toEqual(associationIdBefore);
+          expect(subject.attributes.associated_model).toBeUndefined();
+        });
+
+        it("updates the association and triggers a change event when the setter is passed an object", function() {
+          var callback = sinon.spy();
+          subject.bind('change:associatedModel', callback);
+          subject.setAssociatedModel({foo: 'bar'});
+          expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
+          expect(callback.called).toBeTruthy();
+        });
+
+        it("creates the association when the attribute changes", function() {
+          subject.set({associated_model: {title: 'The New Title'}});
+          expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
+          expect(subject.associatedModel.get('title')).toEqual('The New Title');
+          expect(subject.attributes.associated_model).toBeUndefined();
+        });
+
+        it("just adds the model when the setter is passed a model", function() {
+          var newModel = new Duckbone.Model();
+          subject.setAssociatedModel(newModel);
+          expect(subject.associatedModel.cid).toEqual(newModel.cid);
+        });
+
+        it("triggers a remove event when the setter is used", function() {
+          var callback = sinon.spy();
+          subject.bind('remove:associatedModel', callback);
+          subject.setAssociatedModel();
+          expect(callback.called).toBeTruthy();
+        });
+
+        it("dooes not trigger an add event when the setter is passed nothing", function() {
+          var callback = sinon.spy();
+          subject.bind('add:associatedModel', callback);
+          subject.setAssociatedModel();
+          expect(callback.called).toBeFalsy();
+        });
+      });
+
+      describe("with an empty associated model", function() {
+        beforeEach(function() {
+          subject = new SubjectModel();
+          subject.hasOne({associated_model: {model: AssociatedModel}});
+        });
+
+        it("does not trigger a remove event", function() {
+          var callback = sinon.spy();
+          subject.bind('remove:associatedModel', callback);
+          subject.setAssociatedModel({foo: 'bar'});
+          expect(callback.called).toBeFalsy();
+        });
+
+      });
+
+    });
   });
 
-  it("should create the association when passed data", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    expect(subject.associatedModel).toBeDefined();
-    expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
-  });
+  describe(".hasMany", function() {
 
-  it("hasMany should create an empty collection with no data", function() {
-    subject = new SubjectModel();
-    subject.hasMany({associated_collection: {collection: AssociatedCollection}});
-    expect(subject.associatedCollection instanceof AssociatedCollection).toBeTruthy();
-    expect(subject.associatedCollection.length).toEqual(0);
-  });
+    describe("initializing with association data", function() {
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
+      });
 
-  it("hasMany should create an instance of the collection association", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection}});
-    expect(subject.associatedCollection instanceof AssociatedCollection).toBeTruthy();
-    expect(subject.associatedCollection.length).toEqual(3);
-  });
+      it("creates an instance of the collection association", function() {
+        expect(subject.associatedCollection instanceof AssociatedCollection).toBeTruthy();
+        expect(subject.associatedCollection.length).toEqual(3);
+      });
 
-  it("should move the attributes to the associated model", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    expect(subject.associatedModel.attributes.title).toEqual(fixture.associated_model.title);
-    expect(subject.associatedModel.attributes.associated_model).toEqual(undefined);
-  });
+      it("moves the attributes to the associated collection", function() {
+        expect(subject.associatedCollection.length).toEqual(fixture.associated_collection.length);
+        expect(subject.associatedCollection.first().get('title')).toEqual("Item One");
+      });
 
-  it("should move the attributes to the associated collection", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection}});
-    expect(subject.associatedCollection.length).toEqual(fixture.associated_collection.length);
-    expect(subject.associatedCollection.first().get('title')).toEqual("Item One");
-  });
+      it("creates a reciprocal belongsTo relation", function() {
+        expect(subject.associatedCollection.subject.cid).toEqual(subject.cid);
+      });
 
-  it("hasOne should create a reciprocal belongsTo relation", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel, belongsTo: 'subject'}});
-    expect(subject.associatedModel.subject).toBeDefined();
-  });
+      it("creates a reciprocal belongsTo relation for the collection's models", function() {
+        expect(subject.associatedCollection.at(0).subject.cid).toEqual(subject.cid);
+      });
+    });
 
-  it("hasMany should create a reciprocal belongsTo relation", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
-    expect(subject.associatedCollection.subject).toEqual(subject);
-  });
+    describe("initializing without association data", function() {
+      beforeEach(function() {
+        subject = new SubjectModel();
+        subject.hasMany({associated_collection: {collection: AssociatedCollection}});
+      });
 
-  it("hasMany should create a reciprocal belongsTo relation for the collection's models", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
-    expect(subject.associatedCollection.at(0).subject).toEqual(subject);
-  });
+      it("creates an empty collection", function() {
+        expect(subject.associatedCollection instanceof AssociatedCollection).toBeTruthy();
+        expect(subject.associatedCollection.length).toEqual(0);
+      });
+    });
 
-  it("hasMany should create a reciprocal belongsTo relation for the collection's models on add", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
-    var fourthItem = new AssociatedModel({id: 4, title: "Item Four"});
-    expect(fourthItem.subject).toBeNull();
-    subject.associatedCollection.add(fourthItem);
-    expect(fourthItem.subject).toEqual(subject);
-  });
+    describe('.add', function() {
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
+      });
 
-  it("hasMany should create a reciprocal belongsTo relation for the collection's models on reset", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
-    var fourthItem = new AssociatedModel({id: 4, title: "Item Four"});
-    expect(fourthItem.subject).toBeNull();
-    subject.associatedCollection.reset([fourthItem]);
-    expect(fourthItem.subject).toEqual(subject);
-  });
+      it("creates a reciprocal belongsTo relation for the collection's models on add", function() {
+        var fourthItem = new AssociatedModel({id: 4, title: "Item Four"});
+        expect(fourthItem.subject).toBeNull();
+        subject.associatedCollection.add(fourthItem);
+        expect(fourthItem.subject.cid).toEqual(subject.cid);
+      });
+    });
 
-  it("hasOne should update the association when its attribute changes", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var associationIdBefore = subject.associatedModel.cid;
-    subject.set({associated_model: {title: 'The New Title'}});
-    var associationIdAfter = subject.associatedModel.cid;
-    expect(subject.associatedModel.get('title')).toEqual('The New Title');
-    expect(associationIdAfter).toEqual(associationIdBefore);
-    expect(subject.attributes.associated_model).toBeUndefined();
-  });
+    describe('.reset', function() {
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasMany({associated_collection: {collection: AssociatedCollection, belongsTo: 'subject'}});
+      });
 
-  it("hasOne should create the association when the attribute changes if it didn't exist", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    subject.set({associated_model: {title: 'The New Title'}});
-    expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
-    expect(subject.associatedModel.get('title')).toEqual('The New Title');
-    expect(subject.attributes.associated_model).toBeUndefined();
-  });
+      it("creates a reciprocal belongsTo relation for the collection's models on reset", function() {
+        var fourthItem = new AssociatedModel({id: 4, title: "Item Four"});
+        expect(fourthItem.subject).toBeNull();
+        subject.associatedCollection.reset([fourthItem]);
+        expect(fourthItem.subject.cid).toEqual(subject.cid);
+      });
+    });
 
-  it("hasMany should update the association when its attribute changes", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasMany({associated_collection: {collection: AssociatedCollection}});
-    subject.set({associated_collection: [
-      {id: 4, title: "Item Four"},
-      {id: 5, title: "Item Five"}
-    ]});
-    expect(subject.associatedCollection.length).toEqual(2);
-    expect(subject.associatedCollection.first().get('id')).toEqual(4);
-    expect(subject.attributes.associated_collection).toBeUndefined();
-  });
+    describe('.set', function() {
 
-  it("should have a setter on the association name", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    expect(typeof subject.setAssociatedModel).toEqual('function');
-  });
+      beforeEach(function() {
+        subject = new SubjectModel(fixture);
+        subject.hasMany({associated_collection: {collection: AssociatedCollection}});
+      });
 
-  it("should update the assoc and trigger a change event when the setter is passed an object", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var callback = sinon.spy();
-    subject.bind('change:associatedModel', callback);
-    subject.setAssociatedModel({foo: 'bar'});
-    expect(subject.associatedModel instanceof AssociatedModel).toBeTruthy();
-    expect(callback.called).toBeTruthy();
-  });
+      it("updates the association when its attribute changes", function() {
+        subject.set({associated_collection: [
+          {id: 4, title: "Item Four"},
+          {id: 5, title: "Item Five"}
+        ]});
+        expect(subject.associatedCollection.length).toEqual(2);
+        expect(subject.associatedCollection.first().get('id')).toEqual(4);
+        expect(subject.attributes.associated_collection).toBeUndefined();
+      });
+    });
 
-  it("should just add the model when the setter is passed a model", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var newModel = new Duckbone.Model();
-    subject.setAssociatedModel(newModel);
-    expect(subject.associatedModel.cid).toEqual(newModel.cid);
-  });
-
-  it("should trigger a remove event when the setter is used and it has an existing association", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var callback = sinon.spy();
-    subject.bind('remove:associatedModel', callback);
-    subject.setAssociatedModel();
-    expect(callback.called).toBeTruthy();
-  });
-
-  it("should not trigger a remove event when the setter is used and it has no existing association", function() {
-    subject = new SubjectModel();
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var callback = sinon.spy();
-    subject.bind('remove:associatedModel', callback);
-    subject.setAssociatedModel({foo: 'bar'});
-    expect(callback.called).toBeFalsy();
-  });
-
-  it("should not trigger an add event when the setter is passed nothing", function() {
-    subject = new SubjectModel(fixture);
-    subject.hasOne({associated_model: {model: AssociatedModel}});
-    var callback = sinon.spy();
-    subject.bind('add:associatedModel', callback);
-    subject.setAssociatedModel();
-    expect(callback.called).toBeFalsy();
   });
 
 });
