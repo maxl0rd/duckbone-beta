@@ -104,4 +104,59 @@ describe("Duckbone.ListableView", function () {
     });
   });
 
+  describe("with an emptyTemplate defined", function() {
+    beforeEach(function() {
+      var ViewClassWithEmptyTemplate = ViewClass.extend({
+        emptyTemplate: "There are no items"
+      });
+      subject = new ViewClassWithEmptyTemplate({ collection: collection });
+    });
+
+    it("createChildren creates the empty view", function() {
+      expect(subject.emptyView).toBeDefined();
+    });
+
+    it("renders the empty template when the collection resets empty", function() {
+      subject.collection.reset();
+      expect($(subject.el).find('li.listable_view_empty').eq(0).text()).toEqual("There are no items");
+    });
+
+    it("renders the empty template when the last item is removed from the collection", function() {
+      expect($(subject.el).find('div.empty').length).toEqual(0);
+      subject.collection.remove(subject.collection.first());
+      subject.collection.remove(subject.collection.first());
+      subject.collection.remove(subject.collection.first());
+      expect($(subject.el).find('li.listable_view_empty').eq(0).text()).toEqual("There are no items");
+    });
+
+    it("does not render the empty template when the collection resets with items", function() {
+      subject.collection.reset(dataFixture);
+      expect($(subject.el).find('li.listable_view_empty').length).toEqual(0);
+    });
+  });
+
+  describe("with a loadingTemplate defined", function() {
+    beforeEach(function() {
+      var ViewClassWithLoadingTemplate = ViewClass.extend({
+        loadingTemplate: "Loading"
+      });
+      subject = new ViewClassWithLoadingTemplate({ collection: collection });
+    });
+
+    it("createChildren creates the empty view", function() {
+      expect(subject.loadingView).toBeDefined();
+    });
+
+    it("renders the loading template when the collection begins fetching", function() {
+      subject.collection.trigger('sync:read');
+      expect($(subject.el).find('li.listable_view_loading').eq(0).text()).toEqual("Loading");
+    });
+
+    it("hides the loading template when the collection finishes fetching", function() {
+      subject.collection.trigger('sync:read');
+      subject.collection.trigger('sync:complete');
+      expect($(subject.el).find('li.listable_view_loading').length).toEqual(0);
+    });
+  });
+
 });

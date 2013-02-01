@@ -109,6 +109,8 @@ For example:
     // #### function createChildren
     // Creates a child view for each model in the collection, in a way compatible with NestableView
     createChildren: function() {
+      this.emptyView = this.createEmptyView();
+      this.loadingView = this.createLoadingView();
       return _.reduce(this.collection.models, function(views, model) {
         views[model.cid] = new this.viewClass({model: model});
         return views;
@@ -138,6 +140,34 @@ For example:
     // - returns - the view corresponding to the given model instance
     getViewByModel: function(model) {
       return this.children[model.cid];
+    },
+
+    // #### function createEmptyView
+    // Creates the view that is shown when the collection is empty.
+    // Ignored unless `emptyTemplate` is set to a string of template data or a template function.
+    createEmptyView: function() {
+      var options = {tagName: 'li', className: 'listable_view_empty'};
+      if (typeof this.emptyTemplate == 'undefined') {
+        return null;
+      } else if (typeof this.emptyTemplate == 'string') {
+        return new Duckbone.View(_.extend(options, {templateData: this.emptyTemplate}));
+      } else if (typeof this.emptyTemplate == 'function') {
+        return new Duckbone.View(_.extend(options, {template: this.emptyTemplate}));
+      }
+    },
+
+    // #### function createLoadingView
+    // Creates the view that is shown when the collection is loading.
+    // Ignored unless `loadingTemplate` is set to a string of template data or a template function.
+    createLoadingView: function() {
+      var options = {tagName: 'li', className: 'listable_view_loading'};
+      if (typeof this.loadingTemplate == 'undefined') {
+        return null;
+      } else if (typeof this.loadingTemplate == 'string') {
+        return new Duckbone.View(_.extend(options, {templateData: this.loadingTemplate}));
+      } else if (typeof this.loadingTemplate == 'function') {
+        return new Duckbone.View(_.extend(options, {template: this.loadingTemplate}));
+      }
     }
 
   };
@@ -149,6 +179,7 @@ For example:
     ensureViewClass(this);
     ensureCollection(this);
     this.setupNestedViews(); // Create all of the children views
+
     var fragment = document.createDocumentFragment();
     _.each(this.children, function(view) {
       fragment.appendChild(view.el); // add their el's to a fragment first
@@ -160,13 +191,19 @@ For example:
   var collectionEventHandlers = {
     'reset': collectionReset,
     'add': collectionAdd,
-    'remove': collectionRemove
+    'remove': collectionRemove,
+    'sync:read': collectionSyncRead,
+    'sync:complete': collectionSyncComplete
   };
 
   // Default handler for when the collection is reset
   function collectionReset() {
     this.removeNestedViews();
     this.render(true);
+    if (this.emptyView && this.collection.length == 0) {
+      this.emptyView.render();
+      $(this.el).append(this.emptyView.el);
+    }
   }
 
   // Default handler for when a model is added to the collection
@@ -181,12 +218,28 @@ For example:
       var previousElement = $(this.el).children().eq(position-1);
       $(previousElement).after(view.el);
     }
+    if (this.emptyView) $(this.el).find('.listable_view_empty').remove();
   }
 
   // Default handler for when a model is removed from the collection
   function collectionRemove(model) {
     this.children[model.cid].remove();
     delete this.children[model.cid];
+    if (this.emptyView && this.collection.length == 0) {
+      this.emptyView.render();
+      $(this.el).append(this.emptyView.el);
+    }
+  }
+
+  function collectionSyncRead() {
+    if (this.loadingView) {
+      this.loadingView.render();
+      $(this.el).append(this.loadingView.el);
+    }
+  }
+
+  function collectionSyncComplete() {
+    if (this.loadingView) $(this.el).find('.listable_view_loading').remove();
   }
 
   // Ensure that the view has obtained its view and collection objects
