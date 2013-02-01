@@ -50,6 +50,28 @@ describe("Duckbone.Syncable", function() {
         });
       });
 
+      it('does not allow sync to be called again until the first request returns', function() {
+        server.respondWith('PUT', '/goals/3',
+        [200, {'Content-Type': 'application/json'}, '{}'])
+        jqXHR = subject.save();
+        expect($.active).toEqual(1);
+        var invalidReturnResponse = subject.save();
+        expect($.active).toEqual(1);
+        expect(invalidReturnResponse).toBeFalsy();
+        expect(subject._pendingJqXHR).toBeDefined();
+      });
+
+      it('allows sync to be called again after the first request returns', function() {
+        server.respondWith('PUT', '/goals/3',
+        [200, {'Content-Type': 'application/json'}, '{}'])
+        jqXHR = subject.save();
+        server.respond();
+        expect($.active).toEqual(1);
+        expect(subject._pendingJqXHR).not.toBeDefined();
+        var jqXHR = subject.save();
+        expect($.active).toEqual(2);
+        expect(jqXHR).toBeDefined();
+      });
     });
 
     describe('.fetch', function() {

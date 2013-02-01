@@ -115,6 +115,10 @@ so that it will either blow up or emit nothing without explicit work by the deve
       var jqXHR;
       var type = methodMap[method];
 
+      // Abandon sync if there is a pending request.
+      // Helps prevent badness due to double clicks, and all other kinds of problems.
+      if (model._pendingJqXHR) return false;
+
       // A model may provide a defaultSyncOptions property which is merged into the
       // jQuery request before the call-time options
       var defaultSyncOptions = model.defaultSyncOptions || {};
@@ -164,6 +168,7 @@ so that it will either blow up or emit nothing without explicit work by the deve
 
       // Make the request.
       jqXHR = $.ajax(params);
+      model._pendingJqXHR = jqXHR;
 
       // Attach the params that were used to make testing easier
       jqXHR.params = params;
@@ -174,6 +179,7 @@ so that it will either blow up or emit nothing without explicit work by the deve
 
       // Trigger sync:complete when it's done regardless of outcome
       jqXHR.complete(function(response) {
+        delete model._pendingJqXHR;
         model.trigger('sync:complete', jqXHR);
       });
 
