@@ -203,8 +203,20 @@ into the JSON.
         this._associations[key] = "hasMany";
         createHasManyAssociation(this, key, assoc['collection'], assoc['belongsTo']);
       }, this);
-    }
+    },
 
+    // #### function cloneWithAssociations
+    // Returns a clone of this model that also includes references to its associations.
+    // If present, this function is used by `FormView.cloneModelForEditing`.
+    // Note that the associations themselves are copied, not cloned.
+    cloneWithAssociations: function() {
+      var dolly = this.clone();
+      _.each(this._associations, function(assocType, assocKey) {
+        var camelKey = underToCamel(assocKey);
+        dolly[camelKey] = this[camelKey];
+      }, this);
+      return dolly;
+    }
   };
 
   /**

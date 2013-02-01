@@ -204,10 +204,12 @@ Usage examples:
     // attributes to the original model when saved. It also sets up the model's after save destination.
     // After this method has been called, `this.model` refers to the clone, and `this.originalModel`
     // refers to the original model.
+    // If you do not wish to edit a clone, simply override this method to return `this.model` instead.
     cloneModelForEditing: function() {
       if (!this.model) throw("Found not, has your model been. Cloned, it can not be.");
       this.originalModel = this.model;
-      this.model = this.originalModel.clone();
+      this.model = (typeof this.model.cloneWithAssociations == 'function') ?
+        this.model.cloneWithAssociations() : this.originalModel.clone();
       this.weakBindToModel('sync:success', this.saveClone, this);
     },
 
@@ -216,6 +218,7 @@ Usage examples:
     // This saves the edited attributes from the clone back to the original model
     // and copies the original model to the requested afterSaveDestination.
     saveClone: function() {
+      if (!this.isModelCloned()) return;
       var attrs = _.clone(this.model.attributes);
       _(this.form.fields).each(function(field) {
         if (field.options.temporary) {
@@ -233,7 +236,7 @@ Usage examples:
     // EditableView. It also moves the view's model reference to the originalModel, so that it is
     // accessable to any `afterRemove()` callbacks.
     expireClone: function() {
-      if (!this.originalModel) return;
+      if (!this.isModelCloned()) return;
       this.model.clear({silent: true});
       var explode = function() {
         throw('Attempted get/set on expired clone from Duckbone.EditableView. Use original model instead.');
@@ -247,8 +250,14 @@ Usage examples:
     // #### function resetModel
     // Discards any edits to the clone, and restore its attributes from the original model.
     resetModel: function() {
-      if (!this.originalModel) throw("Cloned not, has your model been. Reset, we can not do.")
+      if (!this.isModelCloned()) throw("Cloned not, has your model been. Reset, we can not do.")
       this.model.set(this.originalModel.attributes);
+    },
+
+    // #### function isModelCloned
+    // Indicates that this view has a cloned model.
+    isModelCloned: function() {
+      return (this.originalModel && this.originalModel.cid != this.model.cid);
     },
 
     // ### Default Model Sync Handlers

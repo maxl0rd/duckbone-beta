@@ -71,11 +71,46 @@ describe("Duckbone Form View System", function() {
       expect(subject.fields['my_submit_field'].type).toEqual("submit");
     });
 
-    // Need validation coverage in here
-
   });
 
   describe("Duckbone.EditableView", function() {
+
+    describe(".cloneModelForEditing", function() {
+
+      describe("with a normal model", function() {
+        beforeEach(function() {
+          subject = new TestView({
+            el: renderedTemplate,
+            model: new Backbone.Model(modelFixture)
+          });
+        });
+
+        it ("clones the model", function() {
+          expect(subject.originalModel).toBeDefined();
+          expect(subject.originalModel.id).toEqual(subject.model.id);
+          expect(subject.isModelCloned()).toBeTruthy();
+        });
+      });
+
+      describe("with an associable model", function() {
+        var associableModel, cloneSpy;
+
+        beforeEach(function() {
+          associableModel = new Backbone.Model(modelFixture);
+          associableModel.cloneWithAssociations = function() { return this.clone(); };
+          cloneSpy = sinon.spy(associableModel, 'cloneWithAssociations');
+
+          subject = new TestView({
+            el: renderedTemplate,
+            model: associableModel
+          });
+        });
+
+        it("calls cloneWithAssociations if present", function() {
+          expect(cloneSpy.called).toBeTruthy();
+        });
+      })
+    });
 
     xit("Should bind to sync events on the model", function() {
       var saved = false;

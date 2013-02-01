@@ -33,6 +33,7 @@ describe("Duckbone.AssociableModel", function() {
   });
 
   describe(".hasOne", function() {
+
     describe("initializing with association data", function() {
       beforeEach(function() {
         subject = new SubjectModel(fixture);
@@ -208,7 +209,6 @@ describe("Duckbone.AssociableModel", function() {
     });
 
     describe('.set', function() {
-
       beforeEach(function() {
         subject = new SubjectModel(fixture);
         subject.hasMany({associated_collection: {collection: AssociatedCollection}});
@@ -225,6 +225,26 @@ describe("Duckbone.AssociableModel", function() {
       });
     });
 
+  });
+
+  describe(".cloneWithAssociations", function() {
+    var clone;
+
+    beforeEach(function() {
+      subject = new SubjectModel(fixture);
+      subject.hasOne({associated_model: {model: AssociatedModel}});
+      clone = subject.cloneWithAssociations();
+    });
+
+    it("clones the model", function() {
+      expect(clone.id).toEqual(subject.id);
+      expect(clone.get('title')).toEqual(subject.get('title'));
+      expect(clone.cid).not.toEqual(subject.cid);
+    });
+
+    it("copies the associations to the clone", function() {
+      expect(clone.associatedModel.cid).toEqual(subject.associatedModel.cid);
+    });
   });
 
 });
