@@ -166,6 +166,18 @@ so that it will either blow up or emit nothing without explicit work by the deve
         params.headers['Authorization'] = 'Basic ' + encode64(params.username+':'+params.password);
       }
 
+      // Clear pendingJqXHR for callbacks
+      var successCallback = params.success || function() {};
+      params.success = function() {
+        delete model._pendingJqXHR;
+        successCallback.apply(model, arguments);
+      };
+      var errorCallback = params.error || function() {};
+      params.error = function() {
+        delete model._pendingJqXHR;
+        errorCallback.apply(model, arguments);
+      };
+
       // Make the request.
       jqXHR = $.ajax(params);
       model._pendingJqXHR = jqXHR;
@@ -179,7 +191,6 @@ so that it will either blow up or emit nothing without explicit work by the deve
 
       // Trigger sync:complete when it's done regardless of outcome
       jqXHR.complete(function(response) {
-        delete model._pendingJqXHR;
         model.trigger('sync:complete', jqXHR);
       });
 

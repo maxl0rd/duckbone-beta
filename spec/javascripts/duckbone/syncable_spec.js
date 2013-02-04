@@ -72,6 +72,17 @@ describe("Duckbone.Syncable", function() {
         expect($.active).toEqual(2);
         expect(jqXHR).toBeDefined();
       });
+
+      it('allows another sync to be called in the success callback', function() {
+        server.respondWith('PUT', '/goals/3',
+        [200, {'Content-Type': 'application/json'}, '{}'])
+        jqXHR = subject.save({}, {
+          success: function() {
+            expect(subject._pendingJqXHR).toBeUndefined();
+          }
+        });
+        server.respond();
+      });
     });
 
     describe('.fetch', function() {
