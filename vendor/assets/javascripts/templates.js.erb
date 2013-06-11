@@ -1,3 +1,4 @@
+<%# encoding: utf-8 %>
 /**
 # Templates
 This file packages all Handlebars templates for the asset pipeline. It creates
@@ -18,7 +19,6 @@ This script will detect any changes to existing templates and recompile.
 However, when new templates are added, it may be necessary to call
 `rake assets:clean` for the new templates to be detected.
 */
-
 <% require 'duckbone/templates' %>
 <% Duckbone::Templates.depend_on_all_handlebars_files self %>
 
