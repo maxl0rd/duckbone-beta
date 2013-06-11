@@ -91,6 +91,35 @@ For example:
     // This can be overridden to specify a different source of templates.
     templateRegistry: templateRegistry,
 
+    // #### function renderTemplate
+    // - context - the object to use as a template context, defaulting to the view's `model` property
+    // - returns - the view itself, for compatibility with the `render` return convention
+    //
+    // The template can be found in any of the following places:
+    //  `this.options.template`, `this.template`, `this.templateName`, `this.options.templateName`.
+    // Then it renders the template in the context of its model.
+    // The output replaces the entire html content of the view's container element.
+    // Pass a different context param to render from a different context.
+    // ie `this.renderTemplate({some_different: "data"});`
+    renderTemplate: function(context) {
+      var context = context || this.model || {};
+      this.ensureTemplate();
+      this.removeNestedViews();
+      if (this.isBindableView) this.unbindAttributes();
+      try {
+        // Render the handlebars template
+        $(this.el).empty().html(this.template(context));
+      } catch(e) {
+        this.handleTemplateError(e, context);
+      }
+      if (this.isBindableView) this.bindAttributesToTemplate(context);
+      this.setupNestedViews();
+      this.placeChildrenInTemplate();
+      this.decorateElement();
+      this.templateRendered = true;
+      return this
+    },
+
     // #### function getTemplate
     // - templateName - the string name of the template in the templateRegistry
     // - allowEmpty - if true, don't set a "missing template" template on not-found
@@ -112,55 +141,43 @@ For example:
       return this.template
     },
 
-    // #### function renderTemplate
-    // - context - the object to use as a template context, defaulting to the view's `model` property
-    // - returns - the view itself, for compatibility with the `render` return convention
-    //
-    // The template can be found in any of the following places:
-    //  `this.options.template`, `this.template`, `this.templateName`, `this.options.templateName`.
-    // Then it renders the template in the context of its model.
-    // The output replaces the entire html content of the view's container element.
-    // Pass a different context param to render from a different context.
-    // ie `this.renderTemplate({some_different: "data"});`
-    // Attempts to replicate typical server-side templating behavior in which
-    // errors in development will show as error messages in place in the template,
-    // and errors in a production environments will result in a server error.
-    // Also prints useful error messages to the console.
-    renderTemplate: function(context) {
-
-      // Set up context and template
-      var context = context || this.model || {};
+    // #### function ensureTemplate
+    // Ensures that the view has a valid template property, resolving if necessary.
+    ensureTemplate: function() {
       if (_.isFunction(this.options.template)) {
         this.template = this.options.template;
       } else if (!this.template) {
         this.getTemplate();
       }
-      if (!this.template) throw("renderTemplate called without a template.")
+      if (!this.template) throw("TemplateableView requires a template.")
+    },
 
-      // Remove any existing child views
-      this.removeNestedViews();
-
-      // Unbind any previous data bindings
-      if (this.isBindableView) this.unbindAttributes();
-
-      // Render the HTML template, and if it fails, output as much info as possible
-      // 500 Error on exceptions in production
-      try {
-        $(this.el).empty().html(this.template(context));
-      } catch(e) {
-        _.log("Handlebars threw an exception rendering your template:");
-        _.log(e.message);
-        _.log("Context:");
-        _.log(context);
-        if (Duckbone.Rails.isDevelopment()) {
-          $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + e.message + '</div>');
-        } else {
-          Duckbone.serverError();
-          throw(e);
-        }
+    // #### function handleTemplateError
+    // - error - an exception thrown by Handlebars during template rendering
+    // - context - the template's render context
+    //
+    // In production environments, the normal behavior is to server error and rethrow the exception.
+    // In development, output the error to the page and continue.
+    handleTemplateError: function(error, context) {
+      var templateName = this.templateName || '';
+      var errorMessage = "Handlebars error rendering the template " + templateName + '. ';
+      _.log(errorMessage);
+      _.log(error.message);
+      _.log("Context:");
+      _.log(context);
+      if (Duckbone.Rails.isProduction()) {
+        Duckbone.serverError();
+        error.message = errorMessage + error.message;
+        throw(error);
+      } else {
+        $(this.el).html('<div class="duckbone_error">Handlebars exception: ' + error.message + '</div>');
       }
+    },
 
-      // Establish any data-bindings that are defined by {{attr "attribute"}} helpers
+    // #### function bindAttributesToTemplate
+    // Integrate with BindableView and {{attr}} helpers.
+    bindAttributesToTemplate: function(context) {
+      context = context || this.model || {};
       if (this.isBindableView && context instanceof Backbone.Model) {
         $(this.el).find('span[data-bind]').each(_.bind(function(i, span) {
           var attr = $(span).attr('data-bind').slice(5); // ie data-bind="attr_title"
@@ -168,11 +185,11 @@ For example:
           this.bindAttribute(context, attr, binding);
         }, this));
       }
+    },
 
-      // Create the child views
-      this.setupNestedViews();
-
-      // Include child views where they belong in the DOM
+    // #### function placeChildrenInTemplate
+    // Integrate with NestableView, placing child views into the rendered template.
+    placeChildrenInTemplate: function() {
       $(this.el).find('*[data-child-view]').each(_.bind(function(i, div) {
         var childName = $(div).attr('data-child-view');
         var child = this.children[childName]
@@ -184,16 +201,21 @@ For example:
           throw("Unknown child view " + childName);
         }
       }, this));
+    },
 
-      // Assign a descriptive class name to the element
+    // #### function decorateElement
+    // Provide convenience attributes on the container element.
+    // The className is set to the templateName, providing a useful convention for
+    // scoping CSS classes. A data-id attribute is also added to every element,
+    // indicating which model the view represents.
+    decorateElement: function() {
       var templateName = this.options.templateName || this.templateName;
       if (this.templateName) {
         $(this.el).addClass(this.templateName);
       }
-
-      // Mark rendered and return self, so the final call in render in coffee returns itself by convention
-      this.templateRendered = true;
-      return this
+      if (this.model && this.model.id) {
+        $(this.el).attr({'data-id': this.model.id});
+      }
     },
 
     // #### function renderTemplateOnce
