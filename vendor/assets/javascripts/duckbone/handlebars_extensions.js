@@ -37,7 +37,7 @@ Parts of this are heavily inspired by SproutCore's use of Handlebars.
         return object[key];
       }
     }
-    return object.get(key);
+    if (object.get) return object.get(key);
   }
 
   // Use the extended JavascriptCompiler
