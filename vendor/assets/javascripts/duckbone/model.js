@@ -250,11 +250,14 @@ into the JSON.
 
     // #### function url
     // Overrides Backbone's default url method with a new version that respects a function-style `urlRoot`
-    url : function() {
+    url: function() {
       var urlRoot = (typeof this.urlRoot == 'function') ? this.urlRoot() : this.urlRoot;
-      var base = getUrl(this.collection) || urlRoot || urlError();
-      if (this.isNew()) return base;
-      return base + (base.charAt(base.length - 1) == '/' ? '' : '/') + encodeURIComponent(this.id);
+      var base = urlRoot || getUrl(this.collection) || urlError();
+      if (this.isNew()) {
+        return base;
+      } else {
+        return base + (base.charAt(base.length - 1) == '/' ? '' : '/') + encodeURIComponent(this.id);
+      }
     },
 
     // #### function setOne
@@ -432,9 +435,14 @@ into the JSON.
   }
 
   // Get a URL from a Model or Collection as a property or as a function.
-  var getUrl = function(object) {
+  function getUrl(object) {
     if (!(object && object.url)) return null;
     return _.isFunction(object.url) ? object.url() : object.url;
+  };
+
+  // Complain
+  function urlError() {
+    throw('No url for model or collection.');
   };
 
 }).call(this);
