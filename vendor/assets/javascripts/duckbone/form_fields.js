@@ -232,13 +232,28 @@ Study the class `Duckbone.RadioSetFormField` for an example of a complex new fie
       this.createOptions(this.options.selectOptions);
     },
 
+    // ### function createOptions
+    // - newOptions - a dictionary of options for the select
+    // Adds each option, sorted by label, unless the option `{optionsSort: "key"}` is given.
     createOptions: function(newOptions) {
       var newOptions = (typeof newOptions == "function") ? newOptions.call(this) : newOptions;
-      for (var opt in newOptions) {
-        var optionEl = $('<option></option>').attr({value: opt});
-        optionEl.html(Handlebars.Utils.escapeExpression(newOptions[opt]));
-        $(this.el).append(optionEl);
+      if (this.options.optionsSort == 'key') {
+        _.each(_(newOptions).keys().sort(), function(opt) {
+          this.addOption(opt, newOptions[opt]);
+        }, this);
+      } else {
+        invertedOptions = _(newOptions).invert();
+        _.each(_(invertedOptions).keys().sort(), function(opt) {
+          var label = (opt == 'null') ? '' : opt;
+          this.addOption(invertedOptions[opt], label);
+        }, this);
       }
+    },
+
+    addOption: function(val, label) {
+      var optionEl = $('<option></option>').attr({value: val});
+      optionEl.html(Handlebars.Utils.escapeExpression(label));
+      $(this.el).append(optionEl);
     },
 
     setOptions: function(selectOptions) {

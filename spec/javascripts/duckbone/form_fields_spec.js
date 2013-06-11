@@ -135,9 +135,9 @@ describe("Duckbone Form Fields", function() {
 
        it("updates the fields when told", function() {
           subject.setOptions({horseFood: "Flesh", birdFood: "Brains"});
-          expect(model.get("food")).toEqual('horseFood');
-          model.set({food: "birdFood"});
           expect(subject.get()).toEqual("birdFood");
+          model.set({food: "horseFood"});
+          expect(model.get("food")).toEqual('horseFood');
        })
     });
 
@@ -172,9 +172,9 @@ describe("Duckbone Form Fields", function() {
 
        it("updates the fields when told", function() {
           subject.setOptions(function() { return {horseFood: "Flesh", birdFood: "Brains"} });
-          expect(model.get("food")).toEqual('horseFood');
-          model.set({food: "birdFood"});
           expect(subject.get()).toEqual("birdFood");
+          model.set({food: "horseFood"});
+          expect(model.get("food")).toEqual('horseFood');
        })
     });
   });
