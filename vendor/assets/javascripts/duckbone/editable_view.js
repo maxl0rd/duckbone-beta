@@ -521,7 +521,7 @@ Usage examples:
 
   // Returns a jQuery selector for the given form field name
   function selectorFor(name) {
-    return '[name=' + name + ']';
+    return '[name="' + name + '"]';
   };
 
   // Inspects a DOM element and determines the form field type based upon its class name.
