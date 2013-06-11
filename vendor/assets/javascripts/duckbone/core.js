@@ -151,6 +151,21 @@ This file is loaded first and just establishes some namespaces and useful helper
 
   _.extend(Duckbone.helpers, {
 
+    // #### function stringToGlobal
+    // - name - the string representing the desired global variable
+    // - returns - a reference
+    //
+    // For example, given 'mycompany.models.foo',
+    // returns an actual reference to window.mycompany.models.foo
+    stringToGlobal: function(name) {
+      var obj = window;
+      var parts = name.split('.');
+      while (parts.length) {
+        obj = obj[parts.shift()]
+      }
+      return obj;
+    },
+
     dateToPrettyTimeAgo: function (date) {
       var min = Math.floor((new Date().getTime() - date.getTime()) / 60000);
       var remainder = min || 0, prettyTime = [], days, hours;

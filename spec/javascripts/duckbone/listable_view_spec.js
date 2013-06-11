@@ -10,7 +10,7 @@ describe("Duckbone.ListableView", function () {
 
   beforeEach(function() {
     // Sub view
-    var subViewClass = Backbone.View.extend({
+    subViewClass = Backbone.View.extend({
       tagName: 'li',
       template: Duckbone.Handlebars.compile('{{pet}} aged {{age}}'),
     });
@@ -40,6 +40,23 @@ describe("Duckbone.ListableView", function () {
 
     it("creates DOM elements for its subviews", function() {
       expect($(subject.el).find('li').length).toEqual(subject.collection.length);
+    });
+  });
+
+  describe('.resolveViewClass', function() {
+    describe('with viewClass given as a string', function() {
+      it("resolves viewClass to the global", function() {
+        window.views = { subViewClass: subViewClass };
+        var ViewClassWithString = Backbone.View.extend({
+          viewClass: 'views.subViewClass',
+          tagName: 'ol'
+        });
+        Duckbone.include(ViewClassWithString.prototype, Duckbone.ListableView);
+        subject = new ViewClassWithString({collection: collection});
+        subject.resolveViewClass();
+        expect(subject.viewClass).toEqual(subViewClass);
+        delete window.views;
+      });
     });
   });
 

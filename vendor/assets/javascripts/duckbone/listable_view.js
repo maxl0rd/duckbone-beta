@@ -10,6 +10,8 @@ Instantiate the view with a `collection` property of models, and a `viewClass`. 
 instance of `viewClass` for each model in its collection. It is also easy to lazy load models, as the ListableView
 can be created at any time, and child views will only be created when models are loaded into the collection.
 
+The `viewClass` property can be defined as an actual class contructor, or as a string i.e. "mycompany.views.MyView", which is lazily evaluated. The latter strategy can ameliorate script load order issues.
+
 The view's tag is a `<ul>` by default, but this may be changed by setting the view's `tagName` property as usual.
 Typically the tag for the `viewClass` will be set to `<li>`.
 
@@ -106,15 +108,20 @@ For example:
       return this;
     },
 
-    // #### function createChildren
-    // Creates a child view for each model in the collection, in a way compatible with NestableView
     createChildren: function() {
+      this.resolveViewClass();
       this.emptyView = this.createEmptyView();
       this.loadingView = this.createLoadingView();
       return _.reduce(this.collection.models, function(views, model) {
         views[model.cid] = new this.viewClass({model: model});
         return views;
       }, {}, this);
+    },
+
+    resolveViewClass: function() {
+      if (typeof this.viewClass == "string") {
+        this.viewClass = Duckbone.helpers.stringToGlobal(this.viewClass);
+      }
     },
 
     // #### function bindCollectionEvents
