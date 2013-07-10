@@ -3,6 +3,7 @@
 //= require ./model
 //= require ./collection
 //= require ./syncable
+//= require ./route
 //= require ./routeable_application
 //= require ./view_lifecycle_extensions
 //= require ./handlebars_extensions

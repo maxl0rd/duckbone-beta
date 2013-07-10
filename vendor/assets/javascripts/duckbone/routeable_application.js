@@ -84,28 +84,9 @@ on itself. For example:
     // If your view prototype has a `templateName`, Duckbone will fall back to using
     // it as a routeName in its absence.
     mapRoutes: function(routingTable) {
-      _.each(_.keys(routingTable), function(route) {
+      _(routingTable).each(function(routeClass, route) {
         try {
-          var routeName = routingTable[route].routeName || routingTable[route].prototype.templateName
-          if (!routeName)
-            throw("Missing or bad routeName for " + route);
-          if (typeof routingTable[route].routeAction != 'function')
-            throw("Missing or bad routeAction for " + route);
-          this.route(route, // draw the normal route
-            routeName,
-            routingTable[route].routeAction
-          );
-          this.route(route+'?*params', // draw the route with a query string
-            routeName,
-            function() { // call the routeAction with the query params appended to arguments
-              var args = _.toArray(arguments);
-              var params = args.pop();
-              var paramsObject = _(params.split('&')).reduce(function(memo, pair) {
-                memo[pair.split('=')[0]] = pair.split('=')[1]; return memo;
-              }, {});
-              return routingTable[route].routeAction.apply(this, args.concat(paramsObject));
-            }
-          );
+          this.mapRoute(route, routeClass);
         } catch (e) {
           _.log(e);
           throw("Bad route for " + route);
@@ -113,31 +94,84 @@ on itself. For example:
       }, this);
     },
 
+    // #### function mapRoute
+    // - route - the Backbone-style route string
+    // - routeClass - an appropriately configured subclass of Duckbone.Route or Duckbone.View
+    //
+    // Defines each individual route for the Backbone router
+    mapRoute: function(route, routeClass) {
+      if (routeClass.prototype.isRoute) {
+        // Use the given route subclass
+      } else {
+        // Create a route subclass from the class properties on the view
+        var viewClass = routeClass;
+        routeClass = Duckbone.Route.extend({
+          routeName: viewClass.routeName || viewClass.prototype.templateName,
+          routeAction: viewClass.routeAction,
+          viewClass: viewClass
+        });
+      }
+      validateRoute(route, routeClass);
+
+      // Register it with the Backbone router,
+      // and an additional route to handle when it is passed pseudo query params
+      var application = this;
+      this.route(route, routeClass.prototype.routeName, function() {
+        Duckbone.route = new routeClass({
+          application: application,
+          fragment: route
+        });
+        Duckbone.route.routeAction.apply(Duckbone.route, arguments);
+      });
+      this.route(route+'?*params', routeClass.prototype.routeName, function() {
+        Duckbone.route = new routeClass({
+          application: application,
+          fragment: route
+        });
+        Duckbone.route.routeActionWithQueryParams.apply(Duckbone.route, arguments);
+      });
+    },
+
     // #### function loadView
-    // - view - the view class to load
+    // - viewClass - the view class to load
     // - options - an options object to be passed to the view initializer
     // - returns - the view
     //
     // Each route action generally results in a call to `loadView()`.
-    loadView: function(view, options) {
-      if (options === undefined) options = {};
+    loadView: function(viewClass, options) {
+      this.unloadView();
+      this.createViewWithLayout(viewClass, options);
+      this.trigger('viewLoaded');
+      return this.mainView;
+    },
+
+    unloadView: function() {
       if (this._removableFlashes) {
         this._removableFlashes.remove();
         delete this._removableFlashes;
       }
       if (this.mainView) this.mainView.remove();
+      delete this.mainView;
+    },
+
+    createViewWithLayout: function(viewClass, options) {
+      options = options || {};
       options.application = this;
-      this.mainView = new view(options);
-      var layoutConstructor = view.layout || this.defaultLayout;
-      if (!(this.layoutView instanceof layoutConstructor)) {
-        if (this.layoutView)
-          this.layoutView.remove();
-        this.layoutView = new layoutConstructor();
-      }
+      this.mainView = new viewClass(options);
+      this.resetLayout(viewClass.layout);
       this.layoutView.setMainView(this.mainView);
       $(this.layoutView.el).appendTo(this.mainContainer);
-      this.trigger('viewLoaded');
-      return this.mainView;
+    },
+
+    // Reset the layout view for the given new layout class
+    // Does nothing if same as existing layout
+
+    resetLayout: function(layoutClass) {
+      var layoutConstructor = layoutClass || this.defaultLayout;
+      if (!(this.layoutView instanceof layoutConstructor)) {
+        if (this.layoutView) this.layoutView.remove();
+        this.layoutView = new layoutConstructor();
+      }
     },
 
     // #### function navigate
@@ -178,5 +212,14 @@ on itself. For example:
       }
     })
   };
+
+  function validateRoute(route, routeClass) {
+    if (!routeClass.prototype.routeName) {
+      throw("Missing or bad routeName for " + route);
+    }
+    if (typeof routeClass.prototype.routeAction != 'function') {
+      throw("Missing or bad routeAction for " + route);
+    }
+  }
 
 }).call();
