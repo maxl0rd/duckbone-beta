@@ -1,8 +1,8 @@
-/**
-# Duckbone Core
+// Core
+// ====
+//
+// This file is loaded first and just establishes some namespaces and useful helpers.
 
-This file is loaded first and just establishes some namespaces and useful helpers.
-*/
 
 (function() {
 

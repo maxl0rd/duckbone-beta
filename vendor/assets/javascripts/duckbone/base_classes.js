@@ -1,21 +1,17 @@
-/**
-# Duckbone Base Classes
-
-These base classes extend `Backbone.Model`, `Backbone.Collection` and `Backbone.View`
-to include the most commonly used modules of Duckbone.  Most apps will
-simply extend these base classes instead of the Backbone base classes directly
-unless they desire a high degree of customized behavior.
-
-This file also defines some other Duckbone core classes:
-
-* `Duckbone.FormView`, which mixes in all the
-functionality required for editing and/or saving models via web forms.
-* `Duckbone.Application`, which extends the Backbone router with declarative route actions
-and flash notice/alert management
-
-
-
-*/
+// Base Classes
+// ============
+//
+// These base classes extend `Backbone.Model`, `Backbone.Collection` and `Backbone.View`
+// to include the most commonly used modules of Duckbone.  Most apps will
+// simply extend these base classes instead of the Backbone base classes directly
+// unless they desire a high degree of customized behavior.
+//
+// This file also defines some other Duckbone core classes:
+//
+// * `Duckbone.FormView`, which mixes in all the
+// functionality required for editing and/or saving models via web forms.
+// * `Duckbone.Application`, which extends the Backbone router with declarative route actions
+// and flash notice/alert management
 
 (function() {
 

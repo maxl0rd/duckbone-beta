@@ -1,64 +1,62 @@
-/**
-# Duckbone.ListableView
-
-ListableView provides all of the functionality necessary to create a "container" view that
-cleanly manages a collection of identical sub-views.
-
-## Usage
-
-Instantiate the view with a `collection` property of models, and a `viewClass`. The ListableView manages an
-instance of `viewClass` for each model in its collection. It is also easy to lazy load models, as the ListableView
-can be created at any time, and child views will only be created when models are loaded into the collection.
-
-The `viewClass` property can be defined as an actual class contructor, or as a string i.e. "mycompany.views.MyView", which is lazily evaluated. The latter strategy can ameliorate script load order issues.
-
-The view's tag is a `<ul>` by default, but this may be changed by setting the view's `tagName` property as usual.
-Typically the tag for the `viewClass` will be set to `<li>`.
-
-There is a base class that mixes in ListableView, called `Duckbone.ListView`.
-
-Example:
-
-    TicketView = Duckbone.View.extend({
-      tagName: 'li',
-      templateData: '<div>Ticket {{id}}</div>'
-    });
-    TicketsListView = Duckbone.ListView.extend({
-      viewClass: TicketView
-    });
-
-    ticketsView = new TicketsListView({
-      collection: new Duckbone.Collection()
-    });
-    ticketsView.collection.fetch();
-
-### Collection Events
-
-The view responds to the following events:
-
-- Responds to collection _reset_ by completely re-rendering itself
-- Responds to collection _add_ by inserting the new view into the list, respecting the collection's sort order
-- Responds to collection _remove_ by removing the corresponding view
-
-This functionality can be overridden by redefining the `collectionEvents` property. String method names, or
-callback functions may be provided for any event that can be issued by the collection. Note that defining
-`collectionEvents` will override _all_ default behavior, not individually per event.
-
-For example:
-
-    TicketsListView = Duckbone.ListView.extend({
-      viewClass: TicketView,
-      collectionEvents: {
-        'reset': 'myResetHandler',
-        'add': 'myFancyAddHandler',
-        'remove': function() { ... },
-        'myCustomEvent': function() { ... }
-      }
-      myResetHandler: function() { ... }
-      // ... etc ...
-    });
-
-*/
+// ListableView
+// ============
+//
+// ListableView provides all of the functionality necessary to create a "container" view that
+// cleanly manages a collection of identical sub-views.
+//
+// ## Usage
+//
+// Instantiate the view with a `collection` property of models, and a `viewClass`. The ListableView manages an
+// instance of `viewClass` for each model in its collection. It is also easy to lazy load models, as the ListableView
+// can be created at any time, and child views will only be created when models are loaded into the collection.
+//
+// The `viewClass` property can be defined as an actual class contructor, or as a string i.e. "mycompany.views.MyView", which is lazily evaluated. The latter strategy can ameliorate script load order issues.
+//
+// The view's tag is a `<ul>` by default, but this may be changed by setting the view's `tagName` property as usual.
+// Typically the tag for the `viewClass` will be set to `<li>`.
+//
+// There is a base class that mixes in ListableView, called `Duckbone.ListView`.
+//
+// Example:
+//
+//     TicketView = Duckbone.View.extend({
+//       tagName: 'li',
+//       templateData: '<div>Ticket {{id}}</div>'
+//     });
+//     TicketsListView = Duckbone.ListView.extend({
+//       viewClass: TicketView
+//     });
+//
+//     ticketsView = new TicketsListView({
+//       collection: new Duckbone.Collection()
+//     });
+//     ticketsView.collection.fetch();
+//
+// ### Collection Events
+//
+// The view responds to the following events:
+//
+// - Responds to collection _reset_ by completely re-rendering itself
+// - Responds to collection _add_ by inserting the new view into the list, respecting the collection's sort order
+// - Responds to collection _remove_ by removing the corresponding view
+//
+// This functionality can be overridden by redefining the `collectionEvents` property. String method names, or
+// callback functions may be provided for any event that can be issued by the collection. Note that defining
+// `collectionEvents` will override _all_ default behavior, not individually per event.
+//
+// For example:
+//
+//     TicketsListView = Duckbone.ListView.extend({
+//       viewClass: TicketView,
+//       collectionEvents: {
+//         'reset': 'myResetHandler',
+//         'add': 'myFancyAddHandler',
+//         'remove': function() { ... },
+//         'myCustomEvent': function() { ... }
+//       }
+//       myResetHandler: function() { ... }
+//       // ... etc ...
+//     });
 
 (function() {
 

@@ -1,24 +1,23 @@
-/**
-# Duckbone.RemoteableView
-
-A RemoteableView relies upon the server to render its contents. It can be used to
-integrate a legacy ERB view into a larger Duckbone application. Note that this is rarely
-a desireable situation, but there may be times when the developer must rely on this technique.
-
-### Usage
-
-Set the 'url' property to the route where Rails will render the contents.
-Configure the route to respond to a normal html format request, and render
-the html without a layout.
-
-Set the loading property, and a "Loading..." message will be displayed the first
-time it renders.
-
-If a model is passed to the view's initialize method, then the view will render itself
-again whenever a _change_ event is received. Since this is expensive in terms of time and
-bandwidth, the rendering is debounced by 500ms. That is, many events occuring together will
-result in only a single render.
-*/
+// RemoteableView
+// ==============
+//
+// A RemoteableView relies upon the server to render its contents. It can be used to
+// integrate a legacy ERB view into a larger Duckbone application. Note that this is rarely
+// a desireable situation, but there may be times when the developer must rely on this technique.
+//
+// ### Usage
+//
+// Set the 'url' property to the route where Rails will render the contents.
+// Configure the route to respond to a normal html format request, and render
+// the html without a layout.
+//
+// Set the loading property, and a "Loading..." message will be displayed the first
+// time it renders.
+//
+// If a model is passed to the view's initialize method, then the view will render itself
+// again whenever a _change_ event is received. Since this is expensive in terms of time and
+// bandwidth, the rendering is debounced by 500ms. That is, many events occuring together will
+// result in only a single render.
 
 (function() {
 

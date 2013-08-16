@@ -26,3 +26,9 @@
 //= require ./base_classes
 //= require ./error_list
 //= require ./base_errors_view
+
+// Duckbone Annotated Source Code and API Documentation
+// ==============================
+//
+// Use the tiny `jump to` link in the upper right
+// to find the annotated source for each module.

@@ -1,49 +1,49 @@
-/**
-# Duckbone.PageableCollection
+// PageableCollection
+// ==================
+//
+// PageableCollection enhances a Backbone Collection so that it understands its connection to a server-paginated endpoint.
+// It should be used in conjunction with the Rails library found in Duckbone.PageableCollection, and either
+// of the standard will_paginate or kaminari gems.
+//
+// ## Usage
+//
+// First, establish pagination in your controller action. Wrap the JSON response in the PageableCollection presenter.
+// For example:
+//
+//     class TicketsController < ApplicationController
+//       def index
+//         @tickets = Ticket.all.page params[:page]
+//         render :json => Duckbone::PageableCollection.new(@tickets)
+//       end
+//     end
+//
+// Then create a pageable collection and use `fetchPage()` to fetch the collection. For example:
+//
+//     tickets = new Duckbone.Collection({url: '/tickets'});
+//     Duckbone.include(tickets, Duckbone.PageableCollection);
+//     tickets.fetchPage(1);
+//
+// The JSON response will look something like this:
+//
+//     { num_pages: 4, limit_value: 25,
+//       current_page: 1, total_count: 99,
+//       records: [ {...}, {...} ] }
+//
+// At that point, you can then use `nextPage()`, `prevPage()`, or `setPage()` to fetch any other set of items
+// into the collection. The collection will trigger both _pageChange_ and _reset_ events, when the records are refreshed.
+//
+// ### Displaying the total count
+//
+// The collection maintains its `totalCount` property and updates it whenever it fetches new data from the server.
+// However, manually adding and removing items from the collection can cause this number to fall out of sync. Use the
+// method `updateTotalCountOnCollectionEvents` to create bindings that will keep this number in sync in the event
+// that it is visible in the UI.
+//
+// ### PageableView
+//
+// To create a paging UI with traditional page links and next/previous navigation, use this class in concert with
+// a Duckbone.PageableView.
 
-PageableCollection enhances a Backbone Collection so that it understands its connection to a server-paginated endpoint.
-It should be used in conjunction with the Rails library found in Duckbone.PageableCollection, and either
-of the standard will_paginate or kaminari gems.
-
-## Usage
-
-First, establish pagination in your controller action. Wrap the JSON response in the PageableCollection presenter.
-For example:
-
-    class TicketsController < ApplicationController
-      def index
-        @tickets = Ticket.all.page params[:page]
-        render :json => Duckbone::PageableCollection.new(@tickets)
-      end
-    end
-
-Then create a pageable collection and use `fetchPage()` to fetch the collection. For example:
-
-    tickets = new Duckbone.Collection({url: '/tickets'});
-    Duckbone.include(tickets, Duckbone.PageableCollection);
-    tickets.fetchPage(1);
-
-The JSON response will look something like this:
-
-    { num_pages: 4, limit_value: 25,
-      current_page: 1, total_count: 99,
-      records: [ {...}, {...} ] }
-
-At that point, you can then use `nextPage()`, `prevPage()`, or `setPage()` to fetch any other set of items
-into the collection. The collection will trigger both _pageChange_ and _reset_ events, when the records are refreshed.
-
-### Displaying the total count
-
-The collection maintains its `totalCount` property and updates it whenever it fetches new data from the server.
-However, manually adding and removing items from the collection can cause this number to fall out of sync. Use the
-method `updateTotalCountOnCollectionEvents` to create bindings that will keep this number in sync in the event
-that it is visible in the UI.
-
-### PageableView
-
-To create a paging UI with traditional page links and next/previous navigation, use this class in concert with
-a Duckbone.PageableView.
-*/
 
 (function() {
 

@@ -1,36 +1,35 @@
-/**
-# Form Fields
-
-This file defines all of the typical web form fields generally used with an EditableView.
-It registers the Handlebars helpers to template a form, as well as the Backbone View classes
-for each field type.
-
-### Building Form Templates
-
-Define a form template for each EditableView using the given Handlebars helpers. It is easiest
-to name each form field with the name of its corresponding model attribute. Define each
-form field's options in the view's `fields` object, as described in the docs for EditableView.
-For example:
-
-    <h1>New Post</h1>
-    {{#form new_post}}
-      {{form_label "headline" "Post Headline"}}
-      {{form_text "headline"}}
-      {{form_label "body" "Post Body"}}
-      {{form_textarea "body"}}
-      {{form_label "category" "Post Category"}}
-      {{form_select "category"}}
-      {{form_submit "new_post" "Create Post"}}
-    {{/form}}
-
-### Custom Field Types
-
-Extend the class `Duckbone.FormFieldBase` to create additional field types. Add additional
-functionality to `afterInitialize` and `createChildren`. Override `get` and `set` to interact
-with the model.
-
-Study the class `Duckbone.RadioSetFormField` for an example of a complex new field type.
-*/
+// Form Fields
+// ===========
+//
+// This file defines all of the typical web form fields generally used with an EditableView.
+// It registers the Handlebars helpers to template a form, as well as the Backbone View classes
+// for each field type.
+//
+// ### Building Form Templates
+//
+// Define a form template for each EditableView using the given Handlebars helpers. It is easiest
+// to name each form field with the name of its corresponding model attribute. Define each
+// form field's options in the view's `fields` object, as described in the docs for EditableView.
+// For example:
+//
+//     <h1>New Post</h1>
+//     {{#form new_post}}
+//       {{form_label "headline" "Post Headline"}}
+//       {{form_text "headline"}}
+//       {{form_label "body" "Post Body"}}
+//       {{form_textarea "body"}}
+//       {{form_label "category" "Post Category"}}
+//       {{form_select "category"}}
+//       {{form_submit "new_post" "Create Post"}}
+//     {{/form}}
+//
+// ### Custom Field Types
+//
+// Extend the class `Duckbone.FormFieldBase` to create additional field types. Add additional
+// functionality to `afterInitialize` and `createChildren`. Override `get` and `set` to interact
+// with the model.
+//
+// Study the class `Duckbone.RadioSetFormField` for an example of a complex new field type.
 
 (function() {
 

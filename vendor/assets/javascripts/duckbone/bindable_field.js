@@ -1,11 +1,10 @@
-/**
-# Duckbone.BindableField
-
-This module enables a view to act as a form element that can bind bi-directionally to a model.
-For example, an input field in a form can both reflect the model's state, and also update it
-based on a user's input. The abstract form field base class `Duckbone.FormFieldBase` includes
-this module, and any custom form field types used by an EditableView should also include this module.
-*/
+// BindableField
+// =============
+//
+// This module enables a view to act as a form element that can bind bi-directionally to a model.
+// For example, an input field in a form can both reflect the model's state, and also update it
+// based on a user's input. The abstract form field base class `Duckbone.FormFieldBase` includes
+// this module, and any custom form field types used by an EditableView should also include this module.
 
 (function() {
 

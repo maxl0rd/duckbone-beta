@@ -1,60 +1,59 @@
-/**
-# Duckbone.RoutableApplication
-
-This mixin adds a page-centric routing system to Backbone's existing URL Router.
-While Backbone's default routing strategy assumes that all route actions will be
-defined on the router itself, RoutableApplication instead delegates its route actions
-to child views that each represent atomic "pages" in the application.
-
-This page-centric concept should be more familiar to Rails developers, and also
-greatly improves code organization for large projects with many separate page views.
-
-The standard Backbone `routes` object is still available, but the developer will likely
-find it confusing to mix the two systems together in practice.
-
-## Usage
-
-Mix in `Duckbone.RouteableApplication` into your top level application object, which should also
-extend Backbone.Router. Then call `mapRoutes()` in `initialize()`, passing an object that
-represents the routing table. Define the `routeAction` on the view class so that it calls `loadView`
-on itself. For example:
-
-    MyApplication = Backbone.Router.extend({
-      initialize: function() {
-        mapRoutes({
-          '/home':      HomeView,
-          '/posts':     PostsView,
-          '/posts/:id': PostView,
-          '/posts/new': NewPostView
-        });
-      }
-    });
-    Duckbone.include(MyApplication.prototype,
-      Duckbone.RouteableApplication);
-
-    PostView = Backbone.View.extend({
-      initialize: function { ...etc... },
-      render: function() { ...etc... }
-    }, {
-      routeName: 'post',
-      routeAction: function(id, params) {
-        var model = new Post({ id: id });
-        model.fetch({
-          success: function(m) {
-            myapp.loadView(PostView, {model: m});
-          }
-        })
-      }
-    });
-
-    ... etc ...
-
-    $(function() {
-      var myapp = new MyApplication();
-      myapp.setContainer($('#app_container').get(0));
-      Backbone.history.start();
-    });
-*/
+// RoutableApplication
+// ===================
+//
+// This mixin adds a page-centric routing system to Backbone's existing URL Router.
+// While Backbone's default routing strategy assumes that all route actions will be
+// defined on the router itself, RoutableApplication instead delegates its route actions
+// to child views that each represent atomic "pages" in the application.
+//
+// This page-centric concept should be more familiar to Rails developers, and also
+// greatly improves code organization for large projects with many separate page views.
+//
+// The standard Backbone `routes` object is still available, but the developer will likely
+// find it confusing to mix the two systems together in practice.
+//
+// ## Usage
+//
+// Mix in `Duckbone.RouteableApplication` into your top level application object, which should also
+// extend Backbone.Router. Then call `mapRoutes()` in `initialize()`, passing an object that
+// represents the routing table. Define the `routeAction` on the view class so that it calls `loadView`
+// on itself. For example:
+//
+//     MyApplication = Backbone.Router.extend({
+//       initialize: function() {
+//         mapRoutes({
+//           '/home':      HomeView,
+//           '/posts':     PostsView,
+//           '/posts/:id': PostView,
+//           '/posts/new': NewPostView
+//         });
+//       }
+//     });
+//     Duckbone.include(MyApplication.prototype,
+//       Duckbone.RouteableApplication);
+//
+//     PostView = Backbone.View.extend({
+//       initialize: function { ...etc... },
+//       render: function() { ...etc... }
+//     }, {
+//       routeName: 'post',
+//       routeAction: function(id, params) {
+//         var model = new Post({ id: id });
+//         model.fetch({
+//           success: function(m) {
+//             myapp.loadView(PostView, {model: m});
+//           }
+//         })
+//       }
+//     });
+//
+//     ... etc ...
+//
+//     $(function() {
+//       var myapp = new MyApplication();
+//       myapp.setContainer($('#app_container').get(0));
+//       Backbone.history.start();
+//     });
 
 (function() {
 

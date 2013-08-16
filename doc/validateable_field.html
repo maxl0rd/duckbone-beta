@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ValidateableField</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>ValidateableField</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This module is included in any form field view that provides validation
+capabilities as part of an EditableView. It provides methods to bind, run, and
+display the results of validations.</p>
+<p>EditableView considers client-side validations to a view-level responsibility and
+so the existing Backbone Model validation facilities are not used. The form and its
+fields itself are validated, rather than the model, since the same model can have
+different validation requirements in different editing contexts. So the model always
+reflects the data entered into the view, even if that input is invalid.</p>
+<h3>Usage</h3>
+<p>This functionality is generally called by the FormManager itself during initialization,
+and as part of the process of validating an entire form before submission. However,
+in special cases the developer might call <code>validate</code> or <code>addError</code> on the field as needed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.ValidateableField = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h4>property isValidateableField</h4>
+<p>Indicates a view with this mixin included</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isValidateableField: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function bindValidation</h4>
+<ul>
+<li>validateEvent - the DOM event to trigger form validation, defaults to <em>change</em>.</li>
+<li>el - the DOM element to bind to, defaulting to the view&#39;s top level element</li>
+<li>returns nothing</li>
+</ul>
+<p>Bind the change event to the validator
+The &quot;validate&quot; option can be either a string key to an existing validator
+or any function that returns true or false
+The &quot;invalidMessage&quot; option will display in the error span</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindValidation: <span class="keyword">function</span>(validateEvent, el) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">var</span> method = <span class="keyword">this</span>.options.validate || <span class="keyword">this</span>.options.required;
+      <span class="keyword">if</span> (!method) <span class="keyword">return</span>; <span class="comment">// bomb out if this field is not configured to validate</span>
+      <span class="keyword">var</span> field = <span class="keyword">this</span>;
+      validateEvent = validateEvent || <span class="keyword">this</span>.options.validateEvent || <span class="string">'change'</span>;
+      el = el || <span class="keyword">this</span>.el;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Fix the problem where clicking submit creates new validation elements
+that cause the submit button to jump around on the page.
+Record the last mouse down time, and if it was very recent,
+then delay validation until the mouse up event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">var</span> mouseTarget = $(window), mousedownAt = <span class="literal">null</span>;
+      <span class="keyword">var</span> mousedownHandler = <span class="keyword">function</span>() {
+        mousedownAt = <span class="keyword">new</span> Date()
+      };
+      <span class="keyword">var</span> mouseupHandler = <span class="keyword">function</span>() {
+        mouseTarget.unbind(<span class="string">'mouseup'</span>, mouseupHandler);
+        field.validate();
+      };
+      <span class="keyword">if</span> (<span class="keyword">this</span>.form.view &amp;&amp; <span class="keyword">this</span>.form.view.isBindableView) {
+        <span class="keyword">this</span>.form.view.weakBindTo(mouseTarget, <span class="string">'mousedown'</span>, mousedownHandler);
+      } <span class="keyword">else</span> {
+        mouseTarget.bind(<span class="string">'mousedown'</span>, mousedownHandler);
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Bind to the validation event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      $(el).bind(validateEvent, <span class="keyword">function</span>() {
+        <span class="keyword">if</span> (mousedownAt &amp;&amp; (<span class="keyword">new</span> Date()) - mousedownAt &lt; <span class="number">10</span>) {
+          mouseTarget.bind(<span class="string">'mouseup'</span>, mouseupHandler); <span class="comment">// wait for mouseup to validate</span>
+        } <span class="keyword">else</span> {
+          field.validate(); <span class="comment">// validate immediately</span>
+        }
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function validate</h4>
+<ul>
+<li>method - the validation method to use. Accepts any string key present in
+<code>Duckbone.forms.validators</code>, or a function that returns true or false.
+The function will be called in the context of the field, and passed its
+current value.</li>
+<li>silent - a boolean indicating whether to display the validation errors.
+Defaults to true.</li>
+<li>returns - a boolean indicating whether the field is valid or not. Fields
+without validation methods will always return true.</li>
+</ul>
+<p>Validates this field using either the given method, or the method previously
+configured on the field by the form. If the field is invalid, the invalid message
+will be added to its DOM, unless <code>silent</code> is true.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    validate: <span class="keyword">function</span>(method, silent) {
+      silent = silent || <span class="literal">false</span>;
+      <span class="keyword">var</span> originalValidity = <span class="keyword">this</span>.valid;
+      <span class="keyword">if</span> (!silent) <span class="keyword">this</span>.clearErrors();
+      <span class="keyword">this</span>.valid = <span class="literal">true</span>; <span class="comment">// assume valid unless method fails</span>
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.options.validate &amp;&amp; <span class="keyword">this</span>.options.required) {
+        <span class="keyword">this</span>.options.validate = <span class="string">'required'</span>;
+        <span class="keyword">this</span>.options.invalidMessage = <span class="keyword">this</span>.options.invalidMessage || <span class="string">"Required"</span>
+      }
+      method = method || <span class="keyword">this</span>.options.validate;
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> method == <span class="string">"string"</span>) method = Duckbone.forms.validators[method];
+      <span class="keyword">if</span> (!method) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// no validation</span>
+      <span class="keyword">var</span> invalidMessage = <span class="keyword">this</span>.options.invalidMessage || <span class="string">"Invalid"</span>;
+      <span class="keyword">if</span> (method.call(<span class="keyword">this</span>, <span class="keyword">this</span>.get()) == <span class="literal">false</span>) <span class="keyword">this</span>.valid = <span class="literal">false</span>;
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.valid &amp;&amp; !silent) {
+        <span class="keyword">this</span>.addError(invalidMessage);
+      } <span class="keyword">else</span> {
+        <span class="keyword">var</span> val = <span class="keyword">this</span>.get();
+        <span class="keyword">if</span> (Duckbone.ModelHelpers.isValidAttribute(val)) <span class="keyword">this</span>.set(val);
+      }
+      <span class="keyword">if</span> (<span class="keyword">this</span>.valid != originalValidity) <span class="keyword">this</span>.form.trigger(<span class="string">'fieldValidityChanged'</span>, <span class="keyword">this</span>);
+      <span class="keyword">return</span> <span class="keyword">this</span>.valid;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>addError</h4>
+<ul>
+<li>message - the error message to display on the field.</li>
+<li>returns - nothing</li>
+</ul>
+<p>Display a validation error on this field. The error will be added to a
+<code>ul</code> list of errors immediately after the form field. This element may
+be styled by the developer as needed. Custom form fields can override
+this method to provide additional display behavior as needed.
+If the handlebars helper {{form_error}} is used, then this method will
+append the errors to that element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    addError: <span class="keyword">function</span>(message) {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.errorList) {
+        <span class="keyword">this</span>.errorList = $(<span class="string">'&lt;ul&gt;'</span>).addClass(<span class="string">'error'</span>);
+        <span class="keyword">var</span> error_div = $(<span class="keyword">this</span>.el).parents(<span class="string">'form'</span>).find(<span class="string">'div.'</span> + <span class="keyword">this</span>.name + <span class="string">'_errors'</span>).get(<span class="number">0</span>);
+        <span class="keyword">if</span> (error_div) {
+          $(error_div).append(<span class="keyword">this</span>.errorList);
+        } <span class="keyword">else</span> {
+          $(<span class="keyword">this</span>.el).after(<span class="keyword">this</span>.errorList);
+        }
+      }
+      <span class="keyword">this</span>.errorList.append($(<span class="string">'&lt;li&gt;'</span>).html(Handlebars.Utils.escapeExpression(message)));
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>clearErrors</h4>
+<p>Clear all error messages.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    clearErrors: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.errorList) {
+        <span class="keyword">this</span>.errorList.remove();
+        <span class="keyword">this</span>.errorList = <span class="literal">null</span>;
+      }
+    }
+  };
+
+}).call(<span class="keyword">this</span>)</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

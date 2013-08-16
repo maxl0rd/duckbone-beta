@@ -1,43 +1,42 @@
-/**
-# Duckbone.PageableView
-
-This module provides all the functionality to create a list of views representing a paginated collection,
-and navigation controls to view the different pages.
-
-It manages two child views: a list view of all the subviews, and a pager view that contains the navigation
-controls.
-
-## Usage
-
-First, create a PageableCollection to hold the model data. For example:
-
-    tickets = new Duckbone.Collection({url: '/tickets'});
-    Duckbone.include(tickets, Duckbone.PageableCollection);
-
-Next, create a class to serve as the sub-view in the list:
-
-    ticketView = Duckbone.View.extend({
-      templateData: 'Ticket number {{attr "id"}}'
-    });
-
-Finally, create a PageableView using these two elements, and load the first page of models.
-
-    pagedTickets = new Duckbone.View.extend({
-      collection: tickets,
-      viewClass: ticketView
-    });
-    pagedTickets.fetchPage(1);
-
-If you wish to create your own Pager class, then you may also set this on the view's `pagerClass`.
-See the default pager code at the end of this file and follow its example.
-
-### Updating the URL Hash
-
-Call `bindPageChangeToHashChange` on the view to create bindings that update the location bar when
-the pagination options are changed. This facility uses the pseudo query-string feature of
-Duckbone.RouteableApplication to pass the current page through the URL hash. When uses in conjunction
-with a route action that respects these params, it is easy to create bookmarkable urls to any page.
-*/
+// PageableView
+// ============
+//
+// This module provides all the functionality to create a list of views representing a paginated collection,
+// and navigation controls to view the different pages.
+//
+// It manages two child views: a list view of all the subviews, and a pager view that contains the navigation
+// controls.
+//
+// ## Usage
+//
+// First, create a PageableCollection to hold the model data. For example:
+//
+//     tickets = new Duckbone.Collection({url: '/tickets'});
+//     Duckbone.include(tickets, Duckbone.PageableCollection);
+//
+// Next, create a class to serve as the sub-view in the list:
+//
+//     ticketView = Duckbone.View.extend({
+//       templateData: 'Ticket number {{attr "id"}}'
+//     });
+//
+// Finally, create a PageableView using these two elements, and load the first page of models.
+//
+//     pagedTickets = new Duckbone.View.extend({
+//       collection: tickets,
+//       viewClass: ticketView
+//     });
+//     pagedTickets.fetchPage(1);
+//
+// If you wish to create your own Pager class, then you may also set this on the view's `pagerClass`.
+// See the default pager code at the end of this file and follow its example.
+//
+// ### Updating the URL Hash
+//
+// Call `bindPageChangeToHashChange` on the view to create bindings that update the location bar when
+// the pagination options are changed. This facility uses the pseudo query-string feature of
+// Duckbone.RouteableApplication to pass the current page through the URL hash. When uses in conjunction
+// with a route action that respects these params, it is easy to create bookmarkable urls to any page.
 
 (function() {
 

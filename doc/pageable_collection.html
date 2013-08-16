@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>PageableCollection</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>PageableCollection</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>PageableCollection enhances a Backbone Collection so that it understands its connection to a server-paginated endpoint.
+It should be used in conjunction with the Rails library found in Duckbone.PageableCollection, and either
+of the standard will_paginate or kaminari gems.</p>
+<h2>Usage</h2>
+<p>First, establish pagination in your controller action. Wrap the JSON response in the PageableCollection presenter.
+For example:</p>
+<pre><code>class TicketsController &lt; ApplicationController
+  def index
+    @tickets = Ticket.all.page params[:page]
+    render :json =&gt; Duckbone::PageableCollection.new(@tickets)
+  end
+end</code></pre>
+<p>Then create a pageable collection and use <code>fetchPage()</code> to fetch the collection. For example:</p>
+<pre><code>tickets = new Duckbone.Collection({url: &#39;/tickets&#39;});
+Duckbone.include(tickets, Duckbone.PageableCollection);
+tickets.fetchPage(1);</code></pre>
+<p>The JSON response will look something like this:</p>
+<pre><code>{ num_pages: 4, limit_value: 25,
+  current_page: 1, total_count: 99,
+  records: [ {...}, {...} ] }</code></pre>
+<p>At that point, you can then use <code>nextPage()</code>, <code>prevPage()</code>, or <code>setPage()</code> to fetch any other set of items
+into the collection. The collection will trigger both <em>pageChange</em> and <em>reset</em> events, when the records are refreshed.</p>
+<h3>Displaying the total count</h3>
+<p>The collection maintains its <code>totalCount</code> property and updates it whenever it fetches new data from the server.
+However, manually adding and removing items from the collection can cause this number to fall out of sync. Use the
+method <code>updateTotalCountOnCollectionEvents</code> to create bindings that will keep this number in sync in the event
+that it is visible in the UI.</p>
+<h3>PageableView</h3>
+<p>To create a paging UI with traditional page links and next/previous navigation, use this class in concert with
+a Duckbone.PageableView.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.PageableCollection = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isPageableCollection</h4>
+<p>Indicates the presence of this mixin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isPageableCollection: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h3>Public Methods</h3>
+<h4>function parse</h4>
+<ul>
+<li>resp - the response object</li>
+<li>xhr - the jQuery XHR object</li>
+<li>returns - an object representing the parsed data</li>
+</ul>
+<p>When PageableCollection is used in a Rails controller, it wraps the response in an object
+that contains the collection&#39;s pagination meta-data. This overridden parse method extracts
+the meta-data into the object, and passes the records on to the normal behavior.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    parse: <span class="keyword">function</span>(resp, xhr)  {
+      <span class="keyword">this</span>.numPages = resp.num_pages;
+      <span class="keyword">this</span>.limitValue = resp.limit_value;
+      <span class="keyword">this</span>.currentPage = resp.current_page;
+      <span class="keyword">this</span>.totalCount = resp.total_count;
+      <span class="keyword">return</span> resp.records;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function fetch</h4>
+<p>Delegate <code>fetch()</code> to <code>fetchPage()</code>. The normal options to fetch are discarded if passed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fetch: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.fetchPage(<span class="number">1</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>function fetchPage</h4>
+<ul>
+<li>pageNum - the page ordinal requested, begining with 1</li>
+<li>returns - the jQuery XHR object for fetch</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fetchPage: <span class="keyword">function</span>(pageNum) {
+      <span class="keyword">var</span> params = <span class="keyword">this</span>.params = <span class="keyword">this</span>.params || {};
+      params.page = pageNum || <span class="number">1</span>;
+      <span class="keyword">return</span> Backbone.Collection.prototype.fetch.call(<span class="keyword">this</span>, {
+        url: buildUrl(<span class="keyword">this</span>, params),
+        success: <span class="keyword">function</span>(c) {
+          c.trigger(<span class="string">'pageChange'</span>, c.currentPage, params);
+        }
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>function setParam</h4>
+<ul>
+<li>param - query parameter name</li>
+<li>val - query parameter value, or null to remove the param</li>
+<li>returns - nothing</li>
+</ul>
+<p>Set additional query params on the collection, ie search string.
+These will be sent to the server on fetch and show up in the url.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setParam: <span class="keyword">function</span>(param, val) {
+      <span class="keyword">this</span>.params = <span class="keyword">this</span>.params || {};
+      <span class="keyword">if</span> (_.isNull(val) || _.isUndefined(val)) {
+        <span class="keyword">delete</span> <span class="keyword">this</span>.params[param];
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.params[param] = val;
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function setPage</h4>
+<ul>
+<li>p - ordinal page number requested</li>
+<li>returns - the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+<p>Sets the collection to the given page number, and fetches those models</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setPage: <span class="keyword">function</span>(p) {
+      <span class="keyword">if</span> (p != <span class="keyword">this</span>.currentPage &amp;&amp; p &gt; <span class="number">0</span> &amp;&amp; p &lt;= <span class="keyword">this</span>.numPages) <span class="keyword">return</span> <span class="keyword">this</span>.fetchPage(p);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>function nextPage</h4>
+<ul>
+<li>returns - the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+<p>Sets the collection to the next page, and fetches those models</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    nextPage: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.fetchPage(<span class="keyword">this</span>.currentPage+<span class="number">1</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function prevPage</h4>
+<ul>
+<li>returns - the jQuery XHR object from the resulting fetch call, or null if fetch is not called</li>
+</ul>
+<p>Sets the collection to the previous page, and fetches those models</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    prevPage: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.fetchPage(<span class="keyword">this</span>.currentPage-<span class="number">1</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function updateTotalCountOnCollectionEvents</h4>
+<p>Create bindings that update the totalCount as models are added and removed from the collection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    updateTotalCountOnCollectionEvents: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.bind(<span class="string">'add'</span>, <span class="keyword">function</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.totalCount) <span class="keyword">this</span>.totalCount += <span class="number">1</span>;
+      }, <span class="keyword">this</span>);
+      <span class="keyword">this</span>.bind(<span class="string">'remove'</span>, <span class="keyword">function</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.totalCount) <span class="keyword">this</span>.totalCount -= <span class="number">1</span>;
+      }, <span class="keyword">this</span>);
+    }
+
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3>Internal Functions</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">buildUrl</span><span class="params">(context, options)</span> {</span>
+    options = options || {};
+    <span class="keyword">var</span> url = (<span class="keyword">typeof</span> context.url == <span class="string">'function'</span>) ? context.url() : context.url
+    <span class="keyword">if</span> (url.indexOf(<span class="string">'?'</span>) &lt; <span class="number">0</span>) url += <span class="string">'?'</span>;
+    <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> options) {
+      url += o+<span class="string">'='</span>+options[o]+<span class="string">'&amp;'</span>;
+    }
+    <span class="keyword">return</span> url;
+  }
+
+}).call();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

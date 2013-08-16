@@ -1,22 +1,21 @@
-/**
-# Duckbone.ValidateableField
-
-This module should be included in any form field view that provides validation
-capabilities as part of an EditableView. It provides methods to bind, run, and
-display the results of validations.
-
-EditableView considers client-side validations to a view-level responsibility and
-so the existing Backbone Model validation facilities are not used. The form and its
-fields itself are validated, rather than the model, since the same model can have
-different validation requirements in different editing contexts. So the model always
-reflects the data entered into the view, even if that input is invalid.
-
-### Usage
-
-This functionality is generally called by the FormManager itself during initialization,
-and as part of the process of validating an entire form before submission. However,
-in special cases the developer might call `validate` or `addError` on the field as needed.
-*/
+// ValidateableField
+// =================
+//
+// This module is included in any form field view that provides validation
+// capabilities as part of an EditableView. It provides methods to bind, run, and
+// display the results of validations.
+//
+// EditableView considers client-side validations to a view-level responsibility and
+// so the existing Backbone Model validation facilities are not used. The form and its
+// fields itself are validated, rather than the model, since the same model can have
+// different validation requirements in different editing contexts. So the model always
+// reflects the data entered into the view, even if that input is invalid.
+//
+// ### Usage
+//
+// This functionality is generally called by the FormManager itself during initialization,
+// and as part of the process of validating an entire form before submission. However,
+// in special cases the developer might call `validate` or `addError` on the field as needed.
 
 (function() {
 

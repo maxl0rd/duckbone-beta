@@ -1,3 +1,13 @@
+// Route
+// =====
+//
+// A route object is passed to a RouteableApplication's `mapRoutes` method,
+// defining the routeAction that is taken when a route is triggered.
+//
+// An implicit Route instance is created for views that are directly routed.
+//
+// The current route instance is always available at the global `Duckbone.route`.
+
 (function() {
 
   Duckbone.Route = function(options) {

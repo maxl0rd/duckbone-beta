@@ -1,160 +1,154 @@
-/**
+// AssociableModel
+// ===============
+//
+// Backbone deliberately provides the flexibility for the developer to manage associated models and
+// collections in any way that makes sense for the application. This flexibility is the
+// cause of much confusion among beginning developers, and so Duckbone provides this
+// straightforward framework for managing Rails-like associations.
+//
+// The simple philosphy behind AssociableModel is that nested objects within JSON data
+// (or model attributes) are transformed into fully fledged Backbone Models or Collections.
+// These exists as properties on the original model, in an analagous way to
+// `has_one` and `has_many` relationships in Rails.
+//
+// In addition, further changes to those nested attributes result in changes to the associations.
+// But this relationship is a one way street. Once the attribute data is used to create associated
+// models, it is removed from the attributes. So changes to associated models are never reflected
+// in the attributes of the original model.
+//
+// There is a clear logic behind this approach:
+//
+// - It is almost always more efficient to serve serialized associations together
+//   in a single large JSON response.
+// - Saving back to the server is best done one model at a time. Other strategies involving
+//   `accepts_nested_attributes_for` or other ad hoc solutions are inefficient and painful.
+// - The Duckbone templating system does not require associations to be serialized again
+//   into a monolithic object, as many other templating engines do. Handlebars simply walks
+//   the path from one model to another as desired.
+// - Packing models with associations back into monolithic objects is highly prone to problematic
+//   circular references, and so this is simply avoided.
+//
+// ## Usage
+//
+// AssociableModel can be mixed into all models and collections that require it,
+// or extend Backbone.Model and Backbone.Collection themselves if desired.
+//
+// The `hasOne` and `hasMany` methods take objects from the model's attributes and
+// move them into a newly created model. This associated model becomes a property on the original
+// model object, and its name is transformed from rails_underscores to camelCase.
+//
+// In almost all cases, these functions will be called from the model's initialize method.
+//
+// ### Syntax
+//
+// Several associations can be created in each call to hasOne or hasMany. A single object is passed.
+// Each key in the object defines the association name.
+//
+// In a call to `hasOne`, the `model` key indicates the class of the associated model.
+// In a call to `hasMany`, the `collection` key indicates the class of the associated collection.
+//
+// If a reciprocal link is desired on the association, then the `belongsTo` key is set to the name
+// of the reciprocal association link.
+//
+// For example:
+//
+//     var BlogPost = Backbone.Model.extend({
+//       initialize: function() {
+//         this.hasOne({
+//           author: { model: Author },
+//           main_photo: { model: Photo, belongsTo: 'post' },
+//         });
+//         this.hasMany({
+//           comments: {
+//             collection: CommentsCollection,
+//             belongsTo: 'post' }
+//         });
+//       }
+//     });
+//
+// In use:
+//
+//     var myPost = new BlogPost({
+//       headline: "An Evolutionary Basis for Procrastination",
+//       author: {
+//         name: "Phillip P. Perkins, MD"
+//       },
+//       main_photo: {
+//         url: "http://www.example.com/sdkjh3987.jpg"
+//       },
+//       comments: [
+//         { user: "username1", body: "Great article!" },
+//         { user: "username1", body: "Waste of time!" }
+//       ]
+//     });
+//
+//     myPost.get('headline') => "Scientists..."
+//     myPost.mainPhoto.get('url') => "http://..."
+//     myPost.mainPhoto.post === myPost => true
+//     myPost.author.get('name') => "Phillip..."
+//     myPost.comments.first().get('user') => "username1"
+//     myPost.comments.first().post === myPost => true
+//     etc.
+//
+// ### Has One Behavior
+//
+// When a hasOne association is initially created, the following occurs:
+//
+// - The created association name is the attribute key transformed into camelCase.
+// - If there is no data for the association, then a new model is not created, and the association
+//   is set to null.
+// - If there is association data in the attribute, then a new Backbone Model is created with that data.
+// - The original association attribute data is deleted.
+// - A setter function is created on the model, named "set[association name]", which should be used
+//   for subsequent reassignments.
+//
+// When the attribute used to create the association is set again, then the association setter is called instead.
+//
+// When the setter function is called, the following occurs:
+//
+// - If a Backbone.Model is passed to the setter, then it replaces the association. Appropriate _add_ and
+//   _remove_ events are generated. For example, if `setAuthor` is called, then an _add:author_ event will be triggered.
+// - If an attributes object is passed to the setter, then those attributes are set on the association instead.
+//   If this results in a model change, then a _change_ event will be triggered, ie _change:author_.
+// - If the setter is called without arguments, then the association is removed, a _remove_ event triggered,
+//   and the property set to null.
+//
+// If a belongsTo relationship is specified:
+//
+// - The association _must_ also define a hasOne relationship if a belongsTo link is desired.
+// - A reciprocal link is created on the association back to the original model
+//
+// ### Has Many Behavior
+//
+// When a hasMany association is initially created:
+//
+// - The created association name is the attribute key transformed into camelCase.
+// - A new collection is created of the desired class.
+// - If there is association data in the attribute, then a set of new models will be added to the collection.
+//
+// When the original attribute is set again (ie from a call to `model.fetch()`), then the following occurs:
+//
+// - If the associated collection is a standard Backbone.Collection, then `reset()` is called with the new data.
+// - If the associated collection has Duckbone.CollectionHelpers included, then `freshen()` will be called instead.
+//   This method results in the same final state of the collection, except that a number of _add_,
+//   _change_, and _remove_ events are triggered instead of _reset_. Previously existing models are simply
+//   updated, instead of being blown away by `reset()`.
+//
+// If a belongsTo relationship is specified:
+//
+// - The association _must_ also define a hasOne relationship if a belongsTo link is desired.
+// - A reciprocal link is created on the associated collection back to the original model.
+// - A reciprocal link is also created on each model in the associated collection back to the original model.
+//
+// ### Special Cases
+//
+// If the desired association should have a different name from that naturally occuring in the JSON,
+// then the model's `parse` method can be overridden to move that attribute.
+//
+// In the event that the developer absolutely must package associations back together as JSON to save
+// to the server, then the model's `toJSON` method can be overridden to add the association back
+// into the JSON.
 
-This file contains two model mixins, Duckbone.AssociableModel, and Duckbone.ModelHelpers.
-Typically both will be mixed into an application's base model class. Adding them directly
-to Backbone.Model will also work, but is perhaps less tidy.
-
-# Duckbone.AssociableModel
-
-Backbone deliberately provides the flexibility for the developer to manage associated models and
-collections in any way that makes sense for the application. This flexibility is the
-cause of much confusion among beginning developers, and so Duckbone provides this
-straightforward framework for managing Rails-like associations.
-
-The simple philosphy behind AssociableModel is that nested objects within JSON data
-(or model attributes) are transformed into fully fledged Backbone Models or Collections.
-These exists as properties on the original model, in an analagous way to
-`has_one` and `has_many` relationships in Rails.
-
-In addition, further changes to those nested attributes result in changes to the associations.
-But this relationship is a one way street. Once the attribute data is used to create associated
-models, it is removed from the attributes. So changes to associated models are never reflected
-in the attributes of the original model.
-
-There is a clear logic behind this approach:
-
-- It is almost always more efficient to serve serialized associations together
-  in a single large JSON response.
-- Saving back to the server is best done one model at a time. Other strategies involving
-  `accepts_nested_attributes_for` or other ad hoc solutions are inefficient and painful.
-- The Duckbone templating system does not require associations to be serialized again
-  into a monolithic object, as many other templating engines do. Handlebars simply walks
-  the path from one model to another as desired.
-- Packing models with associations back into monolithic objects is highly prone to problematic
-  circular references, and so this is simply avoided.
-
-## Usage
-
-AssociableModel can be mixed into all models and collections that require it,
-or extend Backbone.Model and Backbone.Collection themselves if desired.
-
-The `hasOne` and `hasMany` methods take objects from the model's attributes and
-move them into a newly created model. This associated model becomes a property on the original
-model object, and its name is transformed from rails_underscores to camelCase.
-
-In almost all cases, these functions will be called from the model's initialize method.
-
-### Syntax
-
-Several associations can be created in each call to hasOne or hasMany. A single object is passed.
-Each key in the object defines the association name.
-
-In a call to `hasOne`, the `model` key indicates the class of the associated model.
-In a call to `hasMany`, the `collection` key indicates the class of the associated collection.
-
-If a reciprocal link is desired on the association, then the `belongsTo` key is set to the name
-of the reciprocal association link.
-
-For example:
-
-    var BlogPost = Backbone.Model.extend({
-      initialize: function() {
-        this.hasOne({
-          author: { model: Author },
-          main_photo: { model: Photo, belongsTo: 'post' },
-        });
-        this.hasMany({
-          comments: {
-            collection: CommentsCollection,
-            belongsTo: 'post' }
-        });
-      }
-    });
-
-In use:
-
-    var myPost = new BlogPost({
-      headline: "An Evolutionary Basis for Procrastination",
-      author: {
-        name: "Phillip P. Perkins, MD"
-      },
-      main_photo: {
-        url: "http://www.example.com/sdkjh3987.jpg"
-      },
-      comments: [
-        { user: "username1", body: "Great article!" },
-        { user: "username1", body: "Waste of time!" }
-      ]
-    });
-
-    myPost.get('headline') => "Scientists..."
-    myPost.mainPhoto.get('url') => "http://..."
-    myPost.mainPhoto.post === myPost => true
-    myPost.author.get('name') => "Phillip..."
-    myPost.comments.first().get('user') => "username1"
-    myPost.comments.first().post === myPost => true
-    etc.
-
-### Has One Behavior
-
-When a hasOne association is initially created, the following occurs:
-
-- The created association name is the attribute key transformed into camelCase.
-- If there is no data for the association, then a new model is not created, and the association
-  is set to null.
-- If there is association data in the attribute, then a new Backbone Model is created with that data.
-- The original association attribute data is deleted.
-- A setter function is created on the model, named "set[association name]", which should be used
-  for subsequent reassignments.
-
-When the attribute used to create the association is set again, then the association setter is called instead.
-
-When the setter function is called, the following occurs:
-
-- If a Backbone.Model is passed to the setter, then it replaces the association. Appropriate _add_ and
-  _remove_ events are generated. For example, if `setAuthor` is called, then an _add:author_ event will be triggered.
-- If an attributes object is passed to the setter, then those attributes are set on the association instead.
-  If this results in a model change, then a _change_ event will be triggered, ie _change:author_.
-- If the setter is called without arguments, then the association is removed, a _remove_ event triggered,
-  and the property set to null.
-
-If a belongsTo relationship is specified:
-
-- The association _must_ also define a hasOne relationship if a belongsTo link is desired.
-- A reciprocal link is created on the association back to the original model
-
-### Has Many Behavior
-
-When a hasMany association is initially created:
-
-- The created association name is the attribute key transformed into camelCase.
-- A new collection is created of the desired class.
-- If there is association data in the attribute, then a set of new models will be added to the collection.
-
-When the original attribute is set again (ie from a call to `model.fetch()`), then the following occurs:
-
-- If the associated collection is a standard Backbone.Collection, then `reset()` is called with the new data.
-- If the associated collection has Duckbone.CollectionHelpers included, then `freshen()` will be called instead.
-  This method results in the same final state of the collection, except that a number of _add_,
-  _change_, and _remove_ events are triggered instead of _reset_. Previously existing models are simply
-  updated, instead of being blown away by `reset()`.
-
-If a belongsTo relationship is specified:
-
-- The association _must_ also define a hasOne relationship if a belongsTo link is desired.
-- A reciprocal link is created on the associated collection back to the original model.
-- A reciprocal link is also created on each model in the associated collection back to the original model.
-
-### Special Cases
-
-If the desired association should have a different name from that naturally occuring in the JSON,
-then the model's `parse` method can be overridden to move that attribute.
-
-In the event that the developer absolutely must package associations back together as JSON to save
-to the server, then the model's `toJSON` method can be overridden to add the association back
-into the JSON.
-
-*/
 
 (function(){
 
@@ -219,12 +213,11 @@ into the JSON.
     }
   };
 
-  /**
-  # Duckbone.ModelHelpers
-
-  This set of helpers provides conveniences for many common situations not already
-  covered by Backbone.Model.
-  */
+// ModelHelpers
+// ============
+//
+// This set of helpers provides conveniences for many common situations not already
+// covered by Backbone.Model.
 
   Duckbone.ModelHelpers = {
 

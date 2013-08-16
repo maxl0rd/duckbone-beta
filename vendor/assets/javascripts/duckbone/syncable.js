@@ -1,102 +1,101 @@
-/**
-# Duckbone.Syncable
-
-Duckbone's sync method takes the same method signature as Backbone.sync.
-It is directly pluggable into any Model or Collection.
-Its default behavior is the same as that described in the Backbone documentation at
-<http://documentcloud.github.com/backbone/#Sync>.
-
-## Usage
-
-Mix Syncable into any Model or Collection. It will call Syncable.sync
-instead of Backbone.sync for all fetch, save, destroy, etc. methods.
-
-### Create Syncable Compatible Controllers
-
-Duckbone.sync provides additional functionality that is necessary to
-properly couple a client-side application to a set of JSON-centric Rails controllers.
-To implement this pattern, craft the application's controllers as follows.
-
-- Call `respond_to :json` in the controller, and avoid mixing html and json responses in one controller.
-- Respond to GET/index actions with an array of JSONified models.
-- Respond to GET/show actions with a single JSON object.
-  Set the Backbone.Model's `paramRoot` if you prefer to use a JSON root attribute.
-- Respond to successful POST/create and PUT/update actions with the single JSONified model.
-- Respond to invalid POST/create and PUT/update actions with a 422 (Unprocessable Entity)
-  in the header and the model's errors JSONified in the body.
-- Respond to valid DELETE/destroy actions with status 202 (No Content)
-- Respond to invalid DELETE/destroy actions with status 422 (Unprocessable Entity)
-- Respond to all "not found" errors with status 404
-- There is no need to write new or edit actions
-
-For example:
-
-    def update
-      @goal = goals.find(params[:id])
-      if @goal.update_attributes(params[:goal])
-        render :json => @goal
-      else
-        render :json => {:errors => @goal.errors},
-          :status => :unprocessable_entity
-      end
-    end
-
-
-### CSRF Codes
-
-Syncable will automatically insert the page's CSRF code into every ajax request.
-Be sure that they are present in the page head metadata.
-
-### Server Errors
-
-Syncable will trigger the following events on the top level Duckbone object
-whenever server errors happen during sync.
-This enables disparate parts of the application to respond to potentially fatal errors.
-Any response status greater than or equal to 400 will trigger an error event.
-These include:
-
-- 'sync:400' - triggered on 400 error
-- 'sync:404' - triggered on 404 not found
-- 'sync:500' - triggered on 500 server error
-
-### Ajax Request Events
-
-While Backbone supports jQuery's well known `success` and `error` callbacks,
-by themselves these are frequently inadequate for the range of functionality
-that must respond to model sync behavior. Syncable uses jQuery promises on
-ajax calls to bind all additional behavior. This technique is usually preferred
-over the use of the success and error callbacks. Other Duckbone mixins,
-notably EditableView, rely heavily on model sync events to bind complex behavior.
-The following events are available on all Syncable models and collections:
-
-- 'sync:create' - triggered at the start of a create request
-- 'sync:read' - triggered at the start of a read request
-- 'sync:update' - triggered at the start of an update request
-- 'sync:destroy' - triggered at the start of a destroy request
-- 'sync:complete' - triggered at the completion of any request
-- 'sync:invalid' - triggered when a request returns invalid (422)
-- 'sync:error' - triggered when a request returns an error (ie 404, 500)
-
-### URLs and Customizing Calls
-
-The URL that will be called follows the following order of precedence:
-
-1. The url passed to sync() in the options object
-2. The url property or function on the model
-3. A url derived from the urlRoot property on the model
-4. A url derived from the url of the collection including the model
-
-Note that Duckbone.ModelHelpers improves Backbone.Model's implementation of
-urlRoot so that it can also be specified as a function that returns the url root.
-
-### A Note on Security
-
-Many client-side security issues can result from Rails' default behavior
-in which JSON serialization of models is completely unconstrained.
-Take care to only include information in JSON data that the current user
-should have access to. Consider overriding ActiveRecord::Base's as_json()
-so that it will either blow up or emit nothing without explicit work by the developer.
-*/
+// Syncable
+// ========
+//
+// Duckbone's sync method takes the same method signature as Backbone.sync.
+// It is directly pluggable into any Model or Collection.
+// Its default behavior is the same as that described in the Backbone documentation at
+// <http://documentcloud.github.com/backbone/#Sync>.
+//
+// ## Usage
+//
+// Mix Syncable into any Model or Collection. It will call Syncable.sync
+// instead of Backbone.sync for all fetch, save, destroy, etc. methods.
+//
+// ### Create Syncable Compatible Controllers
+//
+// Duckbone.sync provides additional functionality that is necessary to
+// properly couple a client-side application to a set of JSON-centric Rails controllers.
+// To implement this pattern, craft the application's controllers as follows.
+//
+// - Call `respond_to :json` in the controller, and avoid mixing html and json responses in one controller.
+// - Respond to GET/index actions with an array of JSONified models.
+// - Respond to GET/show actions with a single JSON object.
+//   Set the Backbone.Model's `paramRoot` if you prefer to use a JSON root attribute.
+// - Respond to successful POST/create and PUT/update actions with the single JSONified model.
+// - Respond to invalid POST/create and PUT/update actions with a 422 (Unprocessable Entity)
+//   in the header and the model's errors JSONified in the body.
+// - Respond to valid DELETE/destroy actions with status 202 (No Content)
+// - Respond to invalid DELETE/destroy actions with status 422 (Unprocessable Entity)
+// - Respond to all "not found" errors with status 404
+// - There is no need to write new or edit actions
+//
+// For example:
+//
+//     def update
+//       @goal = goals.find(params[:id])
+//       if @goal.update_attributes(params[:goal])
+//         render :json => @goal
+//       else
+//         render :json => {:errors => @goal.errors},
+//           :status => :unprocessable_entity
+//       end
+//     end
+//
+//
+// ### CSRF Codes
+//
+// Syncable will automatically insert the page's CSRF code into every ajax request.
+// Be sure that they are present in the page head metadata.
+//
+// ### Server Errors
+//
+// Syncable will trigger the following events on the top level Duckbone object
+// whenever server errors happen during sync.
+// This enables disparate parts of the application to respond to potentially fatal errors.
+// Any response status greater than or equal to 400 will trigger an error event.
+// These include:
+//
+// - 'sync:400' - triggered on 400 error
+// - 'sync:404' - triggered on 404 not found
+// - 'sync:500' - triggered on 500 server error
+//
+// ### Ajax Request Events
+//
+// While Backbone supports jQuery's well known `success` and `error` callbacks,
+// by themselves these are frequently inadequate for the range of functionality
+// that must respond to model sync behavior. Syncable uses jQuery promises on
+// ajax calls to bind all additional behavior. This technique is usually preferred
+// over the use of the success and error callbacks. Other Duckbone mixins,
+// notably EditableView, rely heavily on model sync events to bind complex behavior.
+// The following events are available on all Syncable models and collections:
+//
+// - 'sync:create' - triggered at the start of a create request
+// - 'sync:read' - triggered at the start of a read request
+// - 'sync:update' - triggered at the start of an update request
+// - 'sync:destroy' - triggered at the start of a destroy request
+// - 'sync:complete' - triggered at the completion of any request
+// - 'sync:invalid' - triggered when a request returns invalid (422)
+// - 'sync:error' - triggered when a request returns an error (ie 404, 500)
+//
+// ### URLs and Customizing Calls
+//
+// The URL that will be called follows the following order of precedence:
+//
+// 1. The url passed to sync() in the options object
+// 2. The url property or function on the model
+// 3. A url derived from the urlRoot property on the model
+// 4. A url derived from the url of the collection including the model
+//
+// Note that Duckbone.ModelHelpers improves Backbone.Model's implementation of
+// urlRoot so that it can also be specified as a function that returns the url root.
+//
+// ### A Note on Security
+//
+// Many client-side security issues can result from Rails' default behavior
+// in which JSON serialization of models is completely unconstrained.
+// Take care to only include information in JSON data that the current user
+// should have access to. Consider overriding ActiveRecord::Base's as_json()
+// so that it will either blow up or emit nothing without explicit work by the developer.
 
 (function() {
 

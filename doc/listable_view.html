@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ListableView</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>ListableView</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>ListableView provides all of the functionality necessary to create a &quot;container&quot; view that
+cleanly manages a collection of identical sub-views.</p>
+<h2>Usage</h2>
+<p>Instantiate the view with a <code>collection</code> property of models, and a <code>viewClass</code>. The ListableView manages an
+instance of <code>viewClass</code> for each model in its collection. It is also easy to lazy load models, as the ListableView
+can be created at any time, and child views will only be created when models are loaded into the collection.</p>
+<p>The <code>viewClass</code> property can be defined as an actual class contructor, or as a string i.e. &quot;mycompany.views.MyView&quot;, which is lazily evaluated. The latter strategy can ameliorate script load order issues.</p>
+<p>The view&#39;s tag is a <code>&lt;ul&gt;</code> by default, but this may be changed by setting the view&#39;s <code>tagName</code> property as usual.
+Typically the tag for the <code>viewClass</code> will be set to <code>&lt;li&gt;</code>.</p>
+<p>There is a base class that mixes in ListableView, called <code>Duckbone.ListView</code>.</p>
+<p>Example:</p>
+<pre><code>TicketView = Duckbone.View.extend({
+  tagName: &#39;li&#39;,
+  templateData: &#39;&lt;div&gt;Ticket {{id}}&lt;/div&gt;&#39;
+});
+TicketsListView = Duckbone.ListView.extend({
+  viewClass: TicketView
+});
+
+ticketsView = new TicketsListView({
+  collection: new Duckbone.Collection()
+});
+ticketsView.collection.fetch();</code></pre>
+<h3>Collection Events</h3>
+<p>The view responds to the following events:</p>
+<ul>
+<li>Responds to collection <em>reset</em> by completely re-rendering itself</li>
+<li>Responds to collection <em>add</em> by inserting the new view into the list, respecting the collection&#39;s sort order</li>
+<li>Responds to collection <em>remove</em> by removing the corresponding view</li>
+</ul>
+<p>This functionality can be overridden by redefining the <code>collectionEvents</code> property. String method names, or
+callback functions may be provided for any event that can be issued by the collection. Note that defining
+<code>collectionEvents</code> will override <em>all</em> default behavior, not individually per event.</p>
+<p>For example:</p>
+<pre><code>TicketsListView = Duckbone.ListView.extend({
+  viewClass: TicketView,
+  collectionEvents: {
+    &#39;reset&#39;: &#39;myResetHandler&#39;,
+    &#39;add&#39;: &#39;myFancyAddHandler&#39;,
+    &#39;remove&#39;: function() { ... },
+    &#39;myCustomEvent&#39;: function() { ... }
+  }
+  myResetHandler: function() { ... }
+  // ... etc ...
+});</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.ListableView = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isListableView</h4>
+<p>Indicates the presence of this mixin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isListableView: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function included</h4>
+<p>Also include ViewLifecycleExtensions, BindableView, and NestableView</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    included: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.hasViewLifecycleExtensions) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.ViewLifecycleExtensions);
+      }
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isBindableView) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.BindableView);
+      }
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isNestableView) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.NestableView);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>property tagName</h4>
+<p>Tells Backbone to create a <code>&lt;ul&gt;</code> list element. Can be overridden.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    tagName: <span class="string">'ul'</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>property className</h4>
+<p>Tells Backbone to use this class name. Can be overriden.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    className: <span class="string">'listable_view'</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h3>Public Methods</h3>
+<h4>function render</h4>
+<ul>
+<li>force - forces a re-render even if the view is already rendered</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    render: <span class="keyword">function</span>(force) {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>._viewsRendered || force) {
+        renderItems.call(<span class="keyword">this</span>);
+        <span class="keyword">if</span> (!<span class="keyword">this</span>._collectionEventsBound) {
+          <span class="keyword">this</span>.bindCollectionEvents();
+          <span class="keyword">this</span>._collectionEventsBound = <span class="literal">true</span>;
+        }
+        <span class="keyword">this</span>._viewsRendered = <span class="literal">true</span>;
+      }
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+
+    createChildren: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.resolveViewClass();
+      <span class="keyword">this</span>.emptyView = <span class="keyword">this</span>.createEmptyView();
+      <span class="keyword">this</span>.loadingView = <span class="keyword">this</span>.createLoadingView();
+      <span class="keyword">return</span> _.reduce(<span class="keyword">this</span>.collection.models, <span class="keyword">function</span>(views, model) {
+        views[model.cid] = <span class="keyword">new</span> <span class="keyword">this</span>.viewClass({model: model});
+        <span class="keyword">return</span> views;
+      }, {}, <span class="keyword">this</span>);
+    },
+
+    resolveViewClass: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.viewClass == <span class="string">"string"</span>) {
+        <span class="keyword">this</span>.viewClass = Duckbone.helpers.stringToGlobal(<span class="keyword">this</span>.viewClass);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function bindCollectionEvents</h4>
+<ul>
+<li>eventHandlers - an object containing handlers, or default behavior otherwise</li>
+</ul>
+<p>Binds behaviors to collection events. Callbacks are always called in the context of the ListableView</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindCollectionEvents: <span class="keyword">function</span>(eventHandlers) {
+      <span class="keyword">var</span> handler;
+      ensureCollection(<span class="keyword">this</span>);
+      eventHandlers = eventHandlers || <span class="keyword">this</span>.collectionEvents || collectionEventHandlers;
+      <span class="keyword">for</span> (<span class="keyword">var</span> event <span class="keyword">in</span> eventHandlers) {
+        handler = eventHandlers[event];
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> handler == <span class="string">'string'</span>) handler = <span class="keyword">this</span>[handler];
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> handler != <span class="string">'function'</span>) {
+          <span class="keyword">throw</span> (<span class="string">'Duckbone.ListableView.bindCollectionEvents() called with bad handler for '</span> + event )
+        }
+        <span class="keyword">this</span>.weakBindTo(<span class="keyword">this</span>.collection, event, handler, <span class="keyword">this</span>);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>function getViewByModel</h4>
+<ul>
+<li>model - a model instance in the view&#39;s collection</li>
+<li>returns - the view corresponding to the given model instance</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getViewByModel: <span class="keyword">function</span>(model) {
+      <span class="keyword">return</span> <span class="keyword">this</span>.children[model.cid];
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function createEmptyView</h4>
+<p>Creates the view that is shown when the collection is empty.
+Ignored unless <code>emptyTemplate</code> is set to a string of template data or a template function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createEmptyView: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> options = {tagName: <span class="string">'li'</span>, className: <span class="string">'listable_view_empty'</span>};
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.emptyTemplate == <span class="string">'undefined'</span>) {
+        <span class="keyword">return</span> <span class="literal">null</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.emptyTemplate == <span class="string">'string'</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> Duckbone.View(_.extend(options, {templateData: <span class="keyword">this</span>.emptyTemplate}));
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.emptyTemplate == <span class="string">'function'</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> Duckbone.View(_.extend(options, {template: <span class="keyword">this</span>.emptyTemplate}));
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function createLoadingView</h4>
+<p>Creates the view that is shown when the collection is loading.
+Ignored unless <code>loadingTemplate</code> is set to a string of template data or a template function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createLoadingView: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> options = {tagName: <span class="string">'li'</span>, className: <span class="string">'listable_view_loading'</span>};
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.loadingTemplate == <span class="string">'undefined'</span>) {
+        <span class="keyword">return</span> <span class="literal">null</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.loadingTemplate == <span class="string">'string'</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> Duckbone.View(_.extend(options, {templateData: <span class="keyword">this</span>.loadingTemplate}));
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.loadingTemplate == <span class="string">'function'</span>) {
+        <span class="keyword">return</span> <span class="keyword">new</span> Duckbone.View(_.extend(options, {template: <span class="keyword">this</span>.loadingTemplate}));
+      }
+    }
+
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3>Internal</h3>
+<p>Renders each individual view</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">renderItems</span><span class="params">()</span> {</span>
+    ensureViewClass(<span class="keyword">this</span>);
+    ensureCollection(<span class="keyword">this</span>);
+    <span class="keyword">this</span>.setupNestedViews(); <span class="comment">// Create all of the children views</span>
+
+    <span class="keyword">var</span> fragment = document.createDocumentFragment();
+    _.each(<span class="keyword">this</span>.children, <span class="keyword">function</span>(view) {
+      fragment.appendChild(view.el); <span class="comment">// add their el's to a fragment first</span>
+    });
+    <span class="keyword">this</span>.el.appendChild(fragment); <span class="comment">// Then add the fragment to the DOM</span>
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Bind default handlers to these collection events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> collectionEventHandlers = {
+    <span class="string">'reset'</span>: collectionReset,
+    <span class="string">'add'</span>: collectionAdd,
+    <span class="string">'remove'</span>: collectionRemove,
+    <span class="string">'sync:read'</span>: collectionSyncRead,
+    <span class="string">'sync:complete'</span>: collectionSyncComplete
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Default handler for when the collection is reset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">collectionReset</span><span class="params">()</span> {</span>
+    <span class="keyword">this</span>.removeNestedViews();
+    <span class="keyword">this</span>.render(<span class="literal">true</span>);
+    <span class="keyword">if</span> (<span class="keyword">this</span>.emptyView &amp;&amp; <span class="keyword">this</span>.collection.length == <span class="number">0</span>) {
+      <span class="keyword">this</span>.emptyView.render();
+      $(<span class="keyword">this</span>.el).append(<span class="keyword">this</span>.emptyView.el);
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Default handler for when a model is added to the collection
+The new view is inserted in the correct sort order</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">collectionAdd</span><span class="params">(model)</span> {</span>
+    <span class="keyword">var</span> view = <span class="keyword">new</span> <span class="keyword">this</span>.viewClass({model: model});
+    <span class="keyword">this</span>.children[model.cid] = view;
+    <span class="keyword">var</span> position = _(<span class="keyword">this</span>.collection.models).indexOf(model);
+    <span class="keyword">if</span> (position == <span class="number">0</span>) {
+      $(<span class="keyword">this</span>.el).prepend(view.el);
+    } <span class="keyword">else</span> {
+      <span class="keyword">var</span> previousElement = $(<span class="keyword">this</span>.el).children().eq(position-<span class="number">1</span>);
+      $(previousElement).after(view.el);
+    }
+    <span class="keyword">if</span> (<span class="keyword">this</span>.emptyView) $(<span class="keyword">this</span>.el).find(<span class="string">'.listable_view_empty'</span>).remove();
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Default handler for when a model is removed from the collection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">collectionRemove</span><span class="params">(model)</span> {</span>
+    <span class="keyword">this</span>.children[model.cid].remove();
+    <span class="keyword">delete</span> <span class="keyword">this</span>.children[model.cid];
+    <span class="keyword">if</span> (<span class="keyword">this</span>.emptyView &amp;&amp; <span class="keyword">this</span>.collection.length == <span class="number">0</span>) {
+      <span class="keyword">this</span>.emptyView.render();
+      $(<span class="keyword">this</span>.el).append(<span class="keyword">this</span>.emptyView.el);
+    }
+  }
+
+  <span class="function"><span class="keyword">function</span> <span class="title">collectionSyncRead</span><span class="params">()</span> {</span>
+    <span class="keyword">if</span> (<span class="keyword">this</span>.loadingView) {
+      <span class="keyword">this</span>.loadingView.render();
+      $(<span class="keyword">this</span>.el).append(<span class="keyword">this</span>.loadingView.el);
+    }
+  }
+
+  <span class="function"><span class="keyword">function</span> <span class="title">collectionSyncComplete</span><span class="params">()</span> {</span>
+    <span class="keyword">if</span> (<span class="keyword">this</span>.loadingView) $(<span class="keyword">this</span>.el).find(<span class="string">'.listable_view_loading'</span>).remove();
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Ensure that the view has obtained its view and collection objects
+Check in its &quot;options&quot; property first, then in the object itself,
+and then default to a new object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">ensureViewClass</span><span class="params">(context)</span> {</span>
+    context.viewClass = context.options.viewClass || context.viewClass || <span class="keyword">new</span> Backbone.View();
+  };
+
+  <span class="function"><span class="keyword">function</span> <span class="title">ensureCollection</span><span class="params">(context)</span> {</span>
+    context.collection = context.options.collection || context.collection || <span class="keyword">new</span> Backbone.Collection();
+  };
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

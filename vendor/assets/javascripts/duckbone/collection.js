@@ -1,18 +1,17 @@
-/**
-# Duckbone.CollectionHelpers
+// CollectionHelpers
+// =================
+//
+// Provides miscellaneous additions to Backbone.Collection that are
+// useful in Duckbone.
+//
+// ## Usage
+//
+// Mix Duckbone.CollectionHelpers into `Backbone.Collection.prototype` or
+// extend Backbone.Collection into your own base collection class. For example:
+//
+//     var myapp.Collection = Backbone.Collection.extend();
+//     Duckbone.include(myapp.Collection, Duckbone.CollectionHelpers);
 
-Provides miscellaneous additions to Backbone.Collection that are
-useful in Duckbone.
-
-## Usage
-
-Mix Duckbone.CollectionHelpers into `Backbone.Collection.prototype` or
-extend Backbone.Collection into your own base collection class. For example:
-
-    var myapp.Collection = Backbone.Collection.extend();
-    Duckbone.include(myapp.Collection, Duckbone.CollectionHelpers);
-
-*/
 
 (function() {
 

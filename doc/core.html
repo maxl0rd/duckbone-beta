@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Core</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>Core</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This file is loaded first and just establishes some namespaces and useful helpers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Establish top level namespaces</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  window.Duckbone = window.Duckbone || {};
+  Duckbone.helpers = Duckbone.helpers || {};
+  Duckbone.forms = Duckbone.forms || {};
+  Duckbone.TemplatesData = Duckbone.TemplatesData || {};
+  Duckbone.PartialsData = Duckbone.PartialsData || {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Establish Rails environment.
+Default to &#39;production&#39; if &#39;environment.js&#39; has not been loaded</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.Rails = Duckbone.Rails || {};
+  Duckbone.Rails.environment = Duckbone.Rails.environment || <span class="string">'production'</span>;
+  _.extend(Duckbone.Rails, {
+    isDevelopment: <span class="keyword">function</span>() { <span class="keyword">return</span> (<span class="keyword">this</span>.environment == <span class="string">'development'</span>) },
+    isTest: <span class="keyword">function</span>()        { <span class="keyword">return</span> (<span class="keyword">this</span>.environment == <span class="string">'test'</span>)        },
+    isProduction: <span class="keyword">function</span>()  { <span class="keyword">return</span> (<span class="keyword">this</span>.environment == <span class="string">'production'</span>)  }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>The top level Duckbone object dispatches some events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _.extend(Duckbone, Backbone.Events);
+
+  _.extend(Duckbone, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>function serverError</h4>
+<ul>
+<li>message - error message text</li>
+<li>returns - nothing</li>
+</ul>
+<p>Defines default behavior for 500 errors. Log error in development mode.
+Redirect to 500 page in production.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    serverError: <span class="keyword">function</span>(message) {
+      _.log(<span class="string">"500 Server Error"</span>);
+      <span class="keyword">if</span> (message) _.log(message);
+      <span class="keyword">if</span> (Duckbone.Rails.isProduction()) {
+        window.location = <span class="string">"/500.html"</span>
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>function serverError</h4>
+<ul>
+<li>message - error message text</li>
+<li>returns - nothing</li>
+</ul>
+<p>Default behavior for 404 errors.
+Log error in development mode.
+Redirect to 404 page in production.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fileNotFound: <span class="keyword">function</span>(message) {
+      _.log(<span class="string">"404 File Not Found"</span>);
+      <span class="keyword">if</span> (message) _.log(message);
+      <span class="keyword">if</span> (Duckbone.Rails.isProduction()) {
+        window.location = <span class="string">"/404.html"</span>
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function register</h4>
+<ul>
+<li>f - a function to register</li>
+<li>single - a boolean determining whether it should be single use, defaults to false</li>
+<li>returns - the string name of the registered function</li>
+</ul>
+<p>This util is used to simplify communication with a Flash ExternalInterface.
+JavaScript callback functions can only be passed as string names,
+and not as function references. This makes some things really hard,
+and prohibits the use of anonymous functions.
+This method wraps up a function and returns its string reference.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    register: <span class="keyword">function</span>(f, single) {
+      single = single || <span class="literal">false</span>;
+      <span class="keyword">var</span> funcName = _.uniqueId(<span class="string">'regfunc'</span>);
+      <span class="keyword">if</span> (_.isUndefined(Duckbone.registeredFunctions)) {
+        Duckbone.registeredFunctions = {};
+      }
+      <span class="keyword">if</span> (single) {
+        f = _.wrap(f, <span class="keyword">function</span>(func) {
+          func(arguments);
+          <span class="keyword">delete</span> Duckbone.registeredFunctions[funcName]
+        });
+      }
+      Duckbone.registeredFunctions[funcName] = f;
+      <span class="keyword">return</span> <span class="string">"Duckbone.registeredFunctions."</span> + funcName
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>function wrapMethods</h4>
+<ul>
+<li>object - the object to wrap methods on, ie a view</li>
+<li>wrapper - the wrapper function</li>
+<li>the rest of the args can be strings of method names,
+or a single array of the method name strings</li>
+<li>returns - nothing</li>
+</ul>
+<p>Wraps all of the given object methods in another function wrapper.
+In the wrapper, &quot;this&quot; is defined as the original object.
+For example, it&#39;s useful for wrapping all of a
+Backbone view&#39;s event callbacks in a common wrapper.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    wrapMethods: <span class="keyword">function</span>(object, wrapper) {
+      <span class="keyword">var</span> methods = Array.prototype.slice.call(arguments, <span class="number">2</span>);
+      <span class="keyword">if</span> (_.isArray(methods[<span class="number">0</span>])) {
+        methods = methods[<span class="number">0</span>];
+      }
+      _.each(methods, <span class="keyword">function</span>(method) {
+        <span class="keyword">var</span> wrappedFunction = object[method];
+        object[method] = <span class="keyword">function</span>() {
+          <span class="keyword">var</span> args = [wrappedFunction].concat(Array.prototype.slice.call(arguments));
+          <span class="keyword">return</span> wrapper.apply(object, args);
+        };
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function log</h4>
+<ul>
+<li>msg - log message</li>
+<li>returns - nothing</li>
+</ul>
+<p>Suppress logs if console.log is undefined.
+Suppress logs in production environments.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    log: <span class="keyword">function</span>(msg) {
+      <span class="keyword">if</span> (Duckbone.Rails.isProduction()) <span class="keyword">return</span>;
+      <span class="keyword">if</span> (window.console &amp;&amp; console.log) console.log(msg);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function include</h4>
+<ul>
+<li>obj - the object to extend</li>
+<li>remaining arguments are objects from which to mix in properties and methods</li>
+<li>returns - nothing</li>
+</ul>
+<p>This is the core method used to add Duckbone mixins to new classes.
+It extends a given object with all the properties in the passed-in object(s).
+It works just like _.extend except that it throws an exception if you pass an undefined object,
+ie. if you spell a mixin wrong, which you will.
+Also calls included() on the mixin after mixing in the methods, which
+can provide additional side-effects.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    include: <span class="keyword">function</span>(obj) {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> obj == <span class="string">"undefined"</span>) {
+        <span class="keyword">throw</span>(<span class="string">"Attempt to include into undefined object."</span>)
+      }
+      _.each(_.toArray(arguments).slice(<span class="number">1</span>), <span class="keyword">function</span>(source) {
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> source == <span class="string">'undefined'</span>) {
+          <span class="keyword">throw</span>(<span class="string">"Attempt to include undefined object."</span>);
+        }
+        <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> source) {
+          <span class="keyword">if</span> (prop != <span class="string">'included'</span> &amp;&amp; source[prop] !== <span class="keyword">void</span> <span class="number">0</span>) {
+            <span class="keyword">if</span> (!obj.hasOwnProperty(prop)) obj[prop] = source[prop];
+          }
+        }
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> source[<span class="string">'included'</span>] == <span class="string">'function'</span>) source[<span class="string">'included'</span>].call(obj);
+      });
+      <span class="keyword">return</span> obj;
+    }
+  }); <span class="comment">// end _.extend</span>
+
+  _.extend(Duckbone.helpers, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h4>function stringToGlobal</h4>
+<ul>
+<li>name - the string representing the desired global variable</li>
+<li>returns - a reference</li>
+</ul>
+<p>For example, given &#39;mycompany.models.foo&#39;,
+returns an actual reference to window.mycompany.models.foo</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    stringToGlobal: <span class="keyword">function</span>(name) {
+      <span class="keyword">var</span> obj = window;
+      <span class="keyword">var</span> parts = name.split(<span class="string">'.'</span>);
+      <span class="keyword">while</span> (parts.length) {
+        obj = obj[parts.shift()]
+      }
+      <span class="keyword">return</span> obj;
+    },
+
+    dateToPrettyTimeAgo: <span class="function"><span class="keyword">function</span> <span class="params">(date)</span> {</span>
+      <span class="keyword">var</span> min = Math.floor((<span class="keyword">new</span> Date().getTime() - date.getTime()) / <span class="number">60000</span>);
+      <span class="keyword">var</span> remainder = min || <span class="number">0</span>, prettyTime = [], days, hours;
+      <span class="keyword">if</span> (remainder == <span class="number">0</span>) {
+        <span class="keyword">return</span> <span class="string">"just now"</span>;
+      }
+      <span class="keyword">if</span> (remainder &gt;= <span class="number">1400</span>) {
+        days = Math.floor(remainder / <span class="number">1440</span>);
+        remainder -= days * <span class="number">1440</span>;
+        prettyTime[<span class="number">0</span>] = days;
+        prettyTime[<span class="number">0</span>] += (days &gt; <span class="number">1</span>) ? <span class="string">" days"</span> : <span class="string">" day"</span>
+      }
+      <span class="keyword">if</span> (remainder &gt;= <span class="number">60</span>) {
+        hours = Math.floor(remainder / <span class="number">60</span>);
+        remainder -= hours * <span class="number">60</span>;
+        prettyTime[<span class="number">1</span>] = hours;
+        prettyTime[<span class="number">1</span>] += (hours &gt; <span class="number">1</span>) ? <span class="string">" hours"</span> : <span class="string">" hour"</span>;
+      }
+      <span class="keyword">if</span> (remainder &gt; <span class="number">0</span>) {
+        prettyTime[<span class="number">2</span>] = remainder;
+        prettyTime[<span class="number">2</span>] += (remainder &gt; <span class="number">1</span>) ? <span class="string">" minutes"</span> : <span class="string">" minute"</span>
+      }
+      <span class="keyword">return</span> _.compact(prettyTime).join(<span class="string">', '</span>) + <span class="string">" ago"</span>;
+    }
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Mix in log to underscore</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _.mixin({
+    log: Duckbone.log
+  });
+
+}).call();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

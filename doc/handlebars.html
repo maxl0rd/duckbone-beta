@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>handlebars.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>handlebars.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>lib/handlebars/parser.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/* Jison generated parser */</span>
+<span class="keyword">var</span> handlebars = (<span class="keyword">function</span>(){
+<span class="keyword">var</span> parser = {trace: <span class="function"><span class="keyword">function</span> <span class="title">trace</span><span class="params">()</span> {</span> },
+yy: {},
+symbols_: {<span class="string">"error"</span>:<span class="number">2</span>,<span class="string">"root"</span>:<span class="number">3</span>,<span class="string">"program"</span>:<span class="number">4</span>,<span class="string">"EOF"</span>:<span class="number">5</span>,<span class="string">"statements"</span>:<span class="number">6</span>,<span class="string">"simpleInverse"</span>:<span class="number">7</span>,<span class="string">"statement"</span>:<span class="number">8</span>,<span class="string">"openInverse"</span>:<span class="number">9</span>,<span class="string">"closeBlock"</span>:<span class="number">10</span>,<span class="string">"openBlock"</span>:<span class="number">11</span>,<span class="string">"mustache"</span>:<span class="number">12</span>,<span class="string">"partial"</span>:<span class="number">13</span>,<span class="string">"CONTENT"</span>:<span class="number">14</span>,<span class="string">"COMMENT"</span>:<span class="number">15</span>,<span class="string">"OPEN_BLOCK"</span>:<span class="number">16</span>,<span class="string">"inMustache"</span>:<span class="number">17</span>,<span class="string">"CLOSE"</span>:<span class="number">18</span>,<span class="string">"OPEN_INVERSE"</span>:<span class="number">19</span>,<span class="string">"OPEN_ENDBLOCK"</span>:<span class="number">20</span>,<span class="string">"path"</span>:<span class="number">21</span>,<span class="string">"OPEN"</span>:<span class="number">22</span>,<span class="string">"OPEN_UNESCAPED"</span>:<span class="number">23</span>,<span class="string">"OPEN_PARTIAL"</span>:<span class="number">24</span>,<span class="string">"params"</span>:<span class="number">25</span>,<span class="string">"hash"</span>:<span class="number">26</span>,<span class="string">"param"</span>:<span class="number">27</span>,<span class="string">"STRING"</span>:<span class="number">28</span>,<span class="string">"INTEGER"</span>:<span class="number">29</span>,<span class="string">"BOOLEAN"</span>:<span class="number">30</span>,<span class="string">"hashSegments"</span>:<span class="number">31</span>,<span class="string">"hashSegment"</span>:<span class="number">32</span>,<span class="string">"ID"</span>:<span class="number">33</span>,<span class="string">"EQUALS"</span>:<span class="number">34</span>,<span class="string">"pathSegments"</span>:<span class="number">35</span>,<span class="string">"SEP"</span>:<span class="number">36</span>,<span class="string">"$accept"</span>:<span class="number">0</span>,<span class="string">"$end"</span>:<span class="number">1</span>},
+terminals_: {<span class="number">2</span>:<span class="string">"error"</span>,<span class="number">5</span>:<span class="string">"EOF"</span>,<span class="number">14</span>:<span class="string">"CONTENT"</span>,<span class="number">15</span>:<span class="string">"COMMENT"</span>,<span class="number">16</span>:<span class="string">"OPEN_BLOCK"</span>,<span class="number">18</span>:<span class="string">"CLOSE"</span>,<span class="number">19</span>:<span class="string">"OPEN_INVERSE"</span>,<span class="number">20</span>:<span class="string">"OPEN_ENDBLOCK"</span>,<span class="number">22</span>:<span class="string">"OPEN"</span>,<span class="number">23</span>:<span class="string">"OPEN_UNESCAPED"</span>,<span class="number">24</span>:<span class="string">"OPEN_PARTIAL"</span>,<span class="number">28</span>:<span class="string">"STRING"</span>,<span class="number">29</span>:<span class="string">"INTEGER"</span>,<span class="number">30</span>:<span class="string">"BOOLEAN"</span>,<span class="number">33</span>:<span class="string">"ID"</span>,<span class="number">34</span>:<span class="string">"EQUALS"</span>,<span class="number">36</span>:<span class="string">"SEP"</span>},
+productions_: [<span class="number">0</span>,[<span class="number">3</span>,<span class="number">2</span>],[<span class="number">4</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">1</span>],[<span class="number">4</span>,<span class="number">0</span>],[<span class="number">6</span>,<span class="number">1</span>],[<span class="number">6</span>,<span class="number">2</span>],[<span class="number">8</span>,<span class="number">3</span>],[<span class="number">8</span>,<span class="number">3</span>],[<span class="number">8</span>,<span class="number">1</span>],[<span class="number">8</span>,<span class="number">1</span>],[<span class="number">8</span>,<span class="number">1</span>],[<span class="number">8</span>,<span class="number">1</span>],[<span class="number">11</span>,<span class="number">3</span>],[<span class="number">9</span>,<span class="number">3</span>],[<span class="number">10</span>,<span class="number">3</span>],[<span class="number">12</span>,<span class="number">3</span>],[<span class="number">12</span>,<span class="number">3</span>],[<span class="number">13</span>,<span class="number">3</span>],[<span class="number">13</span>,<span class="number">4</span>],[<span class="number">7</span>,<span class="number">2</span>],[<span class="number">17</span>,<span class="number">3</span>],[<span class="number">17</span>,<span class="number">2</span>],[<span class="number">17</span>,<span class="number">2</span>],[<span class="number">17</span>,<span class="number">1</span>],[<span class="number">25</span>,<span class="number">2</span>],[<span class="number">25</span>,<span class="number">1</span>],[<span class="number">27</span>,<span class="number">1</span>],[<span class="number">27</span>,<span class="number">1</span>],[<span class="number">27</span>,<span class="number">1</span>],[<span class="number">27</span>,<span class="number">1</span>],[<span class="number">26</span>,<span class="number">1</span>],[<span class="number">31</span>,<span class="number">2</span>],[<span class="number">31</span>,<span class="number">1</span>],[<span class="number">32</span>,<span class="number">3</span>],[<span class="number">32</span>,<span class="number">3</span>],[<span class="number">32</span>,<span class="number">3</span>],[<span class="number">32</span>,<span class="number">3</span>],[<span class="number">21</span>,<span class="number">1</span>],[<span class="number">35</span>,<span class="number">3</span>],[<span class="number">35</span>,<span class="number">1</span>]],
+performAction: <span class="function"><span class="keyword">function</span> <span class="title">anonymous</span><span class="params">(yytext,yyleng,yylineno,yy,yystate,$$,_$)</span> {</span>
+
+<span class="keyword">var</span> $<span class="number">0</span> = $$.length - <span class="number">1</span>;
+<span class="keyword">switch</span> (yystate) {
+<span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> $$[$<span class="number">0</span>-<span class="number">1</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.ProgramNode($$[$<span class="number">0</span>-<span class="number">2</span>], $$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.ProgramNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.ProgramNode([]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">5</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">6</span>: $$[$<span class="number">0</span>-<span class="number">1</span>].push($$[$<span class="number">0</span>]); <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>-<span class="number">1</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">7</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.InverseNode($$[$<span class="number">0</span>-<span class="number">2</span>], $$[$<span class="number">0</span>-<span class="number">1</span>], $$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">8</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.BlockNode($$[$<span class="number">0</span>-<span class="number">2</span>], $$[$<span class="number">0</span>-<span class="number">1</span>], $$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">9</span>: <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">10</span>: <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">11</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.ContentNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">12</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.CommentNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">13</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.MustacheNode($$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">0</span>], $$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">1</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">14</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.MustacheNode($$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">0</span>], $$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">1</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">15</span>: <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>-<span class="number">1</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">16</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.MustacheNode($$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">0</span>], $$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">1</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">17</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.MustacheNode($$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">0</span>], $$[$<span class="number">0</span>-<span class="number">1</span>][<span class="number">1</span>], <span class="literal">true</span>) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">18</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.PartialNode($$[$<span class="number">0</span>-<span class="number">1</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">19</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.PartialNode($$[$<span class="number">0</span>-<span class="number">2</span>], $$[$<span class="number">0</span>-<span class="number">1</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">20</span>: 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">21</span>: <span class="keyword">this</span>.$ = [[$$[$<span class="number">0</span>-<span class="number">2</span>]].concat($$[$<span class="number">0</span>-<span class="number">1</span>]), $$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">22</span>: <span class="keyword">this</span>.$ = [[$$[$<span class="number">0</span>-<span class="number">1</span>]].concat($$[$<span class="number">0</span>]), <span class="literal">null</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">23</span>: <span class="keyword">this</span>.$ = [[$$[$<span class="number">0</span>-<span class="number">1</span>]], $$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">24</span>: <span class="keyword">this</span>.$ = [[$$[$<span class="number">0</span>]], <span class="literal">null</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">25</span>: $$[$<span class="number">0</span>-<span class="number">1</span>].push($$[$<span class="number">0</span>]); <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>-<span class="number">1</span>]; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">26</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">27</span>: <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">28</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.StringNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">29</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.IntegerNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">30</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.BooleanNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">31</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.HashNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">32</span>: $$[$<span class="number">0</span>-<span class="number">1</span>].push($$[$<span class="number">0</span>]); <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>-<span class="number">1</span>] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">33</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">34</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>-<span class="number">2</span>], $$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">35</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>-<span class="number">2</span>], <span class="keyword">new</span> yy.StringNode($$[$<span class="number">0</span>])] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">36</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>-<span class="number">2</span>], <span class="keyword">new</span> yy.IntegerNode($$[$<span class="number">0</span>])] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">37</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>-<span class="number">2</span>], <span class="keyword">new</span> yy.BooleanNode($$[$<span class="number">0</span>])] 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">38</span>: <span class="keyword">this</span>.$ = <span class="keyword">new</span> yy.IdNode($$[$<span class="number">0</span>]) 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">39</span>: $$[$<span class="number">0</span>-<span class="number">2</span>].push($$[$<span class="number">0</span>]); <span class="keyword">this</span>.$ = $$[$<span class="number">0</span>-<span class="number">2</span>]; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">40</span>: <span class="keyword">this</span>.$ = [$$[$<span class="number">0</span>]] 
+<span class="keyword">break</span>;
+}
+},
+table: [{<span class="number">3</span>:<span class="number">1</span>,<span class="number">4</span>:<span class="number">2</span>,<span class="number">5</span>:[<span class="number">2</span>,<span class="number">4</span>],<span class="number">6</span>:<span class="number">3</span>,<span class="number">8</span>:<span class="number">4</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">11</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">1</span>:[<span class="number">3</span>]},{<span class="number">5</span>:[<span class="number">1</span>,<span class="number">16</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">3</span>],<span class="number">7</span>:<span class="number">17</span>,<span class="number">8</span>:<span class="number">18</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">19</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">3</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">5</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">5</span>]},{<span class="number">4</span>:<span class="number">20</span>,<span class="number">6</span>:<span class="number">3</span>,<span class="number">8</span>:<span class="number">4</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">11</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">4</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">4</span>:<span class="number">21</span>,<span class="number">6</span>:<span class="number">3</span>,<span class="number">8</span>:<span class="number">4</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">11</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">4</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">9</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">9</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">10</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">10</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">11</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">11</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">12</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">12</span>]},{<span class="number">17</span>:<span class="number">22</span>,<span class="number">21</span>:<span class="number">23</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">17</span>:<span class="number">26</span>,<span class="number">21</span>:<span class="number">23</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">17</span>:<span class="number">27</span>,<span class="number">21</span>:<span class="number">23</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">17</span>:<span class="number">28</span>,<span class="number">21</span>:<span class="number">23</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">21</span>:<span class="number">29</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">1</span>:[<span class="number">2</span>,<span class="number">1</span>]},{<span class="number">6</span>:<span class="number">30</span>,<span class="number">8</span>:<span class="number">4</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">11</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">6</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">6</span>]},{<span class="number">17</span>:<span class="number">22</span>,<span class="number">18</span>:[<span class="number">1</span>,<span class="number">31</span>],<span class="number">21</span>:<span class="number">23</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">10</span>:<span class="number">32</span>,<span class="number">20</span>:[<span class="number">1</span>,<span class="number">33</span>]},{<span class="number">10</span>:<span class="number">34</span>,<span class="number">20</span>:[<span class="number">1</span>,<span class="number">33</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">35</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">24</span>],<span class="number">21</span>:<span class="number">40</span>,<span class="number">25</span>:<span class="number">36</span>,<span class="number">26</span>:<span class="number">37</span>,<span class="number">27</span>:<span class="number">38</span>,<span class="number">28</span>:[<span class="number">1</span>,<span class="number">41</span>],<span class="number">29</span>:[<span class="number">1</span>,<span class="number">42</span>],<span class="number">30</span>:[<span class="number">1</span>,<span class="number">43</span>],<span class="number">31</span>:<span class="number">39</span>,<span class="number">32</span>:<span class="number">44</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">45</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">38</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">38</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">38</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">38</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">38</span>],<span class="number">36</span>:[<span class="number">1</span>,<span class="number">46</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">36</span>:[<span class="number">2</span>,<span class="number">40</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">47</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">48</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">49</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">50</span>],<span class="number">21</span>:<span class="number">51</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">2</span>],<span class="number">8</span>:<span class="number">18</span>,<span class="number">9</span>:<span class="number">5</span>,<span class="number">11</span>:<span class="number">6</span>,<span class="number">12</span>:<span class="number">7</span>,<span class="number">13</span>:<span class="number">8</span>,<span class="number">14</span>:[<span class="number">1</span>,<span class="number">9</span>],<span class="number">15</span>:[<span class="number">1</span>,<span class="number">10</span>],<span class="number">16</span>:[<span class="number">1</span>,<span class="number">12</span>],<span class="number">19</span>:[<span class="number">1</span>,<span class="number">11</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">2</span>],<span class="number">22</span>:[<span class="number">1</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">1</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">1</span>,<span class="number">15</span>]},{<span class="number">14</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">20</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">20</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">7</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">7</span>]},{<span class="number">21</span>:<span class="number">52</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">8</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">8</span>]},{<span class="number">14</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">14</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">14</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">22</span>],<span class="number">21</span>:<span class="number">40</span>,<span class="number">26</span>:<span class="number">53</span>,<span class="number">27</span>:<span class="number">54</span>,<span class="number">28</span>:[<span class="number">1</span>,<span class="number">41</span>],<span class="number">29</span>:[<span class="number">1</span>,<span class="number">42</span>],<span class="number">30</span>:[<span class="number">1</span>,<span class="number">43</span>],<span class="number">31</span>:<span class="number">39</span>,<span class="number">32</span>:<span class="number">44</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">45</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">23</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">26</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">26</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">26</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">26</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">26</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">31</span>],<span class="number">32</span>:<span class="number">55</span>,<span class="number">33</span>:[<span class="number">1</span>,<span class="number">56</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">27</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">27</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">27</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">27</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">27</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">28</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">28</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">28</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">28</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">28</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">29</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">29</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">29</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">29</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">29</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">30</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">30</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">30</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">30</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">30</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">33</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">33</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">40</span>],<span class="number">34</span>:[<span class="number">1</span>,<span class="number">57</span>],<span class="number">36</span>:[<span class="number">2</span>,<span class="number">40</span>]},{<span class="number">33</span>:[<span class="number">1</span>,<span class="number">58</span>]},{<span class="number">14</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">13</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">13</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">16</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">16</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">17</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">17</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">18</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">18</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">59</span>]},{<span class="number">18</span>:[<span class="number">1</span>,<span class="number">60</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">21</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">25</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">25</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">25</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">25</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">25</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">32</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">32</span>]},{<span class="number">34</span>:[<span class="number">1</span>,<span class="number">57</span>]},{<span class="number">21</span>:<span class="number">61</span>,<span class="number">28</span>:[<span class="number">1</span>,<span class="number">62</span>],<span class="number">29</span>:[<span class="number">1</span>,<span class="number">63</span>],<span class="number">30</span>:[<span class="number">1</span>,<span class="number">64</span>],<span class="number">33</span>:[<span class="number">1</span>,<span class="number">25</span>],<span class="number">35</span>:<span class="number">24</span>},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">39</span>],<span class="number">28</span>:[<span class="number">2</span>,<span class="number">39</span>],<span class="number">29</span>:[<span class="number">2</span>,<span class="number">39</span>],<span class="number">30</span>:[<span class="number">2</span>,<span class="number">39</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">39</span>],<span class="number">36</span>:[<span class="number">2</span>,<span class="number">39</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">19</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">19</span>]},{<span class="number">5</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">14</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">15</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">16</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">19</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">20</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">22</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">23</span>:[<span class="number">2</span>,<span class="number">15</span>],<span class="number">24</span>:[<span class="number">2</span>,<span class="number">15</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">34</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">34</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">35</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">35</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">36</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">36</span>]},{<span class="number">18</span>:[<span class="number">2</span>,<span class="number">37</span>],<span class="number">33</span>:[<span class="number">2</span>,<span class="number">37</span>]}],
+defaultActions: {<span class="number">16</span>:[<span class="number">2</span>,<span class="number">1</span>],<span class="number">37</span>:[<span class="number">2</span>,<span class="number">23</span>],<span class="number">53</span>:[<span class="number">2</span>,<span class="number">21</span>]},
+parseError: <span class="function"><span class="keyword">function</span> <span class="title">parseError</span><span class="params">(str, hash)</span> {</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(str);
+},
+parse: <span class="function"><span class="keyword">function</span> <span class="title">parse</span><span class="params">(input)</span> {</span>
+    <span class="keyword">var</span> self = <span class="keyword">this</span>,
+        stack = [<span class="number">0</span>],
+        vstack = [<span class="literal">null</span>], <span class="comment">// semantic value stack</span>
+        lstack = [], <span class="comment">// location stack</span>
+        table = <span class="keyword">this</span>.table,
+        yytext = <span class="string">''</span>,
+        yylineno = <span class="number">0</span>,
+        yyleng = <span class="number">0</span>,
+        recovering = <span class="number">0</span>,
+        TERROR = <span class="number">2</span>,
+        EOF = <span class="number">1</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>this.reductionCount = this.shiftCount = 0;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">this</span>.lexer.setInput(input);
+    <span class="keyword">this</span>.lexer.yy = <span class="keyword">this</span>.yy;
+    <span class="keyword">this</span>.yy.lexer = <span class="keyword">this</span>.lexer;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.lexer.yylloc == <span class="string">'undefined'</span>)
+        <span class="keyword">this</span>.lexer.yylloc = {};
+    <span class="keyword">var</span> yyloc = <span class="keyword">this</span>.lexer.yylloc;
+    lstack.push(yyloc);
+
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.yy.parseError === <span class="string">'function'</span>)
+        <span class="keyword">this</span>.parseError = <span class="keyword">this</span>.yy.parseError;
+
+    <span class="function"><span class="keyword">function</span> <span class="title">popStack</span> <span class="params">(n)</span> {</span>
+        stack.length = stack.length - <span class="number">2</span>*n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+
+    <span class="function"><span class="keyword">function</span> <span class="title">lex</span><span class="params">()</span> {</span>
+        <span class="keyword">var</span> token;
+        token = self.lexer.lex() || <span class="number">1</span>; <span class="comment">// $end = 1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>if token isn&#39;t its numeric value, convert</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">typeof</span> token !== <span class="string">'number'</span>) {
+            token = self.symbols_[token] || token;
+        }
+        <span class="keyword">return</span> token;
+    };
+
+    <span class="keyword">var</span> symbol, preErrorSymbol, state, action, a, r, yyval={},p,len,newState, expected;
+    <span class="keyword">while</span> (<span class="literal">true</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>retreive state number from top of stack</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        state = stack[stack.length-<span class="number">1</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>use default actions if available</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">this</span>.defaultActions[state]) {
+            action = <span class="keyword">this</span>.defaultActions[state];
+        } <span class="keyword">else</span> {
+            <span class="keyword">if</span> (symbol == <span class="literal">null</span>)
+                symbol = lex();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>read action for current state and first input</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            action = table[state] &amp;&amp; table[state][symbol];
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>handle parse error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">typeof</span> action === <span class="string">'undefined'</span> || !action.length || !action[<span class="number">0</span>]) {
+
+            <span class="keyword">if</span> (!recovering) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Report error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                expected = [];
+                <span class="keyword">for</span> (p <span class="keyword">in</span> table[state]) <span class="keyword">if</span> (<span class="keyword">this</span>.terminals_[p] &amp;&amp; p &gt; <span class="number">2</span>) {
+                    expected.push(<span class="string">"'"</span>+<span class="keyword">this</span>.terminals_[p]+<span class="string">"'"</span>);
+                }
+                <span class="keyword">var</span> errStr = <span class="string">''</span>;
+                <span class="keyword">if</span> (<span class="keyword">this</span>.lexer.showPosition) {
+                    errStr = <span class="string">'Parse error on line '</span>+(yylineno+<span class="number">1</span>)+<span class="string">":\n"</span>+<span class="keyword">this</span>.lexer.showPosition()+<span class="string">'\nExpecting '</span>+expected.join(<span class="string">', '</span>);
+                } <span class="keyword">else</span> {
+                    errStr = <span class="string">'Parse error on line '</span>+(yylineno+<span class="number">1</span>)+<span class="string">": Unexpected "</span> +
+                                  (symbol == <span class="number">1</span> <span class="comment">/*EOF*/</span> ? <span class="string">"end of input"</span> :
+                                              (<span class="string">"'"</span>+(<span class="keyword">this</span>.terminals_[symbol] || symbol)+<span class="string">"'"</span>));
+                }
+                <span class="keyword">this</span>.parseError(errStr,
+                    {text: <span class="keyword">this</span>.lexer.match, token: <span class="keyword">this</span>.terminals_[symbol] || symbol, line: <span class="keyword">this</span>.lexer.yylineno, loc: yyloc, expected: expected});
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>just recovered from another error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (recovering == <span class="number">3</span>) {
+                <span class="keyword">if</span> (symbol == EOF) {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> Error(errStr || <span class="string">'Parsing halted.'</span>);
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>discard current lookahead and grab another</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                yyleng = <span class="keyword">this</span>.lexer.yyleng;
+                yytext = <span class="keyword">this</span>.lexer.yytext;
+                yylineno = <span class="keyword">this</span>.lexer.yylineno;
+                yyloc = <span class="keyword">this</span>.lexer.yylloc;
+                symbol = lex();
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>try to recover from error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">while</span> (<span class="number">1</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>check for error recovery rule in this state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> ((TERROR.toString()) <span class="keyword">in</span> table[state]) {
+                    <span class="keyword">break</span>;
+                }
+                <span class="keyword">if</span> (state == <span class="number">0</span>) {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> Error(errStr || <span class="string">'Parsing halted.'</span>);
+                }
+                popStack(<span class="number">1</span>);
+                state = stack[stack.length-<span class="number">1</span>];
+            }
+
+            preErrorSymbol = symbol; <span class="comment">// save the lookahead token</span>
+            symbol = TERROR;         <span class="comment">// insert generic error symbol as new lookahead</span>
+            state = stack[stack.length-<span class="number">1</span>];
+            action = table[state] &amp;&amp; table[state][TERROR];
+            recovering = <span class="number">3</span>; <span class="comment">// allow 3 real symbols to be shifted before reporting a new error</span>
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>this shouldn&#39;t happen, unless resolve defaults are off</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (action[<span class="number">0</span>] <span class="keyword">instanceof</span> Array &amp;&amp; action.length &gt; <span class="number">1</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Parse Error: multiple actions possible at state: '</span>+state+<span class="string">', token: '</span>+symbol);
+        }
+
+        <span class="keyword">switch</span> (action[<span class="number">0</span>]) {
+
+            <span class="keyword">case</span> <span class="number">1</span>: <span class="comment">// shift</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>this.shiftCount++;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                stack.push(symbol);
+                vstack.push(<span class="keyword">this</span>.lexer.yytext);
+                lstack.push(<span class="keyword">this</span>.lexer.yylloc);
+                stack.push(action[<span class="number">1</span>]); <span class="comment">// push state</span>
+                symbol = <span class="literal">null</span>;
+                <span class="keyword">if</span> (!preErrorSymbol) { <span class="comment">// normal execution/no error</span>
+                    yyleng = <span class="keyword">this</span>.lexer.yyleng;
+                    yytext = <span class="keyword">this</span>.lexer.yytext;
+                    yylineno = <span class="keyword">this</span>.lexer.yylineno;
+                    yyloc = <span class="keyword">this</span>.lexer.yylloc;
+                    <span class="keyword">if</span> (recovering &gt; <span class="number">0</span>)
+                        recovering--;
+                } <span class="keyword">else</span> { <span class="comment">// error just occurred, resume old lookahead f/ before error</span>
+                    symbol = preErrorSymbol;
+                    preErrorSymbol = <span class="literal">null</span>;
+                }
+                <span class="keyword">break</span>;
+
+            <span class="keyword">case</span> <span class="number">2</span>: <span class="comment">// reduce</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>this.reductionCount++;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                len = <span class="keyword">this</span>.productions_[action[<span class="number">1</span>]][<span class="number">1</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>perform semantic action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                yyval.$ = vstack[vstack.length-len]; <span class="comment">// default to $$ = $1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>default location, uses first token for firsts, last for lasts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                yyval._$ = {
+                    first_line: lstack[lstack.length-(len||<span class="number">1</span>)].first_line,
+                    last_line: lstack[lstack.length-<span class="number">1</span>].last_line,
+                    first_column: lstack[lstack.length-(len||<span class="number">1</span>)].first_column,
+                    last_column: lstack[lstack.length-<span class="number">1</span>].last_column
+                };
+                r = <span class="keyword">this</span>.performAction.call(yyval, yytext, yyleng, yylineno, <span class="keyword">this</span>.yy, action[<span class="number">1</span>], vstack, lstack);
+
+                <span class="keyword">if</span> (<span class="keyword">typeof</span> r !== <span class="string">'undefined'</span>) {
+                    <span class="keyword">return</span> r;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>pop off stack</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (len) {
+                    stack = stack.slice(<span class="number">0</span>,-<span class="number">1</span>*len*<span class="number">2</span>);
+                    vstack = vstack.slice(<span class="number">0</span>, -<span class="number">1</span>*len);
+                    lstack = lstack.slice(<span class="number">0</span>, -<span class="number">1</span>*len);
+                }
+
+                stack.push(<span class="keyword">this</span>.productions_[action[<span class="number">1</span>]][<span class="number">0</span>]);    <span class="comment">// push nonterminal (reduce)</span>
+                vstack.push(yyval.$);
+                lstack.push(yyval._$);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>goto new state = table[STATE][NONTERMINAL]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                newState = table[stack[stack.length-<span class="number">2</span>]][stack[stack.length-<span class="number">1</span>]];
+                stack.push(newState);
+                <span class="keyword">break</span>;
+
+            <span class="keyword">case</span> <span class="number">3</span>: <span class="comment">// accept</span>
+                <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+
+    }
+
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}};<span class="comment">/* Jison generated lexer */</span>
+<span class="keyword">var</span> lexer = (<span class="keyword">function</span>(){<span class="keyword">var</span> lexer = ({EOF:<span class="number">1</span>,
+parseError:<span class="function"><span class="keyword">function</span> <span class="title">parseError</span><span class="params">(str, hash)</span> {</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.yy.parseError) {
+            <span class="keyword">this</span>.yy.parseError(str, hash);
+        } <span class="keyword">else</span> {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(str);
+        }
+    },
+setInput:<span class="function"><span class="keyword">function</span> <span class="params">(input)</span> {</span>
+        <span class="keyword">this</span>._input = input;
+        <span class="keyword">this</span>._more = <span class="keyword">this</span>._less = <span class="keyword">this</span>.done = <span class="literal">false</span>;
+        <span class="keyword">this</span>.yylineno = <span class="keyword">this</span>.yyleng = <span class="number">0</span>;
+        <span class="keyword">this</span>.yytext = <span class="keyword">this</span>.matched = <span class="keyword">this</span>.match = <span class="string">''</span>;
+        <span class="keyword">this</span>.conditionStack = [<span class="string">'INITIAL'</span>];
+        <span class="keyword">this</span>.yylloc = {first_line:<span class="number">1</span>,first_column:<span class="number">0</span>,last_line:<span class="number">1</span>,last_column:<span class="number">0</span>};
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+input:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">var</span> ch = <span class="keyword">this</span>._input[<span class="number">0</span>];
+        <span class="keyword">this</span>.yytext+=ch;
+        <span class="keyword">this</span>.yyleng++;
+        <span class="keyword">this</span>.match+=ch;
+        <span class="keyword">this</span>.matched+=ch;
+        <span class="keyword">var</span> lines = ch.match(<span class="regexp">/\n/</span>);
+        <span class="keyword">if</span> (lines) <span class="keyword">this</span>.yylineno++;
+        <span class="keyword">this</span>._input = <span class="keyword">this</span>._input.slice(<span class="number">1</span>);
+        <span class="keyword">return</span> ch;
+    },
+unput:<span class="function"><span class="keyword">function</span> <span class="params">(ch)</span> {</span>
+        <span class="keyword">this</span>._input = ch + <span class="keyword">this</span>._input;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+more:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">this</span>._more = <span class="literal">true</span>;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+pastInput:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">var</span> past = <span class="keyword">this</span>.matched.substr(<span class="number">0</span>, <span class="keyword">this</span>.matched.length - <span class="keyword">this</span>.match.length);
+        <span class="keyword">return</span> (past.length &gt; <span class="number">20</span> ? <span class="string">'...'</span>:<span class="string">''</span>) + past.substr(-<span class="number">20</span>).replace(<span class="regexp">/\n/g</span>, <span class="string">""</span>);
+    },
+upcomingInput:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">var</span> next = <span class="keyword">this</span>.match;
+        <span class="keyword">if</span> (next.length &lt; <span class="number">20</span>) {
+            next += <span class="keyword">this</span>._input.substr(<span class="number">0</span>, <span class="number">20</span>-next.length);
+        }
+        <span class="keyword">return</span> (next.substr(<span class="number">0</span>,<span class="number">20</span>)+(next.length &gt; <span class="number">20</span> ? <span class="string">'...'</span>:<span class="string">''</span>)).replace(<span class="regexp">/\n/g</span>, <span class="string">""</span>);
+    },
+showPosition:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">var</span> pre = <span class="keyword">this</span>.pastInput();
+        <span class="keyword">var</span> c = <span class="keyword">new</span> Array(pre.length + <span class="number">1</span>).join(<span class="string">"-"</span>);
+        <span class="keyword">return</span> pre + <span class="keyword">this</span>.upcomingInput() + <span class="string">"\n"</span> + c+<span class="string">"^"</span>;
+    },
+next:<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.done) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.EOF;
+        }
+        <span class="keyword">if</span> (!<span class="keyword">this</span>._input) <span class="keyword">this</span>.done = <span class="literal">true</span>;
+
+        <span class="keyword">var</span> token,
+            match,
+            col,
+            lines;
+        <span class="keyword">if</span> (!<span class="keyword">this</span>._more) {
+            <span class="keyword">this</span>.yytext = <span class="string">''</span>;
+            <span class="keyword">this</span>.match = <span class="string">''</span>;
+        }
+        <span class="keyword">var</span> rules = <span class="keyword">this</span>._currentRules();
+        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i &lt; rules.length; i++) {
+            match = <span class="keyword">this</span>._input.match(<span class="keyword">this</span>.rules[rules[i]]);
+            <span class="keyword">if</span> (match) {
+                lines = match[<span class="number">0</span>].match(<span class="regexp">/\n.*/g</span>);
+                <span class="keyword">if</span> (lines) <span class="keyword">this</span>.yylineno += lines.length;
+                <span class="keyword">this</span>.yylloc = {first_line: <span class="keyword">this</span>.yylloc.last_line,
+                               last_line: <span class="keyword">this</span>.yylineno+<span class="number">1</span>,
+                               first_column: <span class="keyword">this</span>.yylloc.last_column,
+                               last_column: lines ? lines[lines.length-<span class="number">1</span>].length-<span class="number">1</span> : <span class="keyword">this</span>.yylloc.last_column + match[<span class="number">0</span>].length}
+                <span class="keyword">this</span>.yytext += match[<span class="number">0</span>];
+                <span class="keyword">this</span>.match += match[<span class="number">0</span>];
+                <span class="keyword">this</span>.matches = match;
+                <span class="keyword">this</span>.yyleng = <span class="keyword">this</span>.yytext.length;
+                <span class="keyword">this</span>._more = <span class="literal">false</span>;
+                <span class="keyword">this</span>._input = <span class="keyword">this</span>._input.slice(match[<span class="number">0</span>].length);
+                <span class="keyword">this</span>.matched += match[<span class="number">0</span>];
+                token = <span class="keyword">this</span>.performAction.call(<span class="keyword">this</span>, <span class="keyword">this</span>.yy, <span class="keyword">this</span>, rules[i],<span class="keyword">this</span>.conditionStack[<span class="keyword">this</span>.conditionStack.length-<span class="number">1</span>]);
+                <span class="keyword">if</span> (token) <span class="keyword">return</span> token;
+                <span class="keyword">else</span> <span class="keyword">return</span>;
+            }
+        }
+        <span class="keyword">if</span> (<span class="keyword">this</span>._input === <span class="string">""</span>) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.EOF;
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.parseError(<span class="string">'Lexical error on line '</span>+(<span class="keyword">this</span>.yylineno+<span class="number">1</span>)+<span class="string">'. Unrecognized text.\n'</span>+<span class="keyword">this</span>.showPosition(), 
+                    {text: <span class="string">""</span>, token: <span class="literal">null</span>, line: <span class="keyword">this</span>.yylineno});
+        }
+    },
+lex:<span class="function"><span class="keyword">function</span> <span class="title">lex</span><span class="params">()</span> {</span>
+        <span class="keyword">var</span> r = <span class="keyword">this</span>.next();
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> r !== <span class="string">'undefined'</span>) {
+            <span class="keyword">return</span> r;
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> <span class="keyword">this</span>.lex();
+        }
+    },
+begin:<span class="function"><span class="keyword">function</span> <span class="title">begin</span><span class="params">(condition)</span> {</span>
+        <span class="keyword">this</span>.conditionStack.push(condition);
+    },
+popState:<span class="function"><span class="keyword">function</span> <span class="title">popState</span><span class="params">()</span> {</span>
+        <span class="keyword">return</span> <span class="keyword">this</span>.conditionStack.pop();
+    },
+_currentRules:<span class="function"><span class="keyword">function</span> <span class="title">_currentRules</span><span class="params">()</span> {</span>
+        <span class="keyword">return</span> <span class="keyword">this</span>.conditions[<span class="keyword">this</span>.conditionStack[<span class="keyword">this</span>.conditionStack.length-<span class="number">1</span>]].rules;
+    }});
+lexer.performAction = <span class="function"><span class="keyword">function</span> <span class="title">anonymous</span><span class="params">(yy,yy_,$avoiding_name_collisions,YY_START)</span> {</span>
+
+<span class="keyword">var</span> YYSTATE=YY_START
+<span class="keyword">switch</span>($avoiding_name_collisions) {
+<span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">this</span>.begin(<span class="string">"mu"</span>); <span class="keyword">if</span> (yy_.yytext) <span class="keyword">return</span> <span class="number">14</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="number">14</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="number">24</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> <span class="number">16</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> <span class="number">20</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">5</span>: <span class="keyword">return</span> <span class="number">19</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">6</span>: <span class="keyword">return</span> <span class="number">19</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">7</span>: <span class="keyword">return</span> <span class="number">23</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">8</span>: <span class="keyword">return</span> <span class="number">23</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">9</span>: yy_.yytext = yy_.yytext.substr(<span class="number">3</span>,yy_.yyleng-<span class="number">5</span>); <span class="keyword">this</span>.begin(<span class="string">"INITIAL"</span>); <span class="keyword">return</span> <span class="number">15</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">10</span>: <span class="keyword">return</span> <span class="number">22</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">11</span>: <span class="keyword">return</span> <span class="number">34</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">12</span>: <span class="keyword">return</span> <span class="number">33</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">13</span>: <span class="keyword">return</span> <span class="number">33</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">14</span>: <span class="keyword">return</span> <span class="number">36</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">15</span>: <span class="comment">/*ignore whitespace*/</span> 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">16</span>: <span class="keyword">this</span>.begin(<span class="string">"INITIAL"</span>); <span class="keyword">return</span> <span class="number">18</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">17</span>: <span class="keyword">this</span>.begin(<span class="string">"INITIAL"</span>); <span class="keyword">return</span> <span class="number">18</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">18</span>: yy_.yytext = yy_.yytext.substr(<span class="number">1</span>,yy_.yyleng-<span class="number">2</span>).replace(<span class="regexp">/\\"/g</span>,<span class="string">'"'</span>); <span class="keyword">return</span> <span class="number">28</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">19</span>: <span class="keyword">return</span> <span class="number">30</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">20</span>: <span class="keyword">return</span> <span class="number">30</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">21</span>: <span class="keyword">return</span> <span class="number">29</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">22</span>: <span class="keyword">return</span> <span class="number">33</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">23</span>: <span class="keyword">return</span> <span class="string">'INVALID'</span>; 
+<span class="keyword">break</span>;
+<span class="keyword">case</span> <span class="number">24</span>: <span class="keyword">return</span> <span class="number">5</span>; 
+<span class="keyword">break</span>;
+}
+};
+lexer.rules = [<span class="regexp">/^[^\x00]*?(?=(\{\{))/</span>,<span class="regexp">/^[^\x00]+/</span>,<span class="regexp">/^\{\{&gt;/</span>,<span class="regexp">/^\{\{#/</span>,<span class="regexp">/^\{\{\//</span>,<span class="regexp">/^\{\{\^/</span>,<span class="regexp">/^\{\{\s*else\b/</span>,<span class="regexp">/^\{\{\{/</span>,<span class="regexp">/^\{\{&amp;/</span>,<span class="regexp">/^\{\{![\s\S]*?\}\}/</span>,<span class="regexp">/^\{\{/</span>,<span class="regexp">/^=/</span>,<span class="regexp">/^\.(?=[} ])/</span>,<span class="regexp">/^\.\./</span>,<span class="regexp">/^[/</span>.]/,<span class="regexp">/^\s+/</span>,<span class="regexp">/^\}\}\}/</span>,<span class="regexp">/^\}\}/</span>,<span class="regexp">/^"(\\["]|[^"])*"/</span>,<span class="regexp">/^true(?=[}\s])/</span>,<span class="regexp">/^false(?=[}\s])/</span>,<span class="regexp">/^[0-9]+(?=[}\s])/</span>,<span class="regexp">/^[a-zA-Z0-9_$-]+(?=[=}\s/</span>.])/,<span class="regexp">/^./</span>,<span class="regexp">/^$/</span>];
+lexer.conditions = {<span class="string">"mu"</span>:{<span class="string">"rules"</span>:[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="number">22</span>,<span class="number">23</span>,<span class="number">24</span>],<span class="string">"inclusive"</span>:<span class="literal">false</span>},<span class="string">"INITIAL"</span>:{<span class="string">"rules"</span>:[<span class="number">0</span>,<span class="number">1</span>,<span class="number">24</span>],<span class="string">"inclusive"</span>:<span class="literal">true</span>}};<span class="keyword">return</span> lexer;})()
+parser.lexer = lexer;
+<span class="keyword">return</span> parser;
+})();
+<span class="keyword">if</span> (<span class="keyword">typeof</span> require !== <span class="string">'undefined'</span> &amp;&amp; <span class="keyword">typeof</span> exports !== <span class="string">'undefined'</span>) {
+exports.parser = handlebars;
+exports.parse = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> handlebars.parse.apply(handlebars, arguments); }
+exports.main = <span class="function"><span class="keyword">function</span> <span class="title">commonjsMain</span><span class="params">(args)</span> {</span>
+    <span class="keyword">if</span> (!args[<span class="number">1</span>])
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Usage: '</span>+args[<span class="number">0</span>]+<span class="string">' FILE'</span>);
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> process !== <span class="string">'undefined'</span>) {
+        <span class="keyword">var</span> source = require(<span class="string">'fs'</span>).readFileSync(require(<span class="string">'path'</span>).join(process.cwd(), args[<span class="number">1</span>]), <span class="string">"utf8"</span>);
+    } <span class="keyword">else</span> {
+        <span class="keyword">var</span> cwd = require(<span class="string">"file"</span>).path(require(<span class="string">"file"</span>).cwd());
+        <span class="keyword">var</span> source = cwd.join(args[<span class="number">1</span>]).read({charset: <span class="string">"utf-8"</span>});
+    }
+    <span class="keyword">return</span> exports.parser.parse(source);
+}
+<span class="keyword">if</span> (<span class="keyword">typeof</span> module !== <span class="string">'undefined'</span> &amp;&amp; require.main === module) {
+  exports.main(<span class="keyword">typeof</span> process !== <span class="string">'undefined'</span> ? process.argv.slice(<span class="number">1</span>) : require(<span class="string">"system"</span>).args);
+}
+};
+;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>lib/handlebars/base.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> Handlebars = {};
+
+Handlebars.VERSION = <span class="string">"1.0.beta.2"</span>;
+
+Handlebars.Parser = handlebars;
+
+Handlebars.parse = <span class="keyword">function</span>(string) {
+  Handlebars.Parser.yy = Handlebars.AST;
+  <span class="keyword">return</span> Handlebars.Parser.parse(string);
+};
+
+Handlebars.print = <span class="keyword">function</span>(ast) {
+  <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.PrintVisitor().accept(ast);
+};
+
+Handlebars.helpers  = {};
+Handlebars.partials = {};
+
+Handlebars.registerHelper = <span class="keyword">function</span>(name, fn, inverse) {
+  <span class="keyword">if</span>(inverse) { fn.not = inverse; }
+  <span class="keyword">this</span>.helpers[name] = fn;
+};
+
+Handlebars.registerPartial = <span class="keyword">function</span>(name, str) {
+  <span class="keyword">this</span>.partials[name] = str;
+};
+
+Handlebars.registerHelper(<span class="string">'helperMissing'</span>, <span class="keyword">function</span>(arg) {
+  <span class="keyword">if</span>(arguments.length === <span class="number">2</span>) {
+    <span class="keyword">return</span> <span class="literal">undefined</span>;
+  } <span class="keyword">else</span> {
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"Could not find property '"</span> + arg + <span class="string">"'"</span>);
+  }
+});
+
+Handlebars.registerHelper(<span class="string">'blockHelperMissing'</span>, <span class="keyword">function</span>(context, fn, inverse) {
+  inverse = inverse || <span class="keyword">function</span>() {};
+
+  <span class="keyword">var</span> ret = <span class="string">""</span>;
+  <span class="keyword">var</span> type = Object.prototype.toString.call(context);
+
+  <span class="keyword">if</span>(type === <span class="string">"[object Function]"</span>) {
+    context = context();
+  }
+
+  <span class="keyword">if</span>(context === <span class="literal">true</span>) {
+    <span class="keyword">return</span> fn(<span class="keyword">this</span>);
+  } <span class="keyword">else</span> <span class="keyword">if</span>(context === <span class="literal">false</span> || context == <span class="literal">null</span>) {
+    <span class="keyword">return</span> inverse(<span class="keyword">this</span>);
+  } <span class="keyword">else</span> <span class="keyword">if</span>(type === <span class="string">"[object Array]"</span>) {
+    <span class="keyword">if</span>(context.length &gt; <span class="number">0</span>) {
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, j=context.length; i&lt;j; i++) {
+        ret = ret + fn(context[i]);
+      }
+    } <span class="keyword">else</span> {
+      ret = inverse(<span class="keyword">this</span>);
+    }
+    <span class="keyword">return</span> ret;
+  } <span class="keyword">else</span> {
+    <span class="keyword">return</span> fn(context);
+  }
+}, <span class="keyword">function</span>(context, fn) {
+  <span class="keyword">return</span> fn(context);
+});
+
+Handlebars.registerHelper(<span class="string">'each'</span>, <span class="keyword">function</span>(context, fn, inverse) {
+  <span class="keyword">var</span> ret = <span class="string">""</span>;
+
+  <span class="keyword">if</span>(context &amp;&amp; context.length &gt; <span class="number">0</span>) {
+    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, j=context.length; i&lt;j; i++) {
+      ret = ret + fn(context[i]);
+    }
+  } <span class="keyword">else</span> {
+    ret = inverse(<span class="keyword">this</span>);
+  }
+  <span class="keyword">return</span> ret;
+});
+
+Handlebars.registerHelper(<span class="string">'if'</span>, <span class="keyword">function</span>(context, fn, inverse) {
+  <span class="keyword">if</span>(!context || context == []) {
+    <span class="keyword">return</span> inverse(<span class="keyword">this</span>);
+  } <span class="keyword">else</span> {
+    <span class="keyword">return</span> fn(<span class="keyword">this</span>);
+  }
+});
+
+Handlebars.registerHelper(<span class="string">'unless'</span>, <span class="keyword">function</span>(context, fn, inverse) {
+  <span class="keyword">return</span> Handlebars.helpers[<span class="string">'if'</span>].call(<span class="keyword">this</span>, context, inverse, fn);
+});
+
+Handlebars.registerHelper(<span class="string">'with'</span>, <span class="keyword">function</span>(context, fn) {
+  <span class="keyword">return</span> fn(context);
+});
+
+Handlebars.logger = {
+  DEBUG: <span class="number">0</span>, INFO: <span class="number">1</span>, WARN: <span class="number">2</span>, ERROR: <span class="number">3</span>, level: <span class="number">3</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>override in the host environment</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  log: <span class="keyword">function</span>(level, str) {}
+};
+
+Handlebars.log = <span class="keyword">function</span>(level, str) { Handlebars.logger.log(level, str); };
+;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>lib/handlebars/ast.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Handlebars.AST = {};
+
+  Handlebars.AST.ProgramNode = <span class="keyword">function</span>(statements, inverse) {
+    <span class="keyword">this</span>.type = <span class="string">"program"</span>;
+    <span class="keyword">this</span>.statements = statements;
+    <span class="keyword">if</span>(inverse) { <span class="keyword">this</span>.inverse = <span class="keyword">new</span> Handlebars.AST.ProgramNode(inverse); }
+  };
+
+  Handlebars.AST.MustacheNode = <span class="keyword">function</span>(params, hash, unescaped) {
+    <span class="keyword">this</span>.type = <span class="string">"mustache"</span>;
+    <span class="keyword">this</span>.id = params[<span class="number">0</span>];
+    <span class="keyword">this</span>.params = params.slice(<span class="number">1</span>);
+    <span class="keyword">this</span>.hash = hash;
+    <span class="keyword">this</span>.escaped = !unescaped;
+  };
+
+  Handlebars.AST.PartialNode = <span class="keyword">function</span>(id, context) {
+    <span class="keyword">this</span>.type    = <span class="string">"partial"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>TODO: disallow complex IDs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">this</span>.id      = id;
+    <span class="keyword">this</span>.context = context;
+  };
+
+  <span class="keyword">var</span> verifyMatch = <span class="keyword">function</span>(open, close) {
+    <span class="keyword">if</span>(open.original !== close.original) {
+      <span class="keyword">throw</span> <span class="keyword">new</span> Handlebars.Exception(open.original + <span class="string">" doesn't match "</span> + close.original);
+    }
+  };
+
+  Handlebars.AST.BlockNode = <span class="keyword">function</span>(mustache, program, close) {
+    verifyMatch(mustache.id, close);
+    <span class="keyword">this</span>.type = <span class="string">"block"</span>;
+    <span class="keyword">this</span>.mustache = mustache;
+    <span class="keyword">this</span>.program  = program;
+  };
+
+  Handlebars.AST.InverseNode = <span class="keyword">function</span>(mustache, program, close) {
+    verifyMatch(mustache.id, close);
+    <span class="keyword">this</span>.type = <span class="string">"inverse"</span>;
+    <span class="keyword">this</span>.mustache = mustache;
+    <span class="keyword">this</span>.program  = program;
+  };
+
+  Handlebars.AST.ContentNode = <span class="keyword">function</span>(string) {
+    <span class="keyword">this</span>.type = <span class="string">"content"</span>;
+    <span class="keyword">this</span>.string = string;
+  };
+
+  Handlebars.AST.HashNode = <span class="keyword">function</span>(pairs) {
+    <span class="keyword">this</span>.type = <span class="string">"hash"</span>;
+    <span class="keyword">this</span>.pairs = pairs;
+  };
+
+  Handlebars.AST.IdNode = <span class="keyword">function</span>(parts) {
+    <span class="keyword">this</span>.type = <span class="string">"ID"</span>;
+    <span class="keyword">this</span>.original = parts.join(<span class="string">"."</span>);
+
+    <span class="keyword">var</span> dig = [], depth = <span class="number">0</span>;
+
+    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,l=parts.length; i&lt;l; i++) {
+      <span class="keyword">var</span> part = parts[i];
+
+      <span class="keyword">if</span>(part === <span class="string">".."</span>) { depth++; }
+      <span class="keyword">else</span> <span class="keyword">if</span>(part === <span class="string">"."</span> || part === <span class="string">"this"</span>) { <span class="keyword">continue</span>; }
+      <span class="keyword">else</span> { dig.push(part); }
+    }
+
+    <span class="keyword">this</span>.parts    = dig;
+    <span class="keyword">this</span>.string   = dig.join(<span class="string">'.'</span>);
+    <span class="keyword">this</span>.depth    = depth;
+    <span class="keyword">this</span>.isSimple = (dig.length === <span class="number">1</span>) &amp;&amp; (depth === <span class="number">0</span>);
+  };
+
+  Handlebars.AST.StringNode = <span class="keyword">function</span>(string) {
+    <span class="keyword">this</span>.type = <span class="string">"STRING"</span>;
+    <span class="keyword">this</span>.string = string;
+  };
+
+  Handlebars.AST.IntegerNode = <span class="keyword">function</span>(integer) {
+    <span class="keyword">this</span>.type = <span class="string">"INTEGER"</span>;
+    <span class="keyword">this</span>.integer = integer;
+  };
+
+  Handlebars.AST.BooleanNode = <span class="keyword">function</span>(boolean) {
+    <span class="keyword">this</span>.type = <span class="string">"BOOLEAN"</span>;
+    <span class="keyword">this</span>.boolean = boolean;
+  };
+
+  Handlebars.AST.CommentNode = <span class="keyword">function</span>(comment) {
+    <span class="keyword">this</span>.type = <span class="string">"comment"</span>;
+    <span class="keyword">this</span>.comment = comment;
+  };
+
+})();;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>lib/handlebars/visitor.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Handlebars.Visitor = <span class="keyword">function</span>() {};
+
+Handlebars.Visitor.prototype = {
+  accept: <span class="keyword">function</span>(object) {
+    <span class="keyword">return</span> <span class="keyword">this</span>[object.type](object);
+  }
+};;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>lib/handlebars/utils.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Handlebars.Exception = <span class="keyword">function</span>(message) {
+  <span class="keyword">this</span>.message = message;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Build out our basic SafeString type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Handlebars.SafeString = <span class="keyword">function</span>(string) {
+  <span class="keyword">this</span>.string = string;
+};
+Handlebars.SafeString.prototype.toString = <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="keyword">this</span>.string.toString();
+};
+
+(<span class="keyword">function</span>() {
+  <span class="keyword">var</span> escape = {
+    <span class="string">"&lt;"</span>: <span class="string">"&amp;lt;"</span>,
+    <span class="string">"&gt;"</span>: <span class="string">"&amp;gt;"</span>,
+    <span class="string">'"'</span>: <span class="string">"&amp;quot;"</span>,
+    <span class="string">"'"</span>: <span class="string">"&amp;#x27;"</span>,
+    <span class="string">"`"</span>: <span class="string">"&amp;#x60;"</span>
+  };
+
+  <span class="keyword">var</span> badChars = <span class="regexp">/&amp;(?!\w+;)|[&lt;&gt;"'`]/g</span>;
+  <span class="keyword">var</span> possible = <span class="regexp">/[&amp;&lt;&gt;"'`]/</span>;
+
+  <span class="keyword">var</span> escapeChar = <span class="keyword">function</span>(chr) {
+    <span class="keyword">return</span> escape[chr] || <span class="string">"&amp;amp;"</span>
+  };
+
+  Handlebars.Utils = {
+    escapeExpression: <span class="keyword">function</span>(string) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>don&#39;t escape SafeStrings, since they&#39;re already safe</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> (string <span class="keyword">instanceof</span> Handlebars.SafeString) {
+        <span class="keyword">return</span> string.toString();
+      } <span class="keyword">else</span> <span class="keyword">if</span> (string == <span class="literal">null</span> || string === <span class="literal">false</span>) {
+        <span class="keyword">return</span> <span class="string">""</span>;
+      }
+
+      <span class="keyword">if</span>(!possible.test(string)) { <span class="keyword">return</span> string; }
+      <span class="keyword">return</span> string.replace(badChars, escapeChar);
+    },
+
+    isEmpty: <span class="keyword">function</span>(value) {
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">"undefined"</span>) {
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span> (value === <span class="literal">null</span>) {
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span> (value === <span class="literal">false</span>) {
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span>(Object.prototype.toString.call(value) === <span class="string">"[object Array]"</span> &amp;&amp; value.length === <span class="number">0</span>) {
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      } <span class="keyword">else</span> {
+        <span class="keyword">return</span> <span class="literal">false</span>;
+      }
+    }
+  };
+})();;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>lib/handlebars/compiler.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Handlebars.Compiler = <span class="keyword">function</span>() {};
+Handlebars.JavaScriptCompiler = <span class="keyword">function</span>() {};
+
+(<span class="keyword">function</span>(Compiler, JavaScriptCompiler) {
+  Compiler.OPCODE_MAP = {
+    appendContent: <span class="number">1</span>,
+    getContext: <span class="number">2</span>,
+    lookupWithHelpers: <span class="number">3</span>,
+    lookup: <span class="number">4</span>,
+    append: <span class="number">5</span>,
+    invokeMustache: <span class="number">6</span>,
+    appendEscaped: <span class="number">7</span>,
+    pushString: <span class="number">8</span>,
+    truthyOrFallback: <span class="number">9</span>,
+    functionOrFallback: <span class="number">10</span>,
+    invokeProgram: <span class="number">11</span>,
+    invokePartial: <span class="number">12</span>,
+    push: <span class="number">13</span>,
+    invokeInverse: <span class="number">14</span>,
+    assignToHash: <span class="number">15</span>,
+    pushStringParam: <span class="number">16</span>
+  };
+
+  Compiler.MULTI_PARAM_OPCODES = {
+    appendContent: <span class="number">1</span>,
+    getContext: <span class="number">1</span>,
+    lookupWithHelpers: <span class="number">1</span>,
+    lookup: <span class="number">1</span>,
+    invokeMustache: <span class="number">2</span>,
+    pushString: <span class="number">1</span>,
+    truthyOrFallback: <span class="number">1</span>,
+    functionOrFallback: <span class="number">1</span>,
+    invokeProgram: <span class="number">2</span>,
+    invokePartial: <span class="number">1</span>,
+    push: <span class="number">1</span>,
+    invokeInverse: <span class="number">1</span>,
+    assignToHash: <span class="number">1</span>,
+    pushStringParam: <span class="number">1</span>
+  };
+
+  Compiler.DISASSEMBLE_MAP = {};
+
+  <span class="keyword">for</span>(<span class="keyword">var</span> prop <span class="keyword">in</span> Compiler.OPCODE_MAP) {
+    <span class="keyword">var</span> value = Compiler.OPCODE_MAP[prop];
+    Compiler.DISASSEMBLE_MAP[value] = prop;
+  }
+
+  Compiler.multiParamSize = <span class="keyword">function</span>(code) {
+    <span class="keyword">return</span> Compiler.MULTI_PARAM_OPCODES[Compiler.DISASSEMBLE_MAP[code]];
+  };
+
+  Compiler.prototype = {
+    compiler: Compiler,
+
+    disassemble: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> opcodes = <span class="keyword">this</span>.opcodes, opcode, nextCode;
+      <span class="keyword">var</span> out = [], str, name, value;
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, l=opcodes.length; i&lt;l; i++) {
+        opcode = opcodes[i];
+
+        <span class="keyword">if</span>(opcode === <span class="string">'DECLARE'</span>) {
+          name = opcodes[++i];
+          value = opcodes[++i];
+          out.push(<span class="string">"DECLARE "</span> + name + <span class="string">" = "</span> + value);
+        } <span class="keyword">else</span> {
+          str = Compiler.DISASSEMBLE_MAP[opcode];
+
+          <span class="keyword">var</span> extraParams = Compiler.multiParamSize(opcode);
+          <span class="keyword">var</span> codes = [];
+
+          <span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>; j&lt;extraParams; j++) {
+            nextCode = opcodes[++i];
+
+            <span class="keyword">if</span>(<span class="keyword">typeof</span> nextCode === <span class="string">"string"</span>) {
+              nextCode = <span class="string">"\""</span> + nextCode.replace(<span class="string">"\n"</span>, <span class="string">"\\n"</span>) + <span class="string">"\""</span>;
+            }
+
+            codes.push(nextCode);
+          }
+
+          str = str + <span class="string">" "</span> + codes.join(<span class="string">" "</span>);
+
+          out.push(str);
+        }
+      }
+
+      <span class="keyword">return</span> out.join(<span class="string">"\n"</span>);
+    },
+
+    guid: <span class="number">0</span>,
+
+    compile: <span class="keyword">function</span>(program, options) {
+      <span class="keyword">this</span>.children = [];
+      <span class="keyword">this</span>.depths = {list: []};
+      <span class="keyword">this</span>.options = options || {};
+      <span class="keyword">return</span> <span class="keyword">this</span>.program(program);
+    },
+
+    accept: <span class="keyword">function</span>(node) {
+      <span class="keyword">return</span> <span class="keyword">this</span>[node.type](node);
+    },
+
+    program: <span class="keyword">function</span>(program) {
+      <span class="keyword">var</span> statements = program.statements, statement;
+      <span class="keyword">this</span>.opcodes = [];
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, l=statements.length; i&lt;l; i++) {
+        statement = statements[i];
+        <span class="keyword">this</span>[statement.type](statement);
+      }
+
+      <span class="keyword">this</span>.depths.list = <span class="keyword">this</span>.depths.list.sort(<span class="keyword">function</span>(a, b) {
+        <span class="keyword">return</span> a - b;
+      });
+
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+
+    compileProgram: <span class="keyword">function</span>(program) {
+      <span class="keyword">var</span> result = <span class="keyword">new</span> <span class="keyword">this</span>.compiler().compile(program, <span class="keyword">this</span>.options);
+      <span class="keyword">var</span> guid = <span class="keyword">this</span>.guid++;
+
+      <span class="keyword">this</span>.usePartial = <span class="keyword">this</span>.usePartial || result.usePartial;
+
+      <span class="keyword">this</span>.children[guid] = result;
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, l=result.depths.list.length; i&lt;l; i++) {
+        depth = result.depths.list[i];
+
+        <span class="keyword">if</span>(depth &lt; <span class="number">2</span>) { <span class="keyword">continue</span>; }
+        <span class="keyword">else</span> { <span class="keyword">this</span>.addDepth(depth - <span class="number">1</span>); }
+      }
+
+      <span class="keyword">return</span> guid;
+    },
+
+    block: <span class="keyword">function</span>(block) {
+      <span class="keyword">var</span> mustache = block.mustache;
+      <span class="keyword">var</span> depth, child, inverse, inverseGuid;
+
+      <span class="keyword">var</span> params = <span class="keyword">this</span>.setupStackForMustache(mustache);
+
+      <span class="keyword">var</span> programGuid = <span class="keyword">this</span>.compileProgram(block.program);
+
+      <span class="keyword">if</span>(block.program.inverse) {
+        inverseGuid = <span class="keyword">this</span>.compileProgram(block.program.inverse);
+        <span class="keyword">this</span>.declare(<span class="string">'inverse'</span>, inverseGuid);
+      }
+
+      <span class="keyword">this</span>.opcode(<span class="string">'invokeProgram'</span>, programGuid, params.length);
+      <span class="keyword">this</span>.declare(<span class="string">'inverse'</span>, <span class="literal">null</span>);
+      <span class="keyword">this</span>.opcode(<span class="string">'append'</span>);
+    },
+
+    inverse: <span class="keyword">function</span>(block) {
+      <span class="keyword">this</span>.ID(block.mustache.id);
+      <span class="keyword">var</span> programGuid = <span class="keyword">this</span>.compileProgram(block.program);
+
+      <span class="keyword">this</span>.opcode(<span class="string">'invokeInverse'</span>, programGuid);
+      <span class="keyword">this</span>.opcode(<span class="string">'append'</span>);
+    },
+
+    hash: <span class="keyword">function</span>(hash) {
+      <span class="keyword">var</span> pairs = hash.pairs, pair, val;
+
+      <span class="keyword">this</span>.opcode(<span class="string">'push'</span>, <span class="string">'{}'</span>);
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, l=pairs.length; i&lt;l; i++) {
+        pair = pairs[i];
+        val  = pair[<span class="number">1</span>];
+
+        <span class="keyword">this</span>.accept(val);
+        <span class="keyword">this</span>.opcode(<span class="string">'assignToHash'</span>, pair[<span class="number">0</span>]);
+      }
+    },
+
+    partial: <span class="keyword">function</span>(partial) {
+      <span class="keyword">var</span> id = partial.id;
+      <span class="keyword">this</span>.usePartial = <span class="literal">true</span>;
+
+      <span class="keyword">if</span>(partial.context) {
+        <span class="keyword">this</span>.ID(partial.context);
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.opcode(<span class="string">'push'</span>, <span class="string">'context'</span>);
+      }
+
+      <span class="keyword">this</span>.opcode(<span class="string">'invokePartial'</span>, id.original);
+      <span class="keyword">this</span>.opcode(<span class="string">'append'</span>);
+    },
+
+    content: <span class="keyword">function</span>(content) {
+      <span class="keyword">this</span>.opcode(<span class="string">'appendContent'</span>, content.string);
+    },
+
+    mustache: <span class="keyword">function</span>(mustache) {
+      <span class="keyword">var</span> params = <span class="keyword">this</span>.setupStackForMustache(mustache);
+
+      <span class="keyword">this</span>.opcode(<span class="string">'invokeMustache'</span>, params.length, mustache.id.original);
+
+      <span class="keyword">if</span>(mustache.escaped) {
+        <span class="keyword">this</span>.opcode(<span class="string">'appendEscaped'</span>);
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.opcode(<span class="string">'append'</span>);
+      }
+    },
+
+    ID: <span class="keyword">function</span>(id) {
+      <span class="keyword">this</span>.addDepth(id.depth);
+
+      <span class="keyword">this</span>.opcode(<span class="string">'getContext'</span>, id.depth);
+
+      <span class="keyword">this</span>.opcode(<span class="string">'lookupWithHelpers'</span>, id.parts[<span class="number">0</span>] || <span class="literal">null</span>);
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>, l=id.parts.length; i&lt;l; i++) {
+        <span class="keyword">this</span>.opcode(<span class="string">'lookup'</span>, id.parts[i]);
+      }
+    },
+
+    STRING: <span class="keyword">function</span>(string) {
+      <span class="keyword">this</span>.opcode(<span class="string">'pushString'</span>, string.string);
+    },
+
+    INTEGER: <span class="keyword">function</span>(integer) {
+      <span class="keyword">this</span>.opcode(<span class="string">'push'</span>, integer.integer);
+    },
+
+    BOOLEAN: <span class="keyword">function</span>(boolean) {
+      <span class="keyword">this</span>.opcode(<span class="string">'push'</span>, boolean.boolean);
+    },
+
+    comment: <span class="keyword">function</span>() {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>HELPERS</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    pushParams: <span class="keyword">function</span>(params) {
+      <span class="keyword">var</span> i = params.length, param;
+
+      <span class="keyword">while</span>(i--) {
+        param = params[i];
+
+        <span class="keyword">if</span>(<span class="keyword">this</span>.options.stringParams) {
+          <span class="keyword">if</span>(param.depth) {
+            <span class="keyword">this</span>.addDepth(param.depth);
+          }
+
+          <span class="keyword">this</span>.opcode(<span class="string">'getContext'</span>, param.depth || <span class="number">0</span>);
+          <span class="keyword">this</span>.opcode(<span class="string">'pushStringParam'</span>, param.string);
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>[param.type](param);
+        }
+      }
+    },
+
+    opcode: <span class="keyword">function</span>(name, val1, val2) {
+      <span class="keyword">this</span>.opcodes.push(Compiler.OPCODE_MAP[name]);
+      <span class="keyword">if</span>(val1 !== <span class="literal">undefined</span>) { <span class="keyword">this</span>.opcodes.push(val1); }
+      <span class="keyword">if</span>(val2 !== <span class="literal">undefined</span>) { <span class="keyword">this</span>.opcodes.push(val2); }
+    },
+
+    declare: <span class="keyword">function</span>(name, value) {
+      <span class="keyword">this</span>.opcodes.push(<span class="string">'DECLARE'</span>);
+      <span class="keyword">this</span>.opcodes.push(name);
+      <span class="keyword">this</span>.opcodes.push(value);
+    },
+
+    addDepth: <span class="keyword">function</span>(depth) {
+      <span class="keyword">if</span>(depth === <span class="number">0</span>) { <span class="keyword">return</span>; }
+
+      <span class="keyword">if</span>(!<span class="keyword">this</span>.depths[depth]) {
+        <span class="keyword">this</span>.depths[depth] = <span class="literal">true</span>;
+        <span class="keyword">this</span>.depths.list.push(depth);
+      }
+    },
+
+    setupStackForMustache: <span class="keyword">function</span>(mustache) {
+      <span class="keyword">var</span> params = mustache.params;
+
+      <span class="keyword">this</span>.pushParams(params);
+
+      <span class="keyword">if</span>(mustache.hash) {
+        <span class="keyword">this</span>.hash(mustache.hash);
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.opcode(<span class="string">'push'</span>, <span class="string">'{}'</span>);
+      }
+
+      <span class="keyword">this</span>.ID(mustache.id);
+
+      <span class="keyword">return</span> params;
+    }
+  };
+
+  JavaScriptCompiler.prototype = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>PUBLIC API: You can override these methods in a subclass to provide
+alternative compiled forms for name lookup and buffering semantics</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    nameLookup: <span class="keyword">function</span>(parent, name, type) {
+      <span class="keyword">if</span>(JavaScriptCompiler.RESERVED_WORDS[name] || name.indexOf(<span class="string">'-'</span>) !== -<span class="number">1</span> || !isNaN(name)) {
+        <span class="keyword">return</span> parent + <span class="string">"['"</span> + name + <span class="string">"']"</span>;
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/^[0-9]+$/</span>.test(name)) {
+        <span class="keyword">return</span> parent + <span class="string">"["</span> + name + <span class="string">"]"</span>;
+      } <span class="keyword">else</span> {
+        <span class="keyword">return</span> parent + <span class="string">"."</span> + name;
+      }
+    },
+
+    appendToBuffer: <span class="keyword">function</span>(string) {
+      <span class="keyword">return</span> <span class="string">"buffer = buffer + "</span> + string + <span class="string">";"</span>;
+    },
+
+    initializeBuffer: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.quotedString(<span class="string">""</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>END PUBLIC API</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    compile: <span class="keyword">function</span>(environment, options) {
+      <span class="keyword">this</span>.environment = environment;
+      <span class="keyword">this</span>.options = options || {};
+
+      <span class="keyword">this</span>.preamble();
+
+      <span class="keyword">this</span>.stackSlot = <span class="number">0</span>;
+      <span class="keyword">this</span>.stackVars = [];
+      <span class="keyword">this</span>.registers = {list: []};
+
+      <span class="keyword">this</span>.compileChildren(environment, options);
+
+      Handlebars.log(Handlebars.logger.DEBUG, environment.disassemble() + <span class="string">"\n\n"</span>);
+
+      <span class="keyword">var</span> opcodes = environment.opcodes, opcode, name, declareName, declareVal;
+
+      <span class="keyword">this</span>.i = <span class="number">0</span>;
+
+      <span class="keyword">for</span>(l=opcodes.length; <span class="keyword">this</span>.i&lt;l; <span class="keyword">this</span>.i++) {
+        opcode = <span class="keyword">this</span>.nextOpcode(<span class="number">0</span>);
+
+        <span class="keyword">if</span>(opcode[<span class="number">0</span>] === <span class="string">'DECLARE'</span>) {
+          <span class="keyword">this</span>.i = <span class="keyword">this</span>.i + <span class="number">2</span>;
+          <span class="keyword">this</span>[opcode[<span class="number">1</span>]] = opcode[<span class="number">2</span>];
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>.i = <span class="keyword">this</span>.i + opcode[<span class="number">1</span>].length;
+          <span class="keyword">this</span>[opcode[<span class="number">0</span>]].apply(<span class="keyword">this</span>, opcode[<span class="number">1</span>]);
+        }
+      }
+
+      <span class="keyword">return</span> <span class="keyword">this</span>.createFunction();
+    },
+
+    nextOpcode: <span class="keyword">function</span>(n) {
+      <span class="keyword">var</span> opcodes = <span class="keyword">this</span>.environment.opcodes, opcode = opcodes[<span class="keyword">this</span>.i + n], name, val;
+      <span class="keyword">var</span> extraParams, codes;
+
+      <span class="keyword">if</span>(opcode === <span class="string">'DECLARE'</span>) {
+        name = opcodes[<span class="keyword">this</span>.i + <span class="number">1</span>];
+        val  = opcodes[<span class="keyword">this</span>.i + <span class="number">2</span>];
+        <span class="keyword">return</span> [<span class="string">'DECLARE'</span>, name, val];
+      } <span class="keyword">else</span> {
+        name = Compiler.DISASSEMBLE_MAP[opcode];
+
+        extraParams = Compiler.multiParamSize(opcode);
+        codes = [];
+
+        <span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>; j&lt;extraParams; j++) {
+          codes.push(opcodes[<span class="keyword">this</span>.i + j + <span class="number">1</span> + n]);
+        }
+
+        <span class="keyword">return</span> [name, codes];
+      }
+    },
+
+    eat: <span class="keyword">function</span>(opcode) {
+      <span class="keyword">this</span>.i = <span class="keyword">this</span>.i + opcode.length;
+    },
+
+    preamble: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> out = [];
+      out.push(<span class="string">"var buffer = "</span> + <span class="keyword">this</span>.initializeBuffer() + <span class="string">", currentContext = context"</span>);
+
+      <span class="keyword">var</span> copies = <span class="string">"helpers = helpers || Handlebars.helpers;"</span>;
+      <span class="keyword">if</span>(<span class="keyword">this</span>.environment.usePartial) { copies = copies + <span class="string">" partials = partials || Handlebars.partials;"</span>; }
+      out.push(copies);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>track the last context pushed into place to allow skipping the
+getContext opcode when it would be a noop</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">this</span>.lastContext = <span class="number">0</span>;
+      <span class="keyword">this</span>.source = out;
+    },
+
+    createFunction: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> container = {
+        escapeExpression: Handlebars.Utils.escapeExpression,
+        invokePartial: Handlebars.VM.invokePartial,
+        programs: [],
+        program: <span class="keyword">function</span>(i, helpers, partials, data) {
+          <span class="keyword">var</span> programWrapper = <span class="keyword">this</span>.programs[i];
+          <span class="keyword">if</span>(data) {
+            <span class="keyword">return</span> Handlebars.VM.program(<span class="keyword">this</span>.children[i], helpers, partials, data);
+          } <span class="keyword">else</span> <span class="keyword">if</span>(programWrapper) {
+            <span class="keyword">return</span> programWrapper;
+          } <span class="keyword">else</span> {
+            programWrapper = <span class="keyword">this</span>.programs[i] = Handlebars.VM.program(<span class="keyword">this</span>.children[i], helpers, partials);
+            <span class="keyword">return</span> programWrapper;
+          }
+        },
+        programWithDepth: Handlebars.VM.programWithDepth,
+        noop: Handlebars.VM.noop
+      };
+      <span class="keyword">var</span> locals = <span class="keyword">this</span>.stackVars.concat(<span class="keyword">this</span>.registers.list);
+
+      <span class="keyword">if</span>(locals.length &gt; <span class="number">0</span>) {
+        <span class="keyword">this</span>.source[<span class="number">0</span>] = <span class="keyword">this</span>.source[<span class="number">0</span>] + <span class="string">", "</span> + locals.join(<span class="string">", "</span>);
+      }
+
+      <span class="keyword">this</span>.source[<span class="number">0</span>] = <span class="keyword">this</span>.source[<span class="number">0</span>] + <span class="string">";"</span>;
+
+      <span class="keyword">this</span>.source.push(<span class="string">"return buffer;"</span>);
+
+      <span class="keyword">var</span> params = [<span class="string">"Handlebars"</span>, <span class="string">"context"</span>, <span class="string">"helpers"</span>, <span class="string">"partials"</span>];
+
+      <span class="keyword">if</span>(<span class="keyword">this</span>.options.data) { params.push(<span class="string">"data"</span>); }
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, l=<span class="keyword">this</span>.environment.depths.list.length; i&lt;l; i++) {
+        params.push(<span class="string">"depth"</span> + <span class="keyword">this</span>.environment.depths.list[i]);
+      }
+
+      <span class="keyword">if</span>(params.length === <span class="number">4</span> &amp;&amp; !<span class="keyword">this</span>.environment.usePartial) { params.pop(); }
+
+      params.push(<span class="keyword">this</span>.source.join(<span class="string">"\n"</span>));
+
+      <span class="keyword">var</span> fn = Function.apply(<span class="keyword">this</span>, params);
+      fn.displayName = <span class="string">"Handlebars.js"</span>;
+
+      Handlebars.log(Handlebars.logger.DEBUG, fn.toString() + <span class="string">"\n\n"</span>);
+
+      container.render = fn;
+
+      container.children = <span class="keyword">this</span>.environment.children;
+
+      <span class="keyword">return</span> <span class="keyword">function</span>(context, options, $depth) {
+        <span class="keyword">try</span> {
+          options = options || {};
+          <span class="keyword">var</span> args = [Handlebars, context, options.helpers, options.partials, options.data];
+          <span class="keyword">var</span> depth = Array.prototype.slice.call(arguments, <span class="number">2</span>);
+          args = args.concat(depth);
+          <span class="keyword">return</span> container.render.apply(container, args);
+        } <span class="keyword">catch</span>(e) {
+          <span class="keyword">throw</span> e;
+        }
+      };
+    },
+
+    appendContent: <span class="keyword">function</span>(content) {
+      <span class="keyword">this</span>.source.push(<span class="keyword">this</span>.appendToBuffer(<span class="keyword">this</span>.quotedString(content)));
+    },
+
+    append: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> local = <span class="keyword">this</span>.popStack();
+      <span class="keyword">this</span>.source.push(<span class="string">"if("</span> + local + <span class="string">" || "</span> + local + <span class="string">" === 0) { "</span> + <span class="keyword">this</span>.appendToBuffer(local) + <span class="string">" }"</span>);
+    },
+
+    appendEscaped: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> opcode = <span class="keyword">this</span>.nextOpcode(<span class="number">1</span>), extra = <span class="string">""</span>;
+
+      <span class="keyword">if</span>(opcode[<span class="number">0</span>] === <span class="string">'appendContent'</span>) {
+        extra = <span class="string">" + "</span> + <span class="keyword">this</span>.quotedString(opcode[<span class="number">1</span>][<span class="number">0</span>]);
+        <span class="keyword">this</span>.eat(opcode);
+      }
+
+      <span class="keyword">this</span>.source.push(<span class="keyword">this</span>.appendToBuffer(<span class="string">"this.escapeExpression("</span> + <span class="keyword">this</span>.popStack() + <span class="string">")"</span> + extra));
+    },
+
+    getContext: <span class="keyword">function</span>(depth) {
+      <span class="keyword">if</span>(<span class="keyword">this</span>.lastContext !== depth) {
+        <span class="keyword">this</span>.lastContext = depth;
+
+        <span class="keyword">if</span>(depth === <span class="number">0</span>) {
+          <span class="keyword">this</span>.source.push(<span class="string">"currentContext = context;"</span>);
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>.source.push(<span class="string">"currentContext = depth"</span> + depth + <span class="string">";"</span>);
+        }
+      }
+    },
+
+    lookupWithHelpers: <span class="keyword">function</span>(name) {
+      <span class="keyword">if</span>(name) {
+        <span class="keyword">var</span> topStack = <span class="keyword">this</span>.nextStack();
+
+        <span class="keyword">var</span> toPush =  <span class="string">"if('"</span> + name + <span class="string">"' in helpers) { "</span> + topStack +
+                      <span class="string">" = "</span> + <span class="keyword">this</span>.nameLookup(<span class="string">'helpers'</span>, name, <span class="string">'helper'</span>) +
+                      <span class="string">"; } else { "</span> + topStack + <span class="string">" = "</span> +
+                      <span class="keyword">this</span>.nameLookup(<span class="string">'currentContext'</span>, name, <span class="string">'context'</span>) +
+                      <span class="string">"; }"</span>;
+
+        <span class="keyword">this</span>.source.push(toPush);
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.pushStack(<span class="string">"currentContext"</span>);
+      }
+    },
+
+    lookup: <span class="keyword">function</span>(name) {
+      <span class="keyword">var</span> topStack = <span class="keyword">this</span>.topStack();
+      <span class="keyword">this</span>.source.push(topStack + <span class="string">" = "</span> + <span class="keyword">this</span>.nameLookup(topStack, name, <span class="string">'context'</span>) + <span class="string">";"</span>);
+    },
+
+    pushStringParam: <span class="keyword">function</span>(string) {
+      <span class="keyword">this</span>.pushStack(<span class="string">"currentContext"</span>);
+      <span class="keyword">this</span>.pushString(string);
+    },
+
+    pushString: <span class="keyword">function</span>(string) {
+      <span class="keyword">this</span>.pushStack(<span class="keyword">this</span>.quotedString(string));
+    },
+
+    push: <span class="keyword">function</span>(name) {
+      <span class="keyword">this</span>.pushStack(name);
+    },
+
+    invokeMustache: <span class="keyword">function</span>(paramSize, original) {
+      <span class="keyword">this</span>.populateParams(paramSize, <span class="keyword">this</span>.quotedString(original), <span class="string">"{}"</span>, <span class="literal">null</span>, <span class="keyword">function</span>(nextStack, helperMissingString, id) {
+        <span class="keyword">this</span>.source.push(<span class="string">"else if("</span> + id + <span class="string">"=== undefined) { "</span> + nextStack + <span class="string">" = helpers.helperMissing.call("</span> + helperMissingString + <span class="string">"); }"</span>);
+        <span class="keyword">this</span>.source.push(<span class="string">"else { "</span> + nextStack + <span class="string">" = "</span> + id + <span class="string">"; }"</span>);
+      });
+    },
+
+    invokeProgram: <span class="keyword">function</span>(guid, paramSize) {
+      <span class="keyword">var</span> inverse = <span class="keyword">this</span>.programExpression(<span class="keyword">this</span>.inverse);
+      <span class="keyword">var</span> mainProgram = <span class="keyword">this</span>.programExpression(guid);
+
+      <span class="keyword">this</span>.populateParams(paramSize, <span class="literal">null</span>, mainProgram, inverse, <span class="keyword">function</span>(nextStack, helperMissingString, id) {
+        <span class="keyword">this</span>.source.push(<span class="string">"else { "</span> + nextStack + <span class="string">" = helpers.blockHelperMissing.call("</span> + helperMissingString + <span class="string">"); }"</span>);
+      });
+    },
+
+    populateParams: <span class="keyword">function</span>(paramSize, helperId, program, inverse, fn) {
+      <span class="keyword">var</span> id = <span class="keyword">this</span>.popStack(), nextStack;
+      <span class="keyword">var</span> params = [], param, stringParam;
+
+      <span class="keyword">var</span> hash = <span class="keyword">this</span>.popStack();
+
+      <span class="keyword">this</span>.register(<span class="string">'tmp1'</span>, program);
+      <span class="keyword">this</span>.source.push(<span class="string">'tmp1.hash = '</span> + hash + <span class="string">';'</span>);
+
+      <span class="keyword">if</span>(<span class="keyword">this</span>.options.stringParams) {
+        <span class="keyword">this</span>.source.push(<span class="string">'tmp1.contexts = [];'</span>);
+      }
+
+      <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;paramSize; i++) {
+        param = <span class="keyword">this</span>.popStack();
+        params.push(param);
+
+        <span class="keyword">if</span>(<span class="keyword">this</span>.options.stringParams) {
+          <span class="keyword">this</span>.source.push(<span class="string">'tmp1.contexts.push('</span> + <span class="keyword">this</span>.popStack() + <span class="string">');'</span>);
+        }
+      }
+
+      <span class="keyword">if</span>(inverse) {
+        <span class="keyword">this</span>.source.push(<span class="string">'tmp1.fn = tmp1;'</span>);
+        <span class="keyword">this</span>.source.push(<span class="string">'tmp1.inverse = '</span> + inverse + <span class="string">';'</span>);
+      }
+
+      <span class="keyword">if</span>(<span class="keyword">this</span>.options.data) {
+        <span class="keyword">this</span>.source.push(<span class="string">'tmp1.data = data;'</span>);
+      }
+
+      params.push(<span class="string">'tmp1'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>TODO: This is legacy behavior. Deprecate and remove.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span>(inverse) {
+        params.push(inverse);
+      }
+
+      <span class="keyword">this</span>.populateCall(params, id, helperId || id, fn);
+    },
+
+    populateCall: <span class="keyword">function</span>(params, id, helperId, fn) {
+      <span class="keyword">var</span> paramString = [<span class="string">"context"</span>].concat(params).join(<span class="string">", "</span>);
+      <span class="keyword">var</span> helperMissingString = [<span class="string">"context"</span>].concat(helperId).concat(params).join(<span class="string">", "</span>);
+
+      nextStack = <span class="keyword">this</span>.nextStack();
+
+      <span class="keyword">this</span>.source.push(<span class="string">"if(typeof "</span> + id + <span class="string">" === 'function') { "</span> + nextStack + <span class="string">" = "</span> + id + <span class="string">".call("</span> + paramString + <span class="string">"); }"</span>);
+      fn.call(<span class="keyword">this</span>, nextStack, helperMissingString, id);
+    },
+
+    invokeInverse: <span class="keyword">function</span>(guid) {
+      <span class="keyword">var</span> program = <span class="keyword">this</span>.programExpression(guid);
+
+      <span class="keyword">var</span> blockMissingParams = [<span class="string">"context"</span>, <span class="keyword">this</span>.topStack(), <span class="string">"this.noop"</span>, program];
+      <span class="keyword">this</span>.pushStack(<span class="string">"helpers.blockHelperMissing.call("</span> + blockMissingParams.join(<span class="string">", "</span>) + <span class="string">")"</span>);
+    },
+
+    invokePartial: <span class="keyword">function</span>(context) {
+      <span class="keyword">this</span>.pushStack(<span class="string">"this.invokePartial("</span> + <span class="keyword">this</span>.nameLookup(<span class="string">'partials'</span>, context, <span class="string">'partial'</span>) + <span class="string">", '"</span> + context + <span class="string">"', "</span> + <span class="keyword">this</span>.popStack() + <span class="string">", helpers, partials);"</span>);
+    },
+
+    assignToHash: <span class="keyword">function</span>(key) {
+      <span class="keyword">var</span> value = <span class="keyword">this</span>.popStack();
+      <span class="keyword">var</span> hash = <span class="keyword">this</span>.topStack();
+
+      <span class="keyword">this</span>.source.push(hash + <span class="string">"['"</span> + key + <span class="string">"'] = "</span> + value + <span class="string">";"</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>HELPERS</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    compiler: JavaScriptCompiler,
+
+    compileChildren: function(environment, options) {
+      var children = environment.children, child, compiler;
+      var compiled = [];
+
+      for(var i=0, l=children.length; i&lt;l; i++) {
+        child = children[i];
+        compiler = new this.compiler();
+
+        compiled[i] = compiler.compile(child, options);
+      }
+
+      environment.rawChildren = children;
+      environment.children = compiled;
+    },
+
+    programExpression: function(guid) {
+      if(guid == null) { return "this.noop"; }
+
+      var programParams = [guid, "helpers", "partials"];
+
+      var depths = this.environment.rawChildren[guid].depths.list;
+
+      if(this.options.data) { programParams.push("data"); }
+
+      for(var i=0, l = depths.length; i&lt;l; i++) {
+        depth = depths[i];
+
+        if(depth === 1) { programParams.push("context"); }
+        else { programParams.push("depth" + (depth - 1)); }
+      }
+
+      if(!this.environment.usePartial) {
+        if(programParams[3]) {
+          programParams[2] = "null";
+        } else {
+          programParams.pop();
+        }
+      }
+
+      if(depths.length === 0) {
+        return "this.program(" + programParams.join(", ") + ")";
+      } else {
+        programParams[0] = "this.children[" + guid + "]";
+        return "this.programWithDepth(" + programParams.join(", ") + ")";
+      }
+    },
+
+    register: function(name, val) {
+      this.useRegister(name);
+      this.source.push(name + " = " + val + ";");
+    },
+
+    useRegister: function(name) {
+      if(!this.registers[name]) {
+        this.registers[name] = true;
+        this.registers.list.push(name);
+      }
+    },
+
+    pushStack: function(item) {
+      this.source.push(this.nextStack() + " = " + item + ";");
+      return "stack" + this.stackSlot;
+    },
+
+    nextStack: function() {
+      this.stackSlot++;
+      if(this.stackSlot &gt; this.stackVars.length) { this.stackVars.push("stack" + this.stackSlot); }
+      return "stack" + this.stackSlot;
+    },
+
+    popStack: function() {
+      return "stack" + this.stackSlot--;
+    },
+
+    topStack: function() {
+      return "stack" + this.stackSlot;
+    },
+
+    quotedString: function(str) {
+      return '"' + str
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r') + '"';
+    }
+  };
+
+  var reservedWords = ("break case catch continue default delete do else finally " +
+                       "for function if in instanceof new return switch this throw " + 
+                       "try typeof var void while with null true false").split(" ");
+
+  compilerWords = JavaScriptCompiler.RESERVED_WORDS = {};
+
+  for(var i=0, l=reservedWords.length; i&lt;l; i++) {
+    compilerWords[reservedWords[i]] = true;
+  }
+
+})(Handlebars.Compiler, Handlebars.JavaScriptCompiler);
+
+Handlebars.VM = {
+  programWithDepth: function(fn, helpers, partials, data, $depth) {
+    var args = Array.prototype.slice.call(arguments, 4);
+
+    return function(context, options) {
+      options = options || {};
+
+      options = {
+        helpers: options.helpers || helpers,
+        partials: options.partials || partials,
+        data: options.data || data
+      };
+
+      return fn.apply(this, [context, options].concat(args));
+    };
+  },
+  program: function(fn, helpers, partials, data) {
+    return function(context, options) {
+      options = options || {};
+
+      return fn(context, {
+        helpers: options.helpers || helpers,
+        partials: options.partials || partials,
+        data: options.data || data
+      });
+    };
+  },
+  noop: function() { return ""; },
+  compile: function(string, options) {
+    var ast = Handlebars.parse(string);
+    var environment = new Handlebars.Compiler().compile(ast, options);
+    return new Handlebars.JavaScriptCompiler().compile(environment, options);
+  },
+  invokePartial: function(partial, name, context, helpers, partials) {
+    if(partial === undefined) {
+      throw new Handlebars.Exception("The partial " + name + " could not be found");
+    } else if(partial instanceof Function) {
+      return partial(context, {helpers: helpers, partials: partials});
+    } else {
+      partials[name] = Handlebars.VM.compile(partial);
+      return partials[name](context, {helpers: helpers, partials: partials});
+    }
+  }
+};
+
+Handlebars.compile = Handlebars.VM.compile;;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

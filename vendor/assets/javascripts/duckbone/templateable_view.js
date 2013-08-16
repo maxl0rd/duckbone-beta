@@ -1,65 +1,64 @@
-/**
-# Duckbone.TemplateableView
+// TemplateableView
+// ================
+//
+// This mixin enables any view to use Duckbone Handlebars templates. Most views in a
+// typical application should use templates and this mixin is included in Duckbone.View.
+//
+// This file also defines many additional Handlebars helpers that provide additional
+// Duckbone-specific functionality.
+//
+// ## Usage
+//
+// To assign a template to a view, do one of the following
+//
+// - Define the View's `templateName` property. This should be the same as the file name in the
+//   templates folder, with slashes changed to underscores. So "posts/post" => "posts_post".
+//   This is the preferred usage.
+// - Define the View's `templateData` property as a raw string Handlebars template
+// - Define the View's `template` property as a compiled Handlebars template
+//
+// Templates are *always* rendered in the context of the View's `model` property.
+//
+// Use the Duckbone helpers to provide additional functionality:
+//
+// - {{#if}} now understands functions, so you can use any function that returns a Boolean value
+// - {{#each}} now understands Collections, so you can iterate over a Collection's models with it
+// - {{attribute}} will automatically include Model attributes
+// - {{attr "foo"}} includes a Model attribute and also updates on any model changes
+// - {{child "fooView"}} includes another view
+//
+// ### Overriding the Default Render Function
+//
+// The view lifecycle provides a default render function for you that renders the template. If you
+// need to do more work in render, just redefine it, calling `renderTemplate()` somewhere.
+//
+//     render: function() {
+//       this.renderTemplate();
+//       // do other stuff here, like ...
+//       return this
+//     }
+//
+// ### Using Sub-Views
+//
+// When a view includes another view, use the following technique:
+//
+// - Define the subview in the parent's `createChildren` callback. The view lifecycle will call this
+//   automatically during renderTemplate. Assign the subview to the parent, ie `this.mySubView`
+// - Use the `{{child}}` helper in the parent's template, ie {{child "mySubView"}}
+// - Teardown is automatic
+//
+// For example:
+//
+//     ParentView = Duckbone.View.extend({
+//       templateData: '<div>Parent View</div>
+//         <div class="childStuff">{{child "childView"}}</div>',
+//       createChildren: function() {
+//         {
+//           childView: new Duckbone.View()
+//         }
+//       }
+//     })
 
-This mixin enables any view to use Duckbone Handlebars templates. Most views in a
-typical application should use templates and this mixin is included in Duckbone.View.
-
-This file also defines many additional Handlebars helpers that provide additional
-Duckbone-specific functionality.
-
-## Usage
-
-To assign a template to a view, do one of the following
-
-- Define the View's `templateName` property. This should be the same as the file name in the
-  templates folder, with slashes changed to underscores. So "posts/post" => "posts_post".
-  This is the preferred usage.
-- Define the View's `templateData` property as a raw string Handlebars template
-- Define the View's `template` property as a compiled Handlebars template
-
-Templates are *always* rendered in the context of the View's `model` property.
-
-Use the Duckbone helpers to provide additional functionality:
-
-- {{#if}} now understands functions, so you can use any function that returns a Boolean value
-- {{#each}} now understands Collections, so you can iterate over a Collection's models with it
-- {{attribute}} will automatically include Model attributes
-- {{attr "foo"}} includes a Model attribute and also updates on any model changes
-- {{child "fooView"}} includes another view
-
-### Overriding the Default Render Function
-
-The view lifecycle provides a default render function for you that renders the template. If you
-need to do more work in render, just redefine it, calling `renderTemplate()` somewhere.
-
-    render: function() {
-      this.renderTemplate();
-      // do other stuff here, like ...
-      return this
-    }
-
-### Using Sub-Views
-
-When a view includes another view, use the following technique:
-
-- Define the subview in the parent's `createChildren` callback. The view lifecycle will call this
-  automatically during renderTemplate. Assign the subview to the parent, ie `this.mySubView`
-- Use the `{{child}}` helper in the parent's template, ie {{child "mySubView"}}
-- Teardown is automatic
-
-For example:
-
-    ParentView = Duckbone.View.extend({
-      templateData: '<div>Parent View</div>
-        <div class="childStuff">{{child "childView"}}</div>',
-      createChildren: function() {
-        {
-          childView: new Duckbone.View()
-        }
-      }
-    })
-
-*/
 (function() {
 
   // ### Template Registry

@@ -1,27 +1,26 @@
-/**
-# Duckbone.NestableView
-
-In the Duckbone View lifecycle, it is critical that the appropriate setup and teardown
-happens for all views. Without this, weak bindings will not get unbound and many other
-"zombie code" bugs will plague the developer. NestableView provides automated setup and
-teardown of child views. This is primarily used by TemplateableView, and its `{{child}}` helper.
-
-This mixin is included in `Duckbone.View`.
-
-# Usage
-
-Provide a `createChildren` method that returns an object containing child view
-instances by name. For example:
-
-    createChildren: function() {
-      return {
-        myStuff: new StuffView({model: user.stuff})
-      }
-    }
-
-The `renderTemplate` method of TemplateableView will call
-`setupNestedViews()` and `removeNestedViews()` as needed.
-*/
+// NestableView
+// ============
+//
+// In the Duckbone View lifecycle, it is critical that the appropriate setup and teardown
+// happens for all views. Without this, weak bindings will not get unbound and many other
+// "zombie code" bugs will plague the developer. NestableView provides automated setup and
+// teardown of child views. This is primarily used by TemplateableView, and its `{{child}}` helper.
+//
+// This mixin is included in `Duckbone.View`.
+//
+// # Usage
+//
+// Provide a `createChildren` method that returns an object containing child view
+// instances by name. For example:
+//
+//     createChildren: function() {
+//       return {
+//         myStuff: new StuffView({model: user.stuff})
+//       }
+//     }
+//
+// The `renderTemplate` method of TemplateableView will call
+// `setupNestedViews()` and `removeNestedViews()` as needed.
 
 (function() {
 

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>BindableView</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>BindableView</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This mixin enables any view to selectively data-bind to changes in the model.
+Many developers prefer this approach over re-rendering an entire view on each model
+change event.</p>
+<h2>Usage</h2>
+<p>Mix Duckbone.BindableView into any View that needs to use declarative data-binding
+to model attributes.</p>
+<h3>Data Binding</h3>
+<p>Data bindings should be defined in the <code>attributeChanges</code> object. The binding value
+can be a string selector, in which case the html of that selector is replaced with
+the model value. It can also be a callback function, which is simply executed,
+in the context of the view. For example:</p>
+<pre><code>attributeChanges: {
+  &#39;attribute&#39;: &#39;span.attribute&#39;,
+  &#39;title&#39;: &#39;div.title&#39;,
+  &#39;amount&#39;: function(val) {
+    $(this.el).find(&#39;span.amount&#39;).html(&#39;$&#39;+val);
+  }
+}</code></pre>
+<p>BindableView also mixes in Duckbone.ViewlifecycleExtensions to assist in creating
+and tearing down bindings. If you are using the lifecycle, then bindings will be
+created and destroyed for you. If not, call <code>bindAttributes()</code> in the view&#39;s
+initialize method to establish the bindings. And call <code>removeWeakBindings()</code> in the
+view&#39;s remove() method.</p>
+<h3>Weak Binding</h3>
+<p>BindableView uses &quot;weak bindings&quot; which are intended to be unbound when the view is
+removed. This prevents zombie callbacks from wreaking havoc as a model gets passed from
+view to view. All of the bindings defined in <code>attributeChanges</code> use weak binding.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>(){
+
+  Duckbone.BindableView = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isBindableView</h4>
+<p>Identifies a view that has BindableView mixed in.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isBindableView: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function included</h4>
+<p>Also mix in Duckbone.ViewLifecycleExtensions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    included: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.hasViewLifecycleExtensions) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.ViewLifecycleExtensions);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function bindAttributes</h4>
+<ul>
+<li>model - the model to bind to, defaulting to <code>this.model</code></li>
+<li>returns - nothing</li>
+</ul>
+<p>Establishes the bindings declared in <code>this.attributeChanges</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindAttributes: <span class="keyword">function</span>(model) {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.attributeChanges) <span class="keyword">return</span>;
+      model = model || <span class="keyword">this</span>.model || <span class="keyword">new</span> Backbone.Model();
+      <span class="keyword">for</span> (<span class="keyword">var</span> attr <span class="keyword">in</span> <span class="keyword">this</span>.attributeChanges) {
+        <span class="keyword">this</span>.bindAttribute(model, attr, <span class="keyword">this</span>.attributeChanges[attr]);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>function bindAttribute</h4>
+<ul>
+<li>model - the model to bind to, defaulting to <code>this.model</code></li>
+<li>attr - the model attribute to bind to</li>
+<li>binding - the jQuery selector or binding callback</li>
+<li>returns - nothing</li>
+</ul>
+<p>Bind a single attribute to the supplied model.
+The binding param can either be a string selector,
+in which case the html of that selector is replaced with the model value
+or a callback function, which is simply executed, in the context of the view.
+If the view is already rendered, then initial values will be set
+to the current state of the model at the time of this call.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindAttribute: <span class="keyword">function</span>(model, attr, binding) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Get model</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      model = model || <span class="keyword">this</span>.model || <span class="keyword">new</span> Backbone.Model();
+      <span class="keyword">var</span> attrValue = Handlebars.Utils.escapeExpression(model.get(attr));
+      <span class="keyword">var</span> handler;
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> binding == <span class="string">"function"</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>The binding is a callback function. Set value now.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        binding.call(<span class="keyword">this</span>, attrValue);
+        handler = <span class="keyword">function</span>() {
+          binding.call(<span class="keyword">this</span>, Handlebars.Utils.escapeExpression(model.get(attr)));
+        }
+      } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> binding == <span class="string">"string"</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>The binding is a selector. Set value now.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        $(<span class="keyword">this</span>.el).find(binding).html(attrValue);
+        handler = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+          $(<span class="keyword">this</span>.el).find(binding).html(Handlebars.Utils.escapeExpression(model.get(attr)));
+        }
+      }
+      <span class="keyword">this</span>._attributeBindings = <span class="keyword">this</span>._attributeBindings || [];
+      <span class="keyword">var</span> e = <span class="string">'change:'</span>+attr;
+      <span class="keyword">this</span>._attributeBindings.push([model, e, handler]);
+      <span class="keyword">this</span>.weakBindTo(model, e, handler, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function unbindAttributes</h4>
+<p>Unbind all previously-bound attributes.  Used internally to clean up for
+re-rendering a template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    unbindAttributes: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>._attributeBindings) {
+        _(<span class="keyword">this</span>._attributeBindings).each(<span class="keyword">function</span>(binding) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>There is no individual unbind for weakBindings.  The housekeeping
+to clean up the metadata would be more expensive than attempting
+to unbind all at teardown for most use cases, so we just do a raw
+unbind.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          binding[<span class="number">0</span>].unbind(binding[<span class="number">1</span>], binding[<span class="number">2</span>]);
+        });
+        <span class="keyword">delete</span> <span class="keyword">this</span>._attributeBindings;
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h4>function bindLiveTimestamps</h4>
+<ul>
+<li>seconds - number of seconds to wait before updating again</li>
+<li>returns - nothing</li>
+</ul>
+<p>If you are using the {{live_timestamp}} helper, then call this function
+to begin updating those timestamps once per minute.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindLiveTimestamps: <span class="keyword">function</span>(seconds) {
+      seconds = seconds || <span class="number">60</span>;
+      <span class="keyword">var</span> updateTimestamps = _.bind(<span class="keyword">function</span>() {
+        $(<span class="keyword">this</span>.el).find(<span class="string">'span[data-live-timestamp]'</span>).each(_.bind(<span class="keyword">function</span>(i, span) {
+          <span class="keyword">var</span> millis = parseInt($(span).attr(<span class="string">'data-live-timestamp'</span>));
+          <span class="keyword">var</span> pretty = Duckbone.helpers.dateToPrettyTimeAgo(<span class="keyword">new</span> Date(millis));
+          $(span).html(pretty);
+        }, <span class="keyword">this</span>))
+      }, <span class="keyword">this</span>);
+      updateTimestamps();
+      <span class="keyword">this</span>._updateLiveTimeStampsInterval = setInterval(updateTimestamps, seconds * <span class="number">1000</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h4>unbindLiveTimestamps</h4>
+<p>Stop updating timestamps.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    unbindLiveTimestamps: <span class="keyword">function</span>() {
+      clearInterval(<span class="keyword">this</span>._updateLiveTimeStampsInterval);
+    }
+
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h4>helper {{live_timestamp}}</h4>
+<p>Creates a partial that can be used to insert a live timestamp.
+Bindable view can use this to update it once per minute.
+The timestamp must be in a format natively parseable by Date.
+usage {{live_timestamp &quot;created_at&quot;}}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> (Handlebars) {
+    Handlebars.registerHelper(<span class="string">"live_timestamp"</span>, <span class="keyword">function</span>(timestamp) {
+      <span class="keyword">var</span> stamp = Duckbone.Handlebars.getAttr(<span class="keyword">this</span>, timestamp);
+      <span class="keyword">if</span> (!stamp) <span class="keyword">return</span> <span class="string">""</span>;
+      <span class="keyword">var</span> date = <span class="keyword">new</span> Date(stamp);
+      <span class="keyword">if</span> (!date) <span class="keyword">return</span> <span class="string">""</span>;
+      <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(
+        <span class="string">'&lt;span data-live-timestamp="'</span> + date.getTime() + <span class="string">'"&gt;'</span> +
+        Duckbone.helpers.dateToPrettyTimeAgo(date) + <span class="string">'&lt;/span&gt;'</span>
+      );
+    });
+  }
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

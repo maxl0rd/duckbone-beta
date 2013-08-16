@@ -1,133 +1,131 @@
-/**
-# Duckbone.EditableView
-
-This module can be added to any view that contains form elements.
-It will take over the form found in its template and all of its fields,
-providing most of the functionality that is needed for taking and saving user input.
-
-## Usage
-
-To use EditableView, take the following steps:
-
-- Include Duckbone.Syncable in the model you are editing, either directly or through a base class.
-- Use the supplied Handlebars helpers to add form fields to your template.
-- Add a "fields" object to your view to define the form's behavior.
-- The `initialize()` method provided by Duckbone.ViewLifecycleExtensions will take care of the rest of form setup.
-- Provide additional functionality in the `afterInitialize()` method
-
-### Defining Fields
-
-The `fields` object is made up of keys that map to fields in your form.
-The key of each field should be identical to the `name` attribute in the field DOM element.
-The provided Handlebars form field helpers use this convention.
-
-There are some standard attributes that can be added to all fields:
-
-- `modelAttribute` - this indicates which attribute of the model this field binds to.
-  It defaults to the same as the form field name, so it is best to map field names exactly
-  to attribute names if possible.
-- `elAttributes` - a set of html attributes that will be added to the field,
-  ie. size, maxLength, placeholder, rows, cols, etc.
-- `validate` - a string representing one of the validators,
-  ie. 'email', 'phone', etc.
-- `validate` - or a callback function returning a boolean indicating field validity
-- `required` - validates that content was entered into the field
-
-Additionally, some fields take special options. Select and Radio Set fields accept:
-
-- `selectOptions` - an object representing ids and values of the selection options
-- `selectOptions` - or a function that returns the above object
-
-A Submit Button accepts:
-
-- `submitForm` - a boolean that determines whether the submit button automatically
-  submits the form or not. The developer may deactivate this and bind his own behavior.
-
-### The Form Manager
-
-The EditableView's default initializer calls `Duckbone.EditableView.createForm()` which
-creates the FormManager object, `this.form`, on the view. The FormManager creates views
-for each form field, and binds all event behaviors. The developer may interact with each
-field individually by calling `this.form.getField("field_name")`.
-
-### Form Binding Behavior
-
-Each form field will automatically bind changes on itself to its model. This behavior is
-defined by each form field type, and implemented by Duckbone.BindableField.
-
-Each field will also bind its validation check, if defined. This behavior is defined on
-all form field types, and implemented by Duckbone.ValidateableField.
-
-Form submission events are captured by the EditableView's FormManager,
-and `Duckbone.FormManager.submit()` is called instead. This method will first ensure that
-the form is valid, and then save the model. Otherwise, invalid fields will show their errors.
-
-To define alternate behavior on form submission, it is simplest to simply omit any submit buttons
-inside the form itself, and bind form submission to another button defined outside of the form itself.
-
-### Default Model Sync Behavior
-
-Be default, the following events trigger these behaviors on the form:
-
-- _form submit_ - Validations are run, and if the form is valid, `model.save()` is called
-- _model sync:create_ - All validation errors are cleared
-- _model sync:update_ - All validation errors are cleared
-- _model sync:invalid_ - The errors object in the response is inspected and
-  errors are displayed on all invalid fields
-- _model sync:success_ - No default operation. The user should bind appropriate behavior,
-  ie. providing feedback or navigating to the next page.
-
-### Defining Additional Model Sync Behavior
-
-Create a `modelSyncEvents` object, in which the keys are model events, and the values
-string names of methods on the view. The callbacks will be run in the context of the view.
-
-If you wish to redefine default behavior, the easiest approach is to
-override `defaultModelSyncSavingHandler` or `defaultModelSyncInvalidHandler`.
-
-### Cloning Models
-
-Editable view clones the given model to create a scratch model to work with in the form.
-When the model is saved, then all attributes from the scratch model are copied back to
-the original model. The approach has a number of advantages:
-
-- The original model does not change until the form is completed
-- The original model is not changed if a form is abandoned
-- All event handlers are bound to the clone and do not need to be cleaned up
-- Temporary form values do not need to persist on the original model
-
-This clone is created by `cloneModelForEditing()` in the default initializer created by
-ViewLifecycleExtensions. If you are not using the lifecycle for some reason, then call this
-method by hand.
-
-If a model has additional properties or associations that are necessary for the form to function,
-then the developer should override the model's `clone()` method so that it creates a clone with
-the desired properties.
-
-### After Save Destination
-
-When the EditableView's model is successfully saved, the original model can be assigned to
-an afterSaveDestination. The model can be added to a collection, or set as a property on another model.
-Define the view's `afterSaveDestination` property as an object in which the key is either
-`collection` or `model`. If it is a model, also define the `association` key with the value the
-string name of the property. If there are multiple after save destinations, then an array of these
-objects may also be given.
-
-Usage examples:
-
-    view.afterSaveDestination = {
-      collection: myCollectionObject
-    };
-    view.afterSaveDestination = {
-      model: myModelObject,
-      association: 'propertyName'
-    };
-    view.afterSaveDestination = [
-      {collection: myCollectionObject},
-      {model: myModelObject, association: 'propertyName'}
-    ];
-
-*/
+// EditableView
+// ============
+//
+// This module can be added to any view that contains form elements.
+// It will take over the form found in its template and all of its fields,
+// providing most of the functionality that is needed for taking and saving user input.
+//
+// ## Usage
+//
+// To use EditableView, take the following steps:
+//
+// - Include Duckbone.Syncable in the model you are editing, either directly or through a base class.
+// - Use the supplied Handlebars helpers to add form fields to your template.
+// - Add a "fields" object to your view to define the form's behavior.
+// - The `initialize()` method provided by Duckbone.ViewLifecycleExtensions will take care of the rest of form setup.
+// - Provide additional functionality in the `afterInitialize()` method
+//
+// ### Defining Fields
+//
+// The `fields` object is made up of keys that map to fields in your form.
+// The key of each field should be identical to the `name` attribute in the field DOM element.
+// The provided Handlebars form field helpers use this convention.
+//
+// There are some standard attributes that can be added to all fields:
+//
+// - `modelAttribute` - this indicates which attribute of the model this field binds to.
+//   It defaults to the same as the form field name, so it is best to map field names exactly
+//   to attribute names if possible.
+// - `elAttributes` - a set of html attributes that will be added to the field,
+//   ie. size, maxLength, placeholder, rows, cols, etc.
+// - `validate` - a string representing one of the validators,
+//   ie. 'email', 'phone', etc.
+// - `validate` - or a callback function returning a boolean indicating field validity
+// - `required` - validates that content was entered into the field
+//
+// Additionally, some fields take special options. Select and Radio Set fields accept:
+//
+// - `selectOptions` - an object representing ids and values of the selection options
+// - `selectOptions` - or a function that returns the above object
+//
+// A Submit Button accepts:
+//
+// - `submitForm` - a boolean that determines whether the submit button automatically
+//   submits the form or not. The developer may deactivate this and bind his own behavior.
+//
+// ### The Form Manager
+//
+// The EditableView's default initializer calls `Duckbone.EditableView.createForm()` which
+// creates the FormManager object, `this.form`, on the view. The FormManager creates views
+// for each form field, and binds all event behaviors. The developer may interact with each
+// field individually by calling `this.form.getField("field_name")`.
+//
+// ### Form Binding Behavior
+//
+// Each form field will automatically bind changes on itself to its model. This behavior is
+// defined by each form field type, and implemented by Duckbone.BindableField.
+//
+// Each field will also bind its validation check, if defined. This behavior is defined on
+// all form field types, and implemented by Duckbone.ValidateableField.
+//
+// Form submission events are captured by the EditableView's FormManager,
+// and `Duckbone.FormManager.submit()` is called instead. This method will first ensure that
+// the form is valid, and then save the model. Otherwise, invalid fields will show their errors.
+//
+// To define alternate behavior on form submission, it is simplest to simply omit any submit buttons
+// inside the form itself, and bind form submission to another button defined outside of the form itself.
+//
+// ### Default Model Sync Behavior
+//
+// Be default, the following events trigger these behaviors on the form:
+//
+// - _form submit_ - Validations are run, and if the form is valid, `model.save()` is called
+// - _model sync:create_ - All validation errors are cleared
+// - _model sync:update_ - All validation errors are cleared
+// - _model sync:invalid_ - The errors object in the response is inspected and
+//   errors are displayed on all invalid fields
+// - _model sync:success_ - No default operation. The user should bind appropriate behavior,
+//   ie. providing feedback or navigating to the next page.
+//
+// ### Defining Additional Model Sync Behavior
+//
+// Create a `modelSyncEvents` object, in which the keys are model events, and the values
+// string names of methods on the view. The callbacks will be run in the context of the view.
+//
+// If you wish to redefine default behavior, the easiest approach is to
+// override `defaultModelSyncSavingHandler` or `defaultModelSyncInvalidHandler`.
+//
+// ### Cloning Models
+//
+// Editable view clones the given model to create a scratch model to work with in the form.
+// When the model is saved, then all attributes from the scratch model are copied back to
+// the original model. The approach has a number of advantages:
+//
+// - The original model does not change until the form is completed
+// - The original model is not changed if a form is abandoned
+// - All event handlers are bound to the clone and do not need to be cleaned up
+// - Temporary form values do not need to persist on the original model
+//
+// This clone is created by `cloneModelForEditing()` in the default initializer created by
+// ViewLifecycleExtensions. If you are not using the lifecycle for some reason, then call this
+// method by hand.
+//
+// If a model has additional properties or associations that are necessary for the form to function,
+// then the developer should override the model's `clone()` method so that it creates a clone with
+// the desired properties.
+//
+// ### After Save Destination
+//
+// When the EditableView's model is successfully saved, the original model can be assigned to
+// an afterSaveDestination. The model can be added to a collection, or set as a property on another model.
+// Define the view's `afterSaveDestination` property as an object in which the key is either
+// `collection` or `model`. If it is a model, also define the `association` key with the value the
+// string name of the property. If there are multiple after save destinations, then an array of these
+// objects may also be given.
+//
+// Usage examples:
+//
+//     view.afterSaveDestination = {
+//       collection: myCollectionObject
+//     };
+//     view.afterSaveDestination = {
+//       model: myModelObject,
+//       association: 'propertyName'
+//     };
+//     view.afterSaveDestination = [
+//       {collection: myCollectionObject},
+//       {model: myModelObject, association: 'propertyName'}
+//     ];
 
 (function() {
 

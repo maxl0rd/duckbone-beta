@@ -1,7 +1,7 @@
-/**
-# Duckbone.FlashableView
-Enables any view or application to manage a set of flash messages.
-*/
+// FlashableView
+// =============
+//
+// Enables any view or application to manage a set of flash messages.
 
 (function() {
 
@@ -12,7 +12,6 @@ Enables any view or application to manage a set of flash messages.
     isFlashableView: true,
 
     // #### function configureFlash
-    // Accepts the following options:
     // - container - the DOM element to insert flash messages into
     // - noticeTemplate - a Handlebars template or template string for the notice
     // - alertTemplate - a Handlebars template or template string for the notice

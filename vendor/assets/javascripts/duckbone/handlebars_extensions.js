@@ -1,8 +1,8 @@
-/**
-# Handlebars Extensions
-Provides additional functionality to the Handlebars core as needed by Duckbone.
-Parts of this are heavily inspired by SproutCore's use of Handlebars.
-*/
+// Handlebars Extensions
+// =====================
+//
+// Provides additional functionality to the Handlebars core as needed by Duckbone.
+// Parts of this are heavily inspired by SproutCore (and Ember's) use of Handlebars.
 
 (function() {
 

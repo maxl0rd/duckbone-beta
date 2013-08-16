@@ -1,8 +1,9 @@
-/**
-# Duckbone.TemplateRegistry
-The TemplateRegistry manages a set of packaged template data and serves
-compiled templates to be used by TemplateableView.
-*/
+// TemplateRegistry
+// ================
+//
+// The TemplateRegistry manages a set of packaged template data and serves
+// compiled templates to be used by TemplateableView.
+
 (function() {
 
   // Template Data is by default in Duckbone.TemplatesData

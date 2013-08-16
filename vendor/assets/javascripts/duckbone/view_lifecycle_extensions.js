@@ -1,21 +1,24 @@
+// ViewLifeCycleExensions
+// ======================
+
+// This module adds default initialize(), render(), and remove() methods to any View class.
+// These methods call any lifecycle hooks on other Duckbone mixins
+// that are present on the View class. These are called in the correct order, so
+// that everything instantiates smoothly, without the developer needing to write initialize().
+
+// All of the Duckbone mixins ending in -View also mix in this module,
+// as a dependency in their included() callback.
+
+// There are several callback hooks available that can be defined on the object:
+
+// - beforeClone() => called before EditableView clones its model for editing
+// - afterClone() => called after EditableView clones its model for editing
+// - afterCreateForm() => called after EditableView renders its form elements
+// - afterInitialize() => called after all other initializations are complete
+// - beforeRemove() => called before the View is removed
+// - afterRemove() => called after the View is removed
+
 (function() {
-
-  // This module adds default initialize(), render(), and remove() methods to any View class.
-  // These methods call any lifecycle hooks on other Duckbone mixins
-  // that are present on the View class. These are called in the correct order, so
-  // that everything instantiates smoothly, without the developer needing to write initialize().
-
-  // All of the Duckbone mixins ending in -View also mix in this module,
-  // as a dependency in their included() callback.
-
-  // There are several callback hooks available that can be defined on the object:
-
-  // - beforeClone() => called before EditableView clones its model for editing
-  // - afterClone() => called after EditableView clones its model for editing
-  // - afterCreateForm() => called after EditableView renders its form elements
-  // - afterInitialize() => called after all other initializations are complete
-  // - beforeRemove() => called before the View is removed
-  // - afterRemove() => called after the View is removed
 
   Duckbone.ViewLifecycleExtensions = {
     hasViewLifecycleExtensions: true,

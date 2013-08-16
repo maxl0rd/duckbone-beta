@@ -1,43 +1,41 @@
-/**
-# Duckbone.BindableView
-
-This mixin enables any view to selectively data-bind to changes in the model.
-Many developers prefer this approach over re-rendering an entire view on each model
-change event.
-
-## Usage
-
-Mix Duckbone.BindableView into any View that needs to use declarative data-binding
-to model attributes.
-
-### Data Binding
-
-Data bindings should be defined in the `attributeChanges` object. The binding value
-can be a string selector, in which case the html of that selector is replaced with
-the model value. It can also be a callback function, which is simply executed,
-in the context of the view. For example:
-
-    attributeChanges: {
-      'attribute': 'span.attribute',
-      'title': 'div.title',
-      'amount': function(val) {
-        $(this.el).find('span.amount').html('$'+val);
-      }
-    }
-
-BindableView also mixes in Duckbone.ViewlifecycleExtensions to assist in creating
-and tearing down bindings. If you are using the lifecycle, then bindings will be
-created and destroyed for you. If not, call `bindAttributes()` in the view's
-initialize method to establish the bindings. And call `removeWeakBindings()` in the
-view's remove() method.
-
-### Weak Binding
-
-BindableView uses "weak bindings" which are intended to be unbound when the view is
-removed. This prevents zombie callbacks from wreaking havoc as a model gets passed from
-view to view. All of the bindings defined in `attributeChanges` use weak binding.
-
-*/
+// BindableView
+// =====================
+//
+// This mixin enables any view to selectively data-bind to changes in the model.
+// Many developers prefer this approach over re-rendering an entire view on each model
+// change event.
+//
+// ## Usage
+//
+// Mix Duckbone.BindableView into any View that needs to use declarative data-binding
+// to model attributes.
+//
+// ### Data Binding
+//
+// Data bindings should be defined in the `attributeChanges` object. The binding value
+// can be a string selector, in which case the html of that selector is replaced with
+// the model value. It can also be a callback function, which is simply executed,
+// in the context of the view. For example:
+//
+//     attributeChanges: {
+//       'attribute': 'span.attribute',
+//       'title': 'div.title',
+//       'amount': function(val) {
+//         $(this.el).find('span.amount').html('$'+val);
+//       }
+//     }
+//
+// BindableView also mixes in Duckbone.ViewlifecycleExtensions to assist in creating
+// and tearing down bindings. If you are using the lifecycle, then bindings will be
+// created and destroyed for you. If not, call `bindAttributes()` in the view's
+// initialize method to establish the bindings. And call `removeWeakBindings()` in the
+// view's remove() method.
+//
+// ### Weak Binding
+//
+// BindableView uses "weak bindings" which are intended to be unbound when the view is
+// removed. This prevents zombie callbacks from wreaking havoc as a model gets passed from
+// view to view. All of the bindings defined in `attributeChanges` use weak binding.
 
 (function(){
 
