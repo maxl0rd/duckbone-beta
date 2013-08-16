@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ViewLifeCycleExensions</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>ViewLifeCycleExensions</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This module adds default initialize(), render(), and remove() methods to any View class.
+These methods call any lifecycle hooks on other Duckbone mixins
+that are present on the View class. These are called in the correct order, so
+that everything instantiates smoothly, without the developer needing to write initialize().</p>
+<p>All of the Duckbone mixins ending in -View also mix in this module,
+as a dependency in their included() callback.</p>
+<p>There are several callback hooks available that can be defined on the object:</p>
+<ul>
+<li>beforeClone() =&gt; called before EditableView clones its model for editing</li>
+<li>afterClone() =&gt; called after EditableView clones its model for editing</li>
+<li>afterCreateForm() =&gt; called after EditableView renders its form elements</li>
+<li>afterInitialize() =&gt; called after all other initializations are complete</li>
+<li>beforeRemove() =&gt; called before the View is removed</li>
+<li>afterRemove() =&gt; called after the View is removed</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.ViewLifecycleExtensions = {
+    hasViewLifecycleExtensions: <span class="literal">true</span>,
+
+    initialize: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+
+      <span class="keyword">this</span>.application = <span class="keyword">this</span>.options.application;
+
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isEditableView) {
+        tryMethod(<span class="keyword">this</span>, <span class="string">'beforeClone'</span>); <span class="comment">// User optionally defines this</span>
+        <span class="keyword">this</span>.cloneModelForEditing();
+        tryMethod(<span class="keyword">this</span>, <span class="string">'afterClone'</span>); <span class="comment">// User optionally defines this</span>
+      }
+      <span class="keyword">this</span>.render();
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isStylizeableView) {
+        <span class="keyword">this</span>.applyStyles();
+      }
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isBindableView) {
+        <span class="keyword">this</span>.bindAttributes();
+      }
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isEditableView) {
+        <span class="keyword">this</span>.bindModelSyncEvents();
+        <span class="keyword">this</span>.createForm();
+        tryMethod(<span class="keyword">this</span>, <span class="string">'afterCreateForm'</span>); <span class="comment">// User optionally defines this</span>
+      }
+      tryMethod(<span class="keyword">this</span>, <span class="string">'afterInitialize'</span>); <span class="comment">// User optionally defines this</span>
+    },
+
+    render: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isTemplateableView) {
+        <span class="keyword">this</span>.renderTemplate();
+      }
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isStylizeableView) {
+        <span class="keyword">this</span>.applyStyles();
+      }
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+
+    remove: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isEditableView) <span class="keyword">this</span>.expireClone();
+      tryMethod(<span class="keyword">this</span>, <span class="string">'beforeRemove'</span>); <span class="comment">// User optionally defines this</span>
+      <span class="keyword">this</span>.removeWeakBindings();
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isNestableView) <span class="keyword">this</span>.removeNestedViews();
+      Backbone.View.prototype.remove.call(<span class="keyword">this</span>);
+      tryMethod(<span class="keyword">this</span>, <span class="string">'afterRemove'</span>); <span class="comment">// User optionally defines this</span>
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Weak Binding</h3>
+<p>Weak bindings are a key feature of the Duckbone view lifecycle.  Weak bindings
+may be created against any object that responds to bind() and unbind() - most
+notably Backbone and jQuery objects.  When a weak binding is made in the context
+of a view, it will automatically be unbound when that view is removed to prevent
+zombie callbacks from causing trouble.</p>
+<h4>function weakBindToModel</h4>
+<p>Because binding to a view&#39;s model is so common, this shortcut method is provided.
+It has the same method signature as <code>model.bind()</code>
+- event - event to bind to, ie &#39;change:foo&#39;
+- callback - callback function
+- context - optional <code>this</code> context for the callback, defaults to the view
+- returns - nothing</p>
+<p>Creates a binding on the view&#39;s model that is unbound when the view is removed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    weakBindToModel: <span class="keyword">function</span>(event, callback, context) {
+      <span class="keyword">this</span>.weakBindTo(<span class="keyword">this</span>.model, event, callback, context);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function weakBindTo</h4>
+<ul>
+<li>obj - An object responding to <code>bind()</code>, e.g. a jQuery object or anything that
+includes Backbone.Events</li>
+<li>event - event to bind to, ie &#39;change:foo&#39;</li>
+<li>callback - callback function</li>
+<li>context - optional <code>this</code> context for the callback, defaults to the view</li>
+<li>returns - nothing</li>
+</ul>
+<p>Creates a binding on the object that is unbound when the view is removed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    weakBindTo: <span class="keyword">function</span>(obj, event, callback, context) {
+      <span class="keyword">this</span>._weakBindings = <span class="keyword">this</span>._weakBindings || [];
+      <span class="keyword">this</span>._weakBindings.push([obj, event, callback]);
+      obj.bind.apply(obj, _.toArray(arguments).slice(<span class="number">1</span>));
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function removeWeakBindings</h4>
+<ul>
+<li>returns - nothing
+Unbinds all weak bindings created by this view</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    removeWeakBindings: <span class="keyword">function</span>() {
+      _.each(<span class="keyword">this</span>._weakBindings, <span class="keyword">function</span>(binding) {
+        binding[<span class="number">0</span>].unbind(binding[<span class="number">1</span>],binding[<span class="number">2</span>]);
+      });
+      <span class="keyword">delete</span> <span class="keyword">this</span>[<span class="string">'_weakBindings'</span>];
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isBindableView) <span class="keyword">this</span>.unbindLiveTimestamps();
+    }
+  }
+
+  <span class="keyword">var</span> tryMethod = <span class="keyword">function</span>(obj, method) {
+    <span class="keyword">if</span> (obj[method]) obj[method].call(obj);
+  }
+
+}).call();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

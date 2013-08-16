@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>PageableView</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>PageableView</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This module provides all the functionality to create a list of views representing a paginated collection,
+and navigation controls to view the different pages.</p>
+<p>It manages two child views: a list view of all the subviews, and a pager view that contains the navigation
+controls.</p>
+<h2>Usage</h2>
+<p>First, create a PageableCollection to hold the model data. For example:</p>
+<pre><code>tickets = new Duckbone.Collection({url: &#39;/tickets&#39;});
+Duckbone.include(tickets, Duckbone.PageableCollection);</code></pre>
+<p>Next, create a class to serve as the sub-view in the list:</p>
+<pre><code>ticketView = Duckbone.View.extend({
+  templateData: &#39;Ticket number {{attr &quot;id&quot;}}&#39;
+});</code></pre>
+<p>Finally, create a PageableView using these two elements, and load the first page of models.</p>
+<pre><code>pagedTickets = new Duckbone.View.extend({
+  collection: tickets,
+  viewClass: ticketView
+});
+pagedTickets.fetchPage(1);</code></pre>
+<p>If you wish to create your own Pager class, then you may also set this on the view&#39;s <code>pagerClass</code>.
+See the default pager code at the end of this file and follow its example.</p>
+<h3>Updating the URL Hash</h3>
+<p>Call <code>bindPageChangeToHashChange</code> on the view to create bindings that update the location bar when
+the pagination options are changed. This facility uses the pseudo query-string feature of
+Duckbone.RouteableApplication to pass the current page through the URL hash. When uses in conjunction
+with a route action that respects these params, it is easy to create bookmarkable urls to any page.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.PageableView = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isPageableView</h4>
+<p>Indicates the presence of this mixin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isPageableView: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function included</h4>
+<p>Also includes TemplateableView which also includes NestableView and ViewLifecycleExtensions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    included: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isTemplateableView) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.TemplateableView);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function getTemplate</h4>
+<p>Override getTemplate to provide a simple default
+This way any of templateName, templateDatam or template can still work as an override</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getTemplate: <span class="keyword">function</span>(templateName) {
+      Duckbone.TemplateableView.getTemplate.call(<span class="keyword">this</span>, templateName, <span class="literal">true</span>);
+      <span class="keyword">this</span>.template = <span class="keyword">this</span>.template || Duckbone.Handlebars.compile(<span class="string">'{{child "list"}}{{child "pager"}}'</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3>Public Methods</h3>
+<h4>function createChildren</h4>
+<p>Creates and returns the list view and the pager view.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createChildren: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> {
+        list: <span class="keyword">this</span>.createListView(),
+        pager: <span class="keyword">this</span>.createPagerView()
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>function createListView</h4>
+<p>Creates the list view container for the elements</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createListView: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">new</span> Duckbone.ListView({
+        viewClass: <span class="keyword">this</span>.viewClass,
+        pageableView: <span class="keyword">this</span>,
+        tagName: <span class="string">'ul'</span>,
+        className: <span class="string">'listable_view'</span>,
+        collection: <span class="keyword">this</span>.collection
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function createPagerView</h4>
+<p>Creates a view for the pager element. Uses the default pager class,
+or the supplied user class set on <code>pagerClass</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createPagerView: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> pagerClass = <span class="keyword">this</span>.options.pagerClass || <span class="keyword">this</span>.pagerClass || Pager;
+      <span class="keyword">return</span> <span class="keyword">new</span> pagerClass({
+        collection: <span class="keyword">this</span>.collection,
+        pageableView: <span class="keyword">this</span>
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>function bindPageChangeToHashChange</h4>
+<p>Create bindings that update the location hash to reflect the pagination options.
+TODO: improve this so all params get in ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindPageChangeToHashChange: <span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>bind &#39;changePage&#39; events to navigation state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">this</span>.application = <span class="keyword">this</span>.options.application || <span class="keyword">this</span>.application;
+      <span class="keyword">if</span> (<span class="keyword">this</span>.application) {
+        <span class="keyword">this</span>.collection.bind(<span class="string">'pageChange'</span>, <span class="keyword">function</span>(p, params) {
+          <span class="keyword">var</span> newLocation = window.location.hash.split(<span class="string">'?'</span>)[<span class="number">0</span>];
+          <span class="keyword">this</span>.application.navigate(newLocation, <span class="literal">false</span>, params);
+        }, <span class="keyword">this</span>);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function scrollToTopOfList</h4>
+<p>Smoothly scrolls up to the top of the list, so that newer items are visible when the page changes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    scrollToTopOfList: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> offset = $(<span class="keyword">this</span>.children.list.el).offset().top - <span class="number">20</span>;
+      $(<span class="string">'html body'</span>).animate({ scrollTop: offset }, <span class="number">400</span>, <span class="string">'swing'</span>);
+    }
+
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h3>Default Pager View Class</h3>
+<p>Handlebars template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> pagerTemplateData =
+  <span class="string">'&lt;div class="pager"&gt;&amp;nbsp;&lt;br/&gt;\
+    {{#if showPrevious}}\
+      &lt;a href="#" class="previous_link"&gt;&amp;laquo;&amp;nbsp;Previous&lt;/a&gt;&amp;nbsp;\
+    {{else}}\
+      &lt;span class="inactive"&gt;&amp;laquo;&amp;nbsp;Previous&lt;/span&gt;&amp;nbsp;\
+    {{/if}}\
+    {{#each pages}}\
+      {{#if currentPage}}\
+        &lt;span class="current"&gt;{{title}}&lt;/span&gt;&amp;nbsp;\
+      {{else}}\
+        &lt;a href="#" class="page_link" data-page="{{id}}"&gt;{{title}}&lt;/a&gt;&amp;nbsp;\
+      {{/if}}\
+    {{/each}}\
+    {{#if showNext}}\
+      &lt;a href="#" class="next_link"&gt;Next&amp;nbsp;&amp;raquo;&lt;/a&gt;\
+    {{else}}\
+      &lt;span class="inactive"&gt;Next&amp;nbsp;&amp;raquo;&lt;/span&gt;\
+    {{/if}}\
+  &lt;/div&gt;'</span>;
+
+  Pager = Backbone.View.extend({
+
+    el: <span class="string">'&lt;div class="pager_view"&gt;&lt;/div&gt;'</span>,
+    templateData: pagerTemplateData,
+
+    events: {
+      <span class="string">'click a.previous_link'</span>: <span class="string">'showPreviousPage'</span>,
+      <span class="string">'click a.next_link'</span>: <span class="string">'showNextPage'</span>,
+      <span class="string">'click a.page_link'</span>: <span class="string">'showPage'</span>
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h4>function initialize</h4>
+<p>Render the view, and then bind render to all collection events.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    initialize: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.render();
+      <span class="keyword">this</span>.collection.bind(<span class="string">'all'</span>, <span class="keyword">this</span>.render, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h4>function render</h4>
+<p>Only renders if pagination data is present and fetched.
+Hide the pager if there is only 1 page of data present.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    render: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.collection.numPages) <span class="keyword">this</span>.renderTemplate(<span class="keyword">this</span>.paginationData());
+      <span class="keyword">if</span> (<span class="keyword">this</span>.collection.numPages &gt; <span class="number">1</span>) {
+        $(<span class="keyword">this</span>.el).show();
+      } <span class="keyword">else</span> {
+        $(<span class="keyword">this</span>.el).hide();
+      }
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h4>function paginationData</h4>
+<ul>
+<li>returns - a data object suitable for passing to a template to render the pager</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    paginationData: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> numPages = <span class="keyword">this</span>.collection.numPages;
+      <span class="keyword">var</span> pageData = {
+        showPrevious: (<span class="keyword">this</span>.collection.currentPage &gt; <span class="number">1</span>),
+        numPages: numPages,
+        showNext: (<span class="keyword">this</span>.collection.currentPage &lt; <span class="keyword">this</span>.collection.numPages),
+        pages: _(_.range(<span class="number">1</span>, numPages+<span class="number">1</span>)).map(<span class="keyword">function</span>(i) {
+          <span class="keyword">return</span> {
+            id: i,
+            title: <span class="string">''</span>+i,
+            currentPage: (i == <span class="keyword">this</span>.collection.currentPage)
+          }
+        }, <span class="keyword">this</span>)
+      };
+      <span class="keyword">return</span> pageData;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h4>function showPage</h4>
+<p>Event handler for a click on any page number link</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    showPage: <span class="keyword">function</span>(e) {
+      e.preventDefault();
+      <span class="keyword">var</span> p = parseInt($(e.target).data(<span class="string">'page'</span>));
+      <span class="keyword">this</span>.options.collection.setPage(p);
+      <span class="keyword">this</span>.options.pageableView.scrollToTopOfList();
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h4>function showPreviousPage</h4>
+<p>Event handler for a click on the previous page link</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    showPreviousPage: <span class="keyword">function</span>(e) {
+      e.preventDefault();
+      <span class="keyword">this</span>.options.collection.prevPage();
+      <span class="keyword">this</span>.options.pageableView.scrollToTopOfList();
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h4>function showNextPage</h4>
+<p>Event handler for a click on the next page link</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    showNextPage: <span class="keyword">function</span>(e) {
+      e.preventDefault();
+      <span class="keyword">this</span>.options.collection.nextPage();
+      <span class="keyword">this</span>.options.pageableView.scrollToTopOfList();
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Make it a TemplateableView</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.include(Pager.prototype, Duckbone.TemplateableView);
+
+}).call();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

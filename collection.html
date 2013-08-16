@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>CollectionHelpers</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>CollectionHelpers</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Provides miscellaneous additions to Backbone.Collection that are
+useful in Duckbone.</p>
+<h2>Usage</h2>
+<p>Mix Duckbone.CollectionHelpers into <code>Backbone.Collection.prototype</code> or
+extend Backbone.Collection into your own base collection class. For example:</p>
+<pre><code>var myapp.Collection = Backbone.Collection.extend();
+Duckbone.include(myapp.Collection, Duckbone.CollectionHelpers);</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.CollectionHelpers = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h4>property hasDuckboneCollectionHelpers</h4>
+<p>indicates the presence of this mixin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    hasDuckboneCollectionHelpers: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function slice</h4>
+<ul>
+<li>offset - the first arg is the 0-index offset into the ordered collection</li>
+<li>length - the second arg is the number of models to return, defaulting to<pre><code>     the rest of the collection after the slice point</code></pre>
+</li>
+<li>returns - an array</li>
+</ul>
+<p>Returns an array that is a subset of the collection&#39;s models.
+Uses the same method signature as <code>Array.slice</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    slice: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.models.slice(arguments);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function toSelectOptions</h4>
+<ul>
+<li>attr - the model attribute to use for the select option html, defaults to &quot;title&quot;</li>
+<li>empty - show an empty slot first</li>
+<li>returns - an Object</li>
+</ul>
+<p>Returns an object suitable for passing to a select or radio field&#39;s selectOptions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    toSelectOptions: <span class="keyword">function</span>(attr, empty) {
+      <span class="keyword">var</span> options = {};
+      attr = attr || <span class="string">'title'</span>;
+      <span class="keyword">if</span> (empty) options[<span class="string">' '</span>] = <span class="string">' '</span>
+      <span class="keyword">this</span>.each(<span class="keyword">function</span>(m) {
+        options[m.id] = m.get(attr);
+      });
+      <span class="keyword">return</span> options;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Take an array of raw objects
+If the ID matches a model in the collection, set that model
+If the ID is not found in the collection, add it
+If a model in the collection is no longer available, remove it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    freshen: <span class="keyword">function</span>(objects) {
+      <span class="keyword">var</span> model;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Mark all for removal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">this</span>.each(<span class="keyword">function</span>(m) {
+        m._remove = <span class="literal">true</span>;
+      });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Apply each object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      _(objects).each(<span class="keyword">function</span>(attrs) {
+        model = <span class="keyword">this</span>.get(attrs.id);
+        <span class="keyword">if</span> (model) {
+          model.set(attrs); <span class="comment">// existing model</span>
+          <span class="keyword">delete</span> model._remove
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>.add(attrs); <span class="comment">// new model</span>
+        }
+      }, <span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Now check for any that are still marked for removal</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">var</span> toRemove = <span class="keyword">this</span>.filter(<span class="keyword">function</span>(m) {
+        <span class="keyword">return</span> m._remove;
+      })
+      _(toRemove).each(<span class="keyword">function</span>(m) {
+        <span class="keyword">this</span>.remove(m);
+      }, <span class="keyword">this</span>);
+      <span class="keyword">this</span>.trigger(<span class="string">'freshen'</span>, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Override Backbone&#39;s fetch method to add &#39;freshen&#39; capability.
+just pass freshen: true to non-destructively update a collection from
+the server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fetch: <span class="keyword">function</span>(options) {
+      options || (options = {});
+      <span class="keyword">var</span> collection = <span class="keyword">this</span>;
+      <span class="keyword">var</span> success = options.success;
+      options.success = <span class="keyword">function</span>(resp, status, xhr) {
+        collection[options.add ? <span class="string">'add'</span> : (options.freshen ? <span class="string">'freshen'</span> : <span class="string">'reset'</span>)](collection.parse(resp, xhr), options);
+        <span class="keyword">if</span> (success) success(collection, resp);
+      };
+      <span class="keyword">var</span> error = options.error;
+      options.error = <span class="keyword">function</span>(resp) {
+        <span class="keyword">if</span> (error) {
+          error(collection, resp, options);
+        } <span class="keyword">else</span> {
+          collection.trigger(<span class="string">'error'</span>, collection, resp, options)
+        }
+      }
+
+      <span class="keyword">return</span> (<span class="keyword">this</span>.sync || Backbone.sync).call(<span class="keyword">this</span>, <span class="string">'read'</span>, <span class="keyword">this</span>, options);
+    }
+  }
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

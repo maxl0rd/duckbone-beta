@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>AssociableModel</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>AssociableModel</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Backbone deliberately provides the flexibility for the developer to manage associated models and
+collections in any way that makes sense for the application. This flexibility is the
+cause of much confusion among beginning developers, and so Duckbone provides this
+straightforward framework for managing Rails-like associations.</p>
+<p>The simple philosphy behind AssociableModel is that nested objects within JSON data
+(or model attributes) are transformed into fully fledged Backbone Models or Collections.
+These exists as properties on the original model, in an analagous way to
+<code>has_one</code> and <code>has_many</code> relationships in Rails.</p>
+<p>In addition, further changes to those nested attributes result in changes to the associations.
+But this relationship is a one way street. Once the attribute data is used to create associated
+models, it is removed from the attributes. So changes to associated models are never reflected
+in the attributes of the original model.</p>
+<p>There is a clear logic behind this approach:</p>
+<ul>
+<li>It is almost always more efficient to serve serialized associations together
+in a single large JSON response.</li>
+<li>Saving back to the server is best done one model at a time. Other strategies involving
+<code>accepts_nested_attributes_for</code> or other ad hoc solutions are inefficient and painful.</li>
+<li>The Duckbone templating system does not require associations to be serialized again
+into a monolithic object, as many other templating engines do. Handlebars simply walks
+the path from one model to another as desired.</li>
+<li>Packing models with associations back into monolithic objects is highly prone to problematic
+circular references, and so this is simply avoided.</li>
+</ul>
+<h2>Usage</h2>
+<p>AssociableModel can be mixed into all models and collections that require it,
+or extend Backbone.Model and Backbone.Collection themselves if desired.</p>
+<p>The <code>hasOne</code> and <code>hasMany</code> methods take objects from the model&#39;s attributes and
+move them into a newly created model. This associated model becomes a property on the original
+model object, and its name is transformed from rails_underscores to camelCase.</p>
+<p>In almost all cases, these functions will be called from the model&#39;s initialize method.</p>
+<h3>Syntax</h3>
+<p>Several associations can be created in each call to hasOne or hasMany. A single object is passed.
+Each key in the object defines the association name.</p>
+<p>In a call to <code>hasOne</code>, the <code>model</code> key indicates the class of the associated model.
+In a call to <code>hasMany</code>, the <code>collection</code> key indicates the class of the associated collection.</p>
+<p>If a reciprocal link is desired on the association, then the <code>belongsTo</code> key is set to the name
+of the reciprocal association link.</p>
+<p>For example:</p>
+<pre><code>var BlogPost = Backbone.Model.extend({
+  initialize: function() {
+    this.hasOne({
+      author: { model: Author },
+      main_photo: { model: Photo, belongsTo: &#39;post&#39; },
+    });
+    this.hasMany({
+      comments: {
+        collection: CommentsCollection,
+        belongsTo: &#39;post&#39; }
+    });
+  }
+});</code></pre>
+<p>In use:</p>
+<pre><code>var myPost = new BlogPost({
+  headline: &quot;An Evolutionary Basis for Procrastination&quot;,
+  author: {
+    name: &quot;Phillip P. Perkins, MD&quot;
+  },
+  main_photo: {
+    url: &quot;http://www.example.com/sdkjh3987.jpg&quot;
+  },
+  comments: [
+    { user: &quot;username1&quot;, body: &quot;Great article!&quot; },
+    { user: &quot;username1&quot;, body: &quot;Waste of time!&quot; }
+  ]
+});
+
+myPost.get(&#39;headline&#39;) =&gt; &quot;Scientists...&quot;
+myPost.mainPhoto.get(&#39;url&#39;) =&gt; &quot;http://...&quot;
+myPost.mainPhoto.post === myPost =&gt; true
+myPost.author.get(&#39;name&#39;) =&gt; &quot;Phillip...&quot;
+myPost.comments.first().get(&#39;user&#39;) =&gt; &quot;username1&quot;
+myPost.comments.first().post === myPost =&gt; true
+etc.</code></pre>
+<h3>Has One Behavior</h3>
+<p>When a hasOne association is initially created, the following occurs:</p>
+<ul>
+<li>The created association name is the attribute key transformed into camelCase.</li>
+<li>If there is no data for the association, then a new model is not created, and the association
+is set to null.</li>
+<li>If there is association data in the attribute, then a new Backbone Model is created with that data.</li>
+<li>The original association attribute data is deleted.</li>
+<li>A setter function is created on the model, named &quot;set[association name]&quot;, which should be used
+for subsequent reassignments.</li>
+</ul>
+<p>When the attribute used to create the association is set again, then the association setter is called instead.</p>
+<p>When the setter function is called, the following occurs:</p>
+<ul>
+<li>If a Backbone.Model is passed to the setter, then it replaces the association. Appropriate <em>add</em> and
+<em>remove</em> events are generated. For example, if <code>setAuthor</code> is called, then an <em>add:author</em> event will be triggered.</li>
+<li>If an attributes object is passed to the setter, then those attributes are set on the association instead.
+If this results in a model change, then a <em>change</em> event will be triggered, ie <em>change:author</em>.</li>
+<li>If the setter is called without arguments, then the association is removed, a <em>remove</em> event triggered,
+and the property set to null.</li>
+</ul>
+<p>If a belongsTo relationship is specified:</p>
+<ul>
+<li>The association <em>must</em> also define a hasOne relationship if a belongsTo link is desired.</li>
+<li>A reciprocal link is created on the association back to the original model</li>
+</ul>
+<h3>Has Many Behavior</h3>
+<p>When a hasMany association is initially created:</p>
+<ul>
+<li>The created association name is the attribute key transformed into camelCase.</li>
+<li>A new collection is created of the desired class.</li>
+<li>If there is association data in the attribute, then a set of new models will be added to the collection.</li>
+</ul>
+<p>When the original attribute is set again (ie from a call to <code>model.fetch()</code>), then the following occurs:</p>
+<ul>
+<li>If the associated collection is a standard Backbone.Collection, then <code>reset()</code> is called with the new data.</li>
+<li>If the associated collection has Duckbone.CollectionHelpers included, then <code>freshen()</code> will be called instead.
+This method results in the same final state of the collection, except that a number of <em>add</em>,
+<em>change</em>, and <em>remove</em> events are triggered instead of <em>reset</em>. Previously existing models are simply
+updated, instead of being blown away by <code>reset()</code>.</li>
+</ul>
+<p>If a belongsTo relationship is specified:</p>
+<ul>
+<li>The association <em>must</em> also define a hasOne relationship if a belongsTo link is desired.</li>
+<li>A reciprocal link is created on the associated collection back to the original model.</li>
+<li>A reciprocal link is also created on each model in the associated collection back to the original model.</li>
+</ul>
+<h3>Special Cases</h3>
+<p>If the desired association should have a different name from that naturally occuring in the JSON,
+then the model&#39;s <code>parse</code> method can be overridden to move that attribute.</p>
+<p>In the event that the developer absolutely must package associations back together as JSON to save
+to the server, then the model&#39;s <code>toJSON</code> method can be overridden to add the association back
+into the JSON.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>(){
+
+  Duckbone.AssociableModel = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isAssociableModel</h4>
+<p>Indicates a class with AssociableModel included</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isAssociableModel: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>function included</h4>
+<p>Creates a new set function that manages the movement of attributes to associated models.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    included: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.setWithoutAssociations) {
+        <span class="keyword">this</span>.setWithoutAssociations = <span class="keyword">this</span>.set
+        <span class="keyword">this</span>.set = setWithAssociations;
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h3>Association Methods</h3>
+<h4>function hasOne</h4>
+<ul>
+<li>assocs - an object describing the associations, as described above</li>
+<li>returns - nothing</li>
+</ul>
+<p>Creates a number of given hasOne associations on the model.
+Each association will be a new Backbone.Model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    hasOne: <span class="keyword">function</span>(assocs) {
+      _.each(assocs, <span class="keyword">function</span>(assoc, key) {
+        <span class="keyword">this</span>._associations = <span class="keyword">this</span>._associations || {};
+        <span class="keyword">this</span>._associations[key] = <span class="string">"hasOne"</span>;
+        createHasOneAssociation(<span class="keyword">this</span>, key, assoc[<span class="string">'model'</span>], assoc[<span class="string">'belongsTo'</span>]);
+      }, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>function hasMany</h4>
+<ul>
+<li>assocs - an object describing the associations, as described above</li>
+<li>returns - nothing</li>
+</ul>
+<p>Creates a number of given hasMany associations on the model.
+Each association will be a new Backbone.Collection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    hasMany: <span class="keyword">function</span>(assocs) {
+      _.each(assocs, <span class="keyword">function</span>(assoc, key) {
+        <span class="keyword">this</span>._associations = <span class="keyword">this</span>._associations || {};
+        <span class="keyword">this</span>._associations[key] = <span class="string">"hasMany"</span>;
+        createHasManyAssociation(<span class="keyword">this</span>, key, assoc[<span class="string">'collection'</span>], assoc[<span class="string">'belongsTo'</span>]);
+      }, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>function cloneWithAssociations</h4>
+<p>Returns a clone of this model that also includes references to its associations.
+If present, this function is used by <code>FormView.cloneModelForEditing</code>.
+Note that the associations themselves are copied, not cloned.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    cloneWithAssociations: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> dolly = <span class="keyword">this</span>.clone();
+      _.each(<span class="keyword">this</span>._associations, <span class="keyword">function</span>(assocType, assocKey) {
+        <span class="keyword">var</span> camelKey = underToCamel(assocKey);
+        dolly[camelKey] = <span class="keyword">this</span>[camelKey];
+      }, <span class="keyword">this</span>);
+      <span class="keyword">return</span> dolly;
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h1>ModelHelpers</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>This set of helpers provides conveniences for many common situations not already
+covered by Backbone.Model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.ModelHelpers = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function simpleSave</h4>
+<ul>
+<li>attrs - The attributes to be saved to the server.</li>
+<li>returns - the jqXHR object</li>
+</ul>
+<p>Posts only the given data to the server, leaving existing model attributes unchanged.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    simpleSave: <span class="keyword">function</span>(attrs) {
+      <span class="keyword">var</span> data = {}
+      <span class="keyword">if</span> (<span class="keyword">this</span>.id) attrs.id = <span class="keyword">this</span>.id;
+      <span class="keyword">if</span>(<span class="keyword">this</span>.paramRoot) {
+        data[<span class="keyword">this</span>.paramRoot] = attrs;
+      } <span class="keyword">else</span> {
+        data = attrs;
+      }
+      <span class="keyword">var</span> json = JSON.stringify(data);
+      <span class="keyword">return</span> <span class="keyword">this</span>.save({}, {
+        contentType: <span class="string">'application/json'</span>,
+        data: json
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function url</h4>
+<p>Overrides Backbone&#39;s default url method with a new version that respects a function-style <code>urlRoot</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    url: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> urlRoot = (<span class="keyword">typeof</span> <span class="keyword">this</span>.urlRoot == <span class="string">'function'</span>) ? <span class="keyword">this</span>.urlRoot() : <span class="keyword">this</span>.urlRoot;
+      <span class="keyword">var</span> base = urlRoot || getUrl(<span class="keyword">this</span>.collection) || urlError();
+      <span class="keyword">if</span> (<span class="keyword">this</span>.isNew()) {
+        <span class="keyword">return</span> base;
+      } <span class="keyword">else</span> {
+        <span class="keyword">return</span> base + (base.charAt(base.length - <span class="number">1</span>) == <span class="string">'/'</span> ? <span class="string">''</span> : <span class="string">'/'</span>) + encodeURIComponent(<span class="keyword">this</span>.id);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h4>function setOne</h4>
+<ul>
+<li>attr - the attribute to set</li>
+<li>val - the new value</li>
+<li>options - same options as for set, ie. <code>{silent: true}</code></li>
+</ul>
+<p>Sets a single attribute on the model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setOne: <span class="keyword">function</span>(attr, val, options) {
+      <span class="keyword">var</span> attrs = {};
+      attrs[attr] = val;
+      <span class="keyword">return</span> <span class="keyword">this</span>.set(attrs, options);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h4>function createGetters</h4>
+<ul>
+<li>Each string in the argument list creates a getter function for that attribute key.</li>
+</ul>
+<p>Creates simple getter functions for all desired attributes.
+Getters are renamed in js syntax, so for example: <code>image_asset_url</code> becomes <code>getImageAssetUrl</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createGetters: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> model = <span class="keyword">this</span>;
+      <span class="keyword">var</span> getterList = arguments;
+      <span class="keyword">var</span> getterFunctions = {};
+      _.each(getterList, <span class="keyword">function</span>(getter) {
+        getterFuncName = underToCamel(getter);
+        getterFuncName = <span class="string">'get'</span> + upCaseFirstChar(getterFuncName);
+        <span class="keyword">if</span> (!model[getterFuncName]) {
+          getterFunctions[getterFuncName] = <span class="keyword">function</span>() { <span class="keyword">return</span> <span class="keyword">this</span>.get(getter); }
+        }
+      });
+      _.extend(<span class="keyword">this</span>, getterFunctions);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h4>function isValidAttribute</h4>
+<p>Determines if an attribute is valid to set, avoiding setting attributes to NaN or undefined.
+In almost all cases, better compatibility with Rails will be achieved by setting attributes
+to null instead.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isValidAttribute: <span class="keyword">function</span>(val) {
+      <span class="keyword">return</span> (!_.isNaN(val) &amp;&amp; !_.isUndefined(val))
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3>Internal functions</h3>
+<p>Do the work of creating a hasOne association</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">createHasOneAssociation</span><span class="params">(model, key, modelClass, belongsTo)</span> {</span>
+    <span class="keyword">var</span> setterName = underToCamel(<span class="string">'set_'</span>+key);
+    <span class="keyword">var</span> relName = underToCamel(key);
+    <span class="keyword">var</span> setter = <span class="keyword">function</span>(assocModel, settingUp) { <span class="comment">// create the setter</span>
+      <span class="keyword">if</span> (assocModel <span class="keyword">instanceof</span> Backbone.Model) { <span class="comment">// Model case</span>
+        <span class="keyword">if</span> (assocModel === model[relName]) <span class="keyword">return</span> assocModel; <span class="comment">// return if same</span>
+        <span class="keyword">if</span> (model[relName]) {
+          model.trigger(<span class="string">'remove:'</span>+relName); <span class="comment">// trigger if something is removed</span>
+          <span class="keyword">if</span> (belongsTo) model[relName][belongsTo] = <span class="literal">null</span>; <span class="comment">// delete reciprocal</span>
+        }
+        model[relName] = assocModel; <span class="comment">// set new associated model</span>
+        <span class="keyword">if</span> (belongsTo) callReciprocalSetter(model, model[relName], belongsTo, settingUp);
+        model.trigger(<span class="string">'add:'</span>+relName);
+      } <span class="keyword">else</span> <span class="keyword">if</span> (assocModel) { <span class="comment">// Attributes Object case</span>
+        <span class="keyword">if</span> (model[relName]) { <span class="comment">// Existing model case</span>
+          <span class="keyword">var</span> bubbleChange = <span class="keyword">function</span>() {
+            model.trigger(<span class="string">'change:'</span>+relName); <span class="comment">// trigger change only if it changes</span>
+          };
+          model[relName].bind(<span class="string">'change'</span>, bubbleChange);
+          model[relName].set(assocModel); <span class="comment">// set new attributes on the association</span>
+          model[relName].unbind(<span class="string">'change'</span>, bubbleChange);
+        } <span class="keyword">else</span> { <span class="comment">// New model case</span>
+          model[relName] = <span class="keyword">new</span> modelClass(assocModel); <span class="comment">// create the model with the new attributes</span>
+          <span class="keyword">if</span> (belongsTo) callReciprocalSetter(model, model[relName], belongsTo, settingUp);
+          model.trigger(<span class="string">'add:'</span>+relName);
+        }
+      } <span class="keyword">else</span> { <span class="comment">// Null case, remove association</span>
+        <span class="keyword">if</span> (model[relName]) { <span class="comment">// existing model case</span>
+          model.trigger(<span class="string">'remove:'</span>+relName);
+          <span class="keyword">if</span> (belongsTo) model[relName][belongsTo] = <span class="literal">null</span>; <span class="comment">// destroy reciprocal association</span>
+        }
+        model[relName] = <span class="literal">null</span>; <span class="comment">// destroy association</span>
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>bind to destroy</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> (model[relName]) {
+        model[relName].bind(<span class="string">'destroy'</span>, <span class="keyword">function</span>() { setter.call(model); });
+      }
+      <span class="keyword">return</span> assocModel;
+    } <span class="comment">// end setter</span>
+    <span class="keyword">try</span> {
+      setter.call(model, model.get(key), <span class="literal">true</span>); <span class="comment">// call the setter to initialize</span>
+    } <span class="keyword">catch</span>(e) {
+      <span class="keyword">throw</span>(<span class="string">'Error creating association for '</span> + key + <span class="string">':\n'</span> + e);
+    }
+    <span class="keyword">delete</span> model.attributes[key]; <span class="comment">// remove associations data from attributes</span>
+    model[setterName] = _.bind(setter, model); <span class="comment">// bind setter to model</span>
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Do the work of creating a hasMany association</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">createHasManyAssociation</span> <span class="params">(model, key, assoc, belongsTo)</span> {</span>
+    <span class="keyword">try</span> {
+      <span class="keyword">var</span> relName = underToCamel(key);
+      <span class="keyword">var</span> relData = model.get(key);
+      <span class="keyword">var</span> collection = model[relName] = <span class="keyword">new</span> assoc(relData); <span class="comment">// create the collection</span>
+      <span class="keyword">delete</span> model.attributes[key]; <span class="comment">// delete the association data from attributes</span>
+      <span class="keyword">if</span> (belongsTo) {
+        collection[belongsTo] = model; <span class="comment">// create reciprocal link</span>
+        collection.each(<span class="keyword">function</span>(m) { <span class="comment">// create reciprocal link on all models</span>
+          callReciprocalSetter(model, m, belongsTo);
+        });
+        collection.bind(<span class="string">'add'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(m)</span> {</span> <span class="comment">// on add(), also give new models reciprocal links</span>
+          callReciprocalSetter(model, m, belongsTo);
+        });
+        collection.bind(<span class="string">'remove'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(m)</span> {</span> <span class="comment">// on remove(), remove reciprocal links</span>
+          m[belongsTo] = <span class="literal">null</span>;
+        });
+        collection.bind(<span class="string">'reset'</span>, <span class="keyword">function</span>(c) { <span class="comment">// on reset(), give all new models reciprocal links</span>
+          c.each(<span class="keyword">function</span>(m) {
+            callReciprocalSetter(model, m, belongsTo);
+          });
+        });
+      }
+    } <span class="keyword">catch</span> (e) {
+      <span class="keyword">throw</span>(<span class="string">'Error creating association for '</span> + key + <span class="string">':\n'</span> + e);
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Call the setter on a reciprocal association to establish the belongsTo</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">callReciprocalSetter</span><span class="params">(model, assocModel, belongsTo, settingUp)</span> {</span>
+    <span class="keyword">var</span> setterName = <span class="string">'set'</span> + belongsTo.slice(<span class="number">0</span>, <span class="number">1</span>).toUpperCase() + belongsTo.slice(<span class="number">1</span>);
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> assocModel[setterName] == <span class="string">"function"</span>) {
+      assocModel[setterName].call(assocModel, model, settingUp);
+    } <span class="keyword">else</span> <span class="keyword">if</span> (settingUp) {
+      assocModel[belongsTo] = model;
+    } <span class="keyword">else</span> { <span class="comment">// Complain if a hasOne association has not been defined for the reciprocal link</span>
+      _.log(<span class="string">"Model:"</span>);
+      _.log(assocModel);
+      <span class="keyword">throw</span>(<span class="string">'To use belongsTo, model must define hasOne for '</span> + belongsTo);
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Replacement function for <code>Model.set</code> that also manages setting to associations.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">setWithAssociations</span><span class="params">(attrs, options)</span> {</span>
+    <span class="keyword">var</span> nonAssocAttrs = {};
+    <span class="keyword">if</span> (attrs <span class="keyword">instanceof</span> Backbone.Model || !<span class="keyword">this</span>._associations) {
+      nonAssocAttrs = attrs;
+    } <span class="keyword">else</span> {
+      _(attrs).each(<span class="keyword">function</span>(v, k) {
+        <span class="keyword">var</span> assocType = <span class="keyword">this</span>._associations[k];
+        <span class="keyword">if</span> (assocType == <span class="string">"hasOne"</span>) {
+          <span class="keyword">var</span> setterName = underToCamel(<span class="string">'set_'</span> + k);
+          <span class="keyword">this</span>[setterName](v);
+        } <span class="keyword">else</span> <span class="keyword">if</span> (assocType == <span class="string">"hasMany"</span>) {
+          <span class="keyword">var</span> relName = underToCamel(k);
+          <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>[relName].freshen == <span class="string">"function"</span>) {
+            <span class="keyword">this</span>[relName].freshen(v);
+          } <span class="keyword">else</span> {
+            <span class="keyword">this</span>[relName].reset(v);
+          }
+        } <span class="keyword">else</span> {
+          nonAssocAttrs[k] = v;
+        }
+      }, <span class="keyword">this</span>);
+    }
+    <span class="keyword">return</span> <span class="keyword">this</span>.setWithoutAssociations.call(<span class="keyword">this</span>, nonAssocAttrs, options);
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Convert <code>a_rails_var</code> to <code>aJavaScriptVar</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">underToCamel</span><span class="params">(word)</span> {</span>
+    <span class="keyword">return</span> word.replace(<span class="regexp">/(\_[a-z])/g</span>, <span class="keyword">function</span>($<span class="number">1</span>) {
+      <span class="keyword">return</span> $<span class="number">1.</span>toUpperCase().replace(<span class="string">'_'</span>,<span class="string">''</span>);
+    });
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Capitalize the first character</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">upCaseFirstChar</span><span class="params">(word)</span> {</span>
+    <span class="keyword">return</span> word.replace(<span class="regexp">/^\w/</span>, <span class="keyword">function</span>($<span class="number">0</span>) {
+      <span class="keyword">return</span> $<span class="number">0.</span>toUpperCase();
+    });
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Get a URL from a Model or Collection as a property or as a function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">getUrl</span><span class="params">(object)</span> {</span>
+    <span class="keyword">if</span> (!(object &amp;&amp; object.url)) <span class="keyword">return</span> <span class="literal">null</span>;
+    <span class="keyword">return</span> _.isFunction(object.url) ? object.url() : object.url;
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Complain</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">urlError</span><span class="params">()</span> {</span>
+    <span class="keyword">throw</span>(<span class="string">'No url for model or collection.'</span>);
+  };
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

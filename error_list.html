@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>error_list.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>error_list.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>(){
+
+  Duckbone.ErrorList = <span class="keyword">function</span>(model) {
+    <span class="keyword">this</span>.model = model;
+    <span class="keyword">this</span>.messages = {};
+    <span class="keyword">this</span>.model.bind(<span class="string">"change"</span>, <span class="keyword">this</span>.clearMessages, <span class="keyword">this</span>);
+    <span class="keyword">this</span>.model.bind(<span class="string">"error"</span>, <span class="keyword">this</span>.updateMessages, <span class="keyword">this</span>);
+  };
+
+  _.extend(Duckbone.ErrorList.prototype, Backbone.Events, {
+    hasBaseMessages: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> !_.isEmpty(<span class="keyword">this</span>.messages.base);
+    },
+
+    clearMessages: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.messages = {};
+      <span class="keyword">this</span>.trigger(<span class="string">"change"</span>);
+    },
+
+    updateMessages: <span class="keyword">function</span>(model, response) {
+      <span class="keyword">try</span> {
+        <span class="keyword">var</span> parsedResponse = JSON.parse(response.responseText)
+        <span class="keyword">if</span> (parsedResponse.error) {
+          <span class="keyword">this</span>.messages = { base: [parsedResponse.error] }
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>.messages = parsedResponse.errors;
+        }
+      } <span class="keyword">catch</span>(e) {
+        <span class="keyword">this</span>.messages = {};
+      }
+      <span class="keyword">this</span>.trigger(<span class="string">"change"</span>);
+    },
+
+    baseMessages: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.messages.base || [];
+    }
+  });
+
+}).call();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

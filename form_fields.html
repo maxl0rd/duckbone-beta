@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Form Fields</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>Form Fields</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This file defines all of the typical web form fields generally used with an EditableView.
+It registers the Handlebars helpers to template a form, as well as the Backbone View classes
+for each field type.</p>
+<h3>Building Form Templates</h3>
+<p>Define a form template for each EditableView using the given Handlebars helpers. It is easiest
+to name each form field with the name of its corresponding model attribute. Define each
+form field&#39;s options in the view&#39;s <code>fields</code> object, as described in the docs for EditableView.
+For example:</p>
+<pre><code>&lt;h1&gt;New Post&lt;/h1&gt;
+{{#form new_post}}
+  {{form_label &quot;headline&quot; &quot;Post Headline&quot;}}
+  {{form_text &quot;headline&quot;}}
+  {{form_label &quot;body&quot; &quot;Post Body&quot;}}
+  {{form_textarea &quot;body&quot;}}
+  {{form_label &quot;category&quot; &quot;Post Category&quot;}}
+  {{form_select &quot;category&quot;}}
+  {{form_submit &quot;new_post&quot; &quot;Create Post&quot;}}
+{{/form}}</code></pre>
+<h3>Custom Field Types</h3>
+<p>Extend the class <code>Duckbone.FormFieldBase</code> to create additional field types. Add additional
+functionality to <code>afterInitialize</code> and <code>createChildren</code>. Override <code>get</code> and <code>set</code> to interact
+with the model.</p>
+<p>Study the class <code>Duckbone.RadioSetFormField</code> for an example of a complex new field type.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h3>Handlebars Helpers</h3>
+<h4>helper {{#form}}</h4>
+<ul>
+<li>name - the form&#39;s <code>name</code> attribute</li>
+<li>block - a block template containing the body of the form</li>
+</ul>
+<p>Block helper to create a form tag. It&#39;s name attribute will be set to the given name,
+and its class will be set to the same. In the event that the form is named in Rails-style
+<code>new_foo</code> or <code>edit_foo</code>, then the class <code>foo</code> will also be added.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form'</span>, <span class="keyword">function</span>(name, block) {
+    <span class="keyword">var</span> className = name;
+    className = className.replace(<span class="regexp">/^(new_)(.*)/</span>, <span class="string">"$2"</span>).replace(<span class="regexp">/^(edit_)(.*)/</span>, <span class="string">"$2"</span>);
+    <span class="keyword">if</span> (className != name) className += <span class="string">' '</span> + name;
+    <span class="keyword">return</span> <span class="string">'&lt;form action="#" name="'</span>+name+<span class="string">'" class="'</span>+className+<span class="string">'"&gt;\n'</span> + block(<span class="keyword">this</span>) + <span class="string">'\n&lt;/form&gt;'</span>;
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h4>helper {{form_error_banner}}</h4>
+<ul>
+<li>text - the text to display in the form&#39;s error banner</li>
+</ul>
+<p>This helper creates a div containing a form error banner. This banner is shown
+whenever the form is submitted and found to be invalid.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_error_banner'</span>, <span class="keyword">function</span>(text) {
+    text = (<span class="keyword">typeof</span> text == <span class="string">"string"</span>) ? text : <span class="string">"Please fix the errors below"</span>;
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;div class="error_banner" style="display: none"&gt;'</span> + Handlebars.Utils.escapeExpression(text) + <span class="string">'&lt;/div&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>helper {{form_error}}</h4>
+<ul>
+<li>name - the form field for which to display validation errors</li>
+</ul>
+<p>Explicitly place the form error el rather than in the default location.
+Otherwise it will be implicitly placed after the element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_error'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;div class="'</span>+ Handlebars.Utils.escapeExpression(name) + <span class="string">'_errors"&gt;&lt;/div&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>helper {{form_label}}</h4>
+<ul>
+<li>name - the name of the associated form field</li>
+<li>text - the text for the label</li>
+</ul>
+<p>Creates an HTML <code>&lt;label&gt;</code> tag that is associated to the given form field.
+If label text is omitted, then the prettified form field name is used.
+For example, <code>new_account_application</code> will become &quot;New Account Application&quot;.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_label'</span>, <span class="keyword">function</span>(name, text_or_block) {
+    <span class="keyword">var</span> text;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> text_or_block == <span class="string">'object'</span>) {
+      text = name; <span class="comment">// text is empty. use name</span>
+      text = text.replace(<span class="regexp">/^(.)/</span>, <span class="keyword">function</span>(c) {
+        <span class="keyword">return</span> c.toUpperCase(); <span class="comment">// capitalize first character</span>
+      });
+      text = text.replace(<span class="regexp">/(\_[a-z])/g</span>, <span class="keyword">function</span>($<span class="number">1</span>) {
+        <span class="keyword">return</span> $<span class="number">1.</span>toUpperCase().replace(<span class="string">'_'</span>,<span class="string">' '</span>); <span class="comment">// capitalize each next word, replace _ with space</span>
+      });
+    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> text_or_block == <span class="string">"function"</span>) {
+      text = <span class="keyword">new</span> Handlebars.SafeString(text_or_block(<span class="keyword">this</span>));
+    } <span class="keyword">else</span> {
+      text = text_or_block;
+    }
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;label data-field-name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;'</span>+Handlebars.Utils.escapeExpression(text)+<span class="string">'&lt;/label&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>helper {{form_text}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;input type=&quot;text&quot;&gt;</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_text'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;input class="form_text" type="text" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"/&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>helper {{form_select}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>Create an empty HTML <code>&lt;select&gt;</code> tag. The form field view is responsible for populating
+the child <code>option</code> elements according to its <code>selectOptions</code> property.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_select'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;select class="form_select" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;&lt;/select&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>helper {{form_radio_set}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>The Duckbone radio set field is a high level abstraction on top of a collection of
+HTML <code>&lt;input type=&quot;radio&gt;&quot;</code> tags, that allows the developer to treat the entire radio
+set as a single form field. The helper creates a container which is populated by the view.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_radio_set'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;div class="form_radio_set" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;&lt;/div&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>helper {{form_checkbox}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;input type=&quot;checkbox&quot;&gt;</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_checkbox'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;input class="form_checkbox" type="checkbox" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"/&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>helper {{form_textarea}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;textarea&gt;</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_textarea'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;textarea class="form_textarea" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;&lt;/textarea&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h4>helper {{form_password}}</h4>
+<ul>
+<li>name - the form field name</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;input type=&quot;password&quot;&gt;</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_password'</span>, <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;input class="form_password" type="password" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;&lt;/input&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h4>helper {{form_submit}}</h4>
+<ul>
+<li>name - the form field name, generally set to the same as the name of the form itself</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;button&gt;</code> for triggering form submission.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_submit'</span>, <span class="keyword">function</span>(name, text) {
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> text == <span class="string">'undefined'</span>) text = <span class="string">"Save"</span>;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> text == <span class="string">'object'</span>) text = <span class="string">"Save"</span>;
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(<span class="string">'&lt;button class="form_submit" name="'</span> +
+      Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;'</span>+Handlebars.Utils.escapeExpression(text)+<span class="string">'&lt;/button&gt;'</span>);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h4>helper {{form_submit_with_spinner}}</h4>
+<ul>
+<li>name - the form field name, generally set to the same as the name of the form itself</li>
+</ul>
+<p>Create an HTML tag of type <code>&lt;button&gt;</code> for triggering form submission.
+Also creates a small invisible spinner graphic, which the form submit view can use.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'form_submit_with_spinner'</span>, <span class="keyword">function</span>(name, text, path) {
+    path = (<span class="keyword">typeof</span> path == <span class="string">'object'</span>) ? <span class="string">'/assets/ajax_loader.gif'</span> : path;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> text == <span class="string">'undefined'</span>) text = <span class="string">"Save"</span>;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> text == <span class="string">'object'</span>) text = <span class="string">"Save"</span>;
+    <span class="keyword">var</span> out = <span class="string">'&lt;button class="form_submit" name="'</span>+Handlebars.Utils.escapeExpression(name)+<span class="string">'"&gt;'</span> +
+      Handlebars.Utils.escapeExpression(text)+<span class="string">'&lt;/button&gt;'</span>;
+    out += <span class="string">'&lt;img src="'</span> + Handlebars.Utils.escapeExpression(path) + <span class="string">'" class="ajax_loading '</span> +
+      Handlebars.Utils.escapeExpression(name)+<span class="string">'_loading" style="display: none"/&gt;'</span>;
+    <span class="keyword">return</span> <span class="keyword">new</span> Handlebars.SafeString(out);
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3>Duckbone.FormFieldBase</h3>
+<p>This provides a base class for all form fields defined in this file, or extended by the developer.
+It extends Backbone View with BindableField and ValidateableField.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.FormFieldBase = Backbone.View.extend();
+
+  _.extend(Duckbone.FormFieldBase.prototype, Duckbone.BindableField, Duckbone.ValidateableField, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h4>function initialize</h4>
+<ul>
+<li>options - <code>Backbone.View</code> initialization options</li>
+</ul>
+<p>Initializes all of the functionality in BindableField and ValidateableField. Calls the hooks
+for further extension.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    initialize: <span class="keyword">function</span>(options) {
+      <span class="keyword">this</span>.name = <span class="keyword">this</span>.options.name || $(<span class="keyword">this</span>.el).attr(<span class="string">'name'</span>);
+      <span class="keyword">this</span>.form = <span class="keyword">this</span>.options.form;
+      <span class="keyword">if</span> (options.elAttributes) $(<span class="keyword">this</span>.el).attr(options.elAttributes);
+      <span class="keyword">this</span>.afterInitialize(options);
+      <span class="keyword">this</span>.createChildren();
+      <span class="keyword">this</span>.bindToModel();
+      <span class="keyword">this</span>.bindToDOM();
+      <span class="keyword">this</span>.bindValidation();
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h4>function afterInitialize</h4>
+<ul>
+<li>options - <code>Backbone.View</code> initialization options</li>
+</ul>
+<p>Provides a hook for the developer to add additional functionality to subclasses.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    afterInitialize: <span class="keyword">function</span>(options) {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h4>function afterInitialize</h4>
+<p>Provides a hook for the developer to add additional functionality to subclasses.
+This method is used when the field must add additional elements to the DOM
+to implement its functionality.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createChildren: <span class="keyword">function</span>() {}
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h3>TextFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.TextFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"text"</span>,
+    stripWhitespace: <span class="literal">true</span>
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h3>SelectFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.SelectFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"select"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h4>function createChildren</h4>
+<p>Adds all of the child <code>&lt;option&gt;</code> elements to the <code>&lt;select&gt;</code> element,
+as defined by the field&#39;s <code>selectOptions</code> property.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createChildren: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.createOptions(<span class="keyword">this</span>.options.selectOptions);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h3>function createOptions</h3>
+<ul>
+<li>newOptions - a dictionary of options for the select
+Adds each option, sorted by label, unless the option <code>{optionsSort: &quot;key&quot;}</code> is given.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createOptions: <span class="keyword">function</span>(newOptions) {
+      <span class="keyword">var</span> newOptions = (<span class="keyword">typeof</span> newOptions == <span class="string">"function"</span>) ? newOptions.call(<span class="keyword">this</span>) : newOptions;
+      <span class="keyword">if</span> (<span class="keyword">this</span>.options.optionsSort == <span class="string">'key'</span>) {
+        _.each(_(newOptions).keys().sort(), <span class="keyword">function</span>(opt) {
+          <span class="keyword">this</span>.addOption(opt, newOptions[opt]);
+        }, <span class="keyword">this</span>);
+      } <span class="keyword">else</span> {
+        invertedOptions = _(newOptions).invert();
+        _.each(_(invertedOptions).keys().sort(), <span class="keyword">function</span>(opt) {
+          <span class="keyword">var</span> label = (opt == <span class="string">'null'</span>) ? <span class="string">''</span> : opt;
+          <span class="keyword">this</span>.addOption(invertedOptions[opt], label);
+        }, <span class="keyword">this</span>);
+      }
+    },
+
+    addOption: <span class="keyword">function</span>(val, label) {
+      <span class="keyword">var</span> optionEl = $(<span class="string">'&lt;option&gt;&lt;/option&gt;'</span>).attr({value: val});
+      optionEl.html(Handlebars.Utils.escapeExpression(label));
+      $(<span class="keyword">this</span>.el).append(optionEl);
+    },
+
+    setOptions: <span class="keyword">function</span>(selectOptions) {
+      $(<span class="keyword">this</span>.el).empty();
+      <span class="keyword">this</span>.createOptions(selectOptions);
+      <span class="keyword">this</span>.synchronizeSelectionWithModel();
+    },
+
+    synchronizeSelectionWithModel: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> modelValue = <span class="keyword">this</span>.model.get(<span class="keyword">this</span>.modelAttribute);
+      <span class="keyword">this</span>.set(modelValue);
+      <span class="keyword">if</span> (<span class="keyword">this</span>.get() != <span class="keyword">this</span>.modelValue) {
+        <span class="keyword">var</span> oneAttr = {}
+        oneAttr[<span class="keyword">this</span>.modelAttribute] = <span class="keyword">this</span>.get();
+        <span class="keyword">this</span>.model.set(oneAttr);
+      }
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h3>RadioSetFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.RadioSetFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"radio_set"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h4>function createChildren</h4>
+<p>Adds all of the child radio button elements to the field,
+as defined by the field&#39;s <code>selectOptions</code> property.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createChildren: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> opts = <span class="keyword">this</span>.options.selectOptions;
+      <span class="keyword">var</span> selectOptions = (<span class="keyword">typeof</span> opts == <span class="string">"function"</span>) ? opts.call(<span class="keyword">this</span>) : opts;
+      <span class="keyword">for</span> (<span class="keyword">var</span> opt <span class="keyword">in</span> selectOptions) {
+        <span class="keyword">var</span> fieldId = <span class="keyword">this</span>.form.name + <span class="string">'_'</span> + <span class="keyword">this</span>.name + <span class="string">'_'</span> + opt;
+        <span class="keyword">var</span> optionEl = $(<span class="string">'&lt;div&gt;&lt;input type="radio"/&gt;&lt;label for="'</span> + fieldId + <span class="string">'" class="radio_label"&gt;&lt;/label&gt;&lt;/div&gt;'</span>);
+        $(optionEl).find(<span class="string">'input'</span>).attr({id: fieldId, name: <span class="keyword">this</span>.name, value: opt});
+        $(optionEl).find(<span class="string">'label'</span>).html(Handlebars.Utils.escapeExpression(<span class="keyword">this</span>.options.selectOptions[opt]));
+        $(<span class="keyword">this</span>.el).append(optionEl);
+      }
+      <span class="keyword">var</span> el = <span class="keyword">this</span>.el;
+      $(<span class="keyword">this</span>.el).find(<span class="string">'input'</span>).bind(<span class="string">'change'</span>, <span class="keyword">function</span>() { <span class="comment">// Retrigger input changes on top level div</span>
+        $(el).trigger(<span class="string">'change'</span>);                           <span class="comment">// which triggers our normal bindings to happen</span>
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h4>function get</h4>
+<ul>
+<li>returns - the value of the field.</li>
+</ul>
+<p>Overrides the super to return the value of the selected radio element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    get: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> $(<span class="keyword">this</span>.el).find(<span class="string">'input:checked'</span>).attr(<span class="string">'value'</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h4>function set</h4>
+<ul>
+<li>newValue - the new field value</li>
+</ul>
+<p>Overrides the super to select the matching radio element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    set: <span class="keyword">function</span>(newValue) {
+      <span class="keyword">var</span> checkedRadio = $(<span class="keyword">this</span>.el).find(<span class="string">'input:checked'</span>).get(<span class="number">0</span>) <span class="comment">// Find existing selection</span>
+      <span class="keyword">if</span> (checkedRadio) checkedRadio.checked = <span class="literal">false</span>; <span class="comment">// Wipe existing selection</span>
+      <span class="keyword">var</span> radio = $(<span class="keyword">this</span>.el).find(<span class="string">'input[value="'</span>+newValue+<span class="string">'"]'</span>).get(<span class="number">0</span>); <span class="comment">// Find the desired new selection.</span>
+      <span class="keyword">if</span> (radio) radio.checked = <span class="literal">true</span>; <span class="comment">// Set new selection</span>
+    }
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h3>CheckboxFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.CheckboxFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"checkbox"</span>,
+
+    get: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> $(<span class="keyword">this</span>.el).is(<span class="string">':checked'</span>);
+    },
+
+    set: <span class="keyword">function</span>(modelValue) {
+      $(<span class="keyword">this</span>.el).attr({checked: modelValue});
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h3>TextAreaFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.TextAreaFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"textarea"</span>,
+    stripWhitespace: <span class="literal">true</span>
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <h3>PasswordFormField</h3>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.PasswordFormField = Duckbone.FormFieldBase.extend({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"password"</span>,
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h3>SubmitFormField</h3>
+<p>Does not extend FormFieldBase since it&#39;s not a BindableField</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.SubmitFormField = Backbone.View.extend();
+
+  _.extend(Duckbone.SubmitFormField.prototype, Duckbone.BindableField, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <h4>property type</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    type: <span class="string">"submit"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <h4>function initialize</h4>
+<ul>
+<li>options - Backbone.View options</li>
+</ul>
+<p>Sets up the submit button. Pass <code>submitForm: false</code> and the button will not
+submit the form, otherwise it will naturally submit the form.
+Additionally, a submit form field may be defined <em>outside</em> of the form itself,
+and the form may be passed in as an option to enable the button to submit it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    initialize: <span class="keyword">function</span>(options) {
+      <span class="keyword">this</span>.form = options.form;
+      <span class="keyword">this</span>.name = options.name;
+      <span class="keyword">this</span>.spinnerEl = $(<span class="keyword">this</span>.el).next(<span class="string">'img.ajax_loading'</span>);
+      $(<span class="keyword">this</span>.el).bind(<span class="string">'click'</span>, _.bind(<span class="keyword">this</span>.bindDisableAndSpin, <span class="keyword">this</span>));
+      <span class="keyword">this</span>.submitForm = (<span class="keyword">typeof</span> options.submitForm == <span class="string">"undefined"</span>) ? <span class="literal">true</span> : options.submitForm;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <h4>function bindDisableAndSpin</h4>
+<p>Bind the method <code>disableAndSpin</code> in response to a button click. If the form is valid,
+and it calls <code>Model.save()</code> then the handler will fire.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindDisableAndSpin: <span class="keyword">function</span>(e) {
+      e.preventDefault();
+      <span class="keyword">this</span>.form.model.unbind(<span class="string">'sync:create'</span>, <span class="keyword">this</span>.disableAndSpin); <span class="comment">// Don't double up bindings</span>
+      <span class="keyword">this</span>.form.model.unbind(<span class="string">'sync:update'</span>, <span class="keyword">this</span>.disableAndSpin);
+      <span class="keyword">this</span>.form.model.bind(<span class="string">'sync:create'</span>, <span class="keyword">this</span>.disableAndSpin, <span class="keyword">this</span>); <span class="comment">// Disable and spin</span>
+      <span class="keyword">this</span>.form.model.bind(<span class="string">'sync:update'</span>, <span class="keyword">this</span>.disableAndSpin, <span class="keyword">this</span>); <span class="comment">// if syncing starts</span>
+      <span class="keyword">if</span> (<span class="keyword">this</span>.submitForm) <span class="keyword">this</span>.form.submit();
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <h4>function disableAndSpin</h4>
+<p>Add the class &#39;loading&#39; to the button, which the developer should use to make the button
+appear disabled. Also, this method steals all subsequent clicks on the button until the
+sync completes, to provide double click protection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    disableAndSpin: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.form.model.unbind(<span class="string">'sync:create'</span>, <span class="keyword">this</span>.disableAndSpin);
+      <span class="keyword">this</span>.form.model.unbind(<span class="string">'sync:update'</span>, <span class="keyword">this</span>.disableAndSpin);
+      <span class="keyword">if</span> (<span class="keyword">this</span>.spinnerEl) $(<span class="keyword">this</span>.spinnerEl).fadeIn();
+      $(<span class="keyword">this</span>.el).addClass(<span class="string">'loading'</span>);
+      $(<span class="keyword">this</span>.el).unbind(<span class="string">'click'</span>);
+      $(<span class="keyword">this</span>.el).bind(<span class="string">'click'</span>, <span class="keyword">this</span>.stealClick);
+      <span class="keyword">this</span>.form.model.bind(<span class="string">'sync:complete'</span>, <span class="keyword">this</span>.syncComplete, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <h4>function stealClick</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    stealClick: <span class="keyword">function</span>(e) {
+      e.preventDefault(); <span class="keyword">return</span> <span class="literal">false</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <h4>function syncComplete</h4>
+<p>Unbind handlers and restore normal state.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    syncComplete: <span class="keyword">function</span>() {
+      $(<span class="keyword">this</span>.el).unbind(<span class="string">'click'</span>);
+      $(<span class="keyword">this</span>.el).removeClass(<span class="string">'loading'</span>);
+      <span class="keyword">if</span> (<span class="keyword">this</span>.spinnerEl) $(<span class="keyword">this</span>.spinnerEl).fadeOut();
+      $(<span class="keyword">this</span>.el).bind(<span class="string">'click'</span>, _.bind(<span class="keyword">this</span>.bindDisableAndSpin, <span class="keyword">this</span>));
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <h3>Field Types Registry</h3>
+<p>Create a registry of all form field types. Add additional user-defined field types here.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.forms.fieldTypes = {
+    text: Duckbone.TextFormField,
+    select: Duckbone.SelectFormField,
+    radio_set: Duckbone.RadioSetFormField,
+    checkbox: Duckbone.CheckboxFormField,
+    textarea: Duckbone.TextAreaFormField,
+    password: Duckbone.PasswordFormField,
+    submit: Duckbone.SubmitFormField
+  };
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>EditableView</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>EditableView</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This module can be added to any view that contains form elements.
+It will take over the form found in its template and all of its fields,
+providing most of the functionality that is needed for taking and saving user input.</p>
+<h2>Usage</h2>
+<p>To use EditableView, take the following steps:</p>
+<ul>
+<li>Include Duckbone.Syncable in the model you are editing, either directly or through a base class.</li>
+<li>Use the supplied Handlebars helpers to add form fields to your template.</li>
+<li>Add a &quot;fields&quot; object to your view to define the form&#39;s behavior.</li>
+<li>The <code>initialize()</code> method provided by Duckbone.ViewLifecycleExtensions will take care of the rest of form setup.</li>
+<li>Provide additional functionality in the <code>afterInitialize()</code> method</li>
+</ul>
+<h3>Defining Fields</h3>
+<p>The <code>fields</code> object is made up of keys that map to fields in your form.
+The key of each field should be identical to the <code>name</code> attribute in the field DOM element.
+The provided Handlebars form field helpers use this convention.</p>
+<p>There are some standard attributes that can be added to all fields:</p>
+<ul>
+<li><code>modelAttribute</code> - this indicates which attribute of the model this field binds to.
+It defaults to the same as the form field name, so it is best to map field names exactly
+to attribute names if possible.</li>
+<li><code>elAttributes</code> - a set of html attributes that will be added to the field,
+ie. size, maxLength, placeholder, rows, cols, etc.</li>
+<li><code>validate</code> - a string representing one of the validators,
+ie. &#39;email&#39;, &#39;phone&#39;, etc.</li>
+<li><code>validate</code> - or a callback function returning a boolean indicating field validity</li>
+<li><code>required</code> - validates that content was entered into the field</li>
+</ul>
+<p>Additionally, some fields take special options. Select and Radio Set fields accept:</p>
+<ul>
+<li><code>selectOptions</code> - an object representing ids and values of the selection options</li>
+<li><code>selectOptions</code> - or a function that returns the above object</li>
+</ul>
+<p>A Submit Button accepts:</p>
+<ul>
+<li><code>submitForm</code> - a boolean that determines whether the submit button automatically
+submits the form or not. The developer may deactivate this and bind his own behavior.</li>
+</ul>
+<h3>The Form Manager</h3>
+<p>The EditableView&#39;s default initializer calls <code>Duckbone.EditableView.createForm()</code> which
+creates the FormManager object, <code>this.form</code>, on the view. The FormManager creates views
+for each form field, and binds all event behaviors. The developer may interact with each
+field individually by calling <code>this.form.getField(&quot;field_name&quot;)</code>.</p>
+<h3>Form Binding Behavior</h3>
+<p>Each form field will automatically bind changes on itself to its model. This behavior is
+defined by each form field type, and implemented by Duckbone.BindableField.</p>
+<p>Each field will also bind its validation check, if defined. This behavior is defined on
+all form field types, and implemented by Duckbone.ValidateableField.</p>
+<p>Form submission events are captured by the EditableView&#39;s FormManager,
+and <code>Duckbone.FormManager.submit()</code> is called instead. This method will first ensure that
+the form is valid, and then save the model. Otherwise, invalid fields will show their errors.</p>
+<p>To define alternate behavior on form submission, it is simplest to simply omit any submit buttons
+inside the form itself, and bind form submission to another button defined outside of the form itself.</p>
+<h3>Default Model Sync Behavior</h3>
+<p>Be default, the following events trigger these behaviors on the form:</p>
+<ul>
+<li><em>form submit</em> - Validations are run, and if the form is valid, <code>model.save()</code> is called</li>
+<li><em>model sync:create</em> - All validation errors are cleared</li>
+<li><em>model sync:update</em> - All validation errors are cleared</li>
+<li><em>model sync:invalid</em> - The errors object in the response is inspected and
+errors are displayed on all invalid fields</li>
+<li><em>model sync:success</em> - No default operation. The user should bind appropriate behavior,
+ie. providing feedback or navigating to the next page.</li>
+</ul>
+<h3>Defining Additional Model Sync Behavior</h3>
+<p>Create a <code>modelSyncEvents</code> object, in which the keys are model events, and the values
+string names of methods on the view. The callbacks will be run in the context of the view.</p>
+<p>If you wish to redefine default behavior, the easiest approach is to
+override <code>defaultModelSyncSavingHandler</code> or <code>defaultModelSyncInvalidHandler</code>.</p>
+<h3>Cloning Models</h3>
+<p>Editable view clones the given model to create a scratch model to work with in the form.
+When the model is saved, then all attributes from the scratch model are copied back to
+the original model. The approach has a number of advantages:</p>
+<ul>
+<li>The original model does not change until the form is completed</li>
+<li>The original model is not changed if a form is abandoned</li>
+<li>All event handlers are bound to the clone and do not need to be cleaned up</li>
+<li>Temporary form values do not need to persist on the original model</li>
+</ul>
+<p>This clone is created by <code>cloneModelForEditing()</code> in the default initializer created by
+ViewLifecycleExtensions. If you are not using the lifecycle for some reason, then call this
+method by hand.</p>
+<p>If a model has additional properties or associations that are necessary for the form to function,
+then the developer should override the model&#39;s <code>clone()</code> method so that it creates a clone with
+the desired properties.</p>
+<h3>After Save Destination</h3>
+<p>When the EditableView&#39;s model is successfully saved, the original model can be assigned to
+an afterSaveDestination. The model can be added to a collection, or set as a property on another model.
+Define the view&#39;s <code>afterSaveDestination</code> property as an object in which the key is either
+<code>collection</code> or <code>model</code>. If it is a model, also define the <code>association</code> key with the value the
+string name of the property. If there are multiple after save destinations, then an array of these
+objects may also be given.</p>
+<p>Usage examples:</p>
+<pre><code>view.afterSaveDestination = {
+  collection: myCollectionObject
+};
+view.afterSaveDestination = {
+  model: myModelObject,
+  association: &#39;propertyName&#39;
+};
+view.afterSaveDestination = [
+  {collection: myCollectionObject},
+  {model: myModelObject, association: &#39;propertyName&#39;}
+];</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h4>helper {{base_errors}}</h4>
+<p>This helper creates a ul containing each base error on the form&#39;s model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Handlebars.registerHelper(<span class="string">'base_errors'</span>, <span class="keyword">function</span>() {
+    <span class="keyword">return</span> Handlebars.helpers.child(<span class="string">"_baseErrors"</span>);
+  });
+
+
+  Duckbone.EditableView = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h3>Mixin</h3>
+<h4>property isEditableView</h4>
+<p>Indicates a view that includes EditableView</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isEditableView: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function included</h4>
+<p>Also includes ViewLifecycleExtensions, which automatically calls several of these
+methods during the view&#39;s initialize and remove</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    included: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.hasViewLifecycleExtensions) {
+        Duckbone.include(<span class="keyword">this</span>, Duckbone.ViewLifecycleExtensions);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3>Form Set Up</h3>
+<h4>function createForm</h4>
+<p>Accepts the following options:</p>
+<ul>
+<li>el -  the form element to use, defaults to the first form element found on the view.</li>
+<li>fields - the fields description object, defaults to <code>this.fields</code></li>
+<li>model - the model to bind the form to, defaults to <code>this.model</code></li>
+<li>returns - the new FormManager</li>
+</ul>
+<p>This method creates the view&#39;s FormManager which builds all of the form field views.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createForm: <span class="keyword">function</span>(options) {
+      options = options || {};
+      <span class="keyword">var</span> formElement = options.el || $(<span class="keyword">this</span>.el).find(<span class="string">'form'</span>).get(<span class="number">0</span>) || $(<span class="keyword">this</span>.el).get(<span class="number">0</span>);
+      <span class="keyword">var</span> fieldOptions = options.fields || <span class="keyword">this</span>.options.fields || <span class="keyword">this</span>.fields;
+      <span class="keyword">var</span> model = options.model || <span class="keyword">this</span>.model;
+      <span class="keyword">var</span> form = <span class="keyword">new</span> Duckbone.FormManager({
+        el: formElement,
+        fields: fieldOptions,
+        model: model || <span class="keyword">new</span> Backbone.Model(),
+        view: <span class="keyword">this</span>
+      });
+      <span class="keyword">this</span>.form = <span class="keyword">this</span>.form || form;
+      <span class="keyword">return</span> form;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Override NestableView.setupNestedViews to include base errors</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setupNestedViews: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.children = <span class="keyword">this</span>.createChildren();
+      <span class="keyword">this</span>.children._baseErrors = <span class="keyword">new</span> Duckbone.BaseErrorsView({ model: <span class="keyword">new</span> Duckbone.ErrorList(<span class="keyword">this</span>.model) });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h4>function bindModelSyncEvents</h4>
+<p>Binds the events triggered by a Syncable-enhanced Model to those default
+behaviors defined below. Additionally binds user defined model sync events,
+defined on the view&#39;s <code>modelSyncEvents</code> property.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindModelSyncEvents: <span class="keyword">function</span>() {
+      bindEvents(<span class="keyword">this</span>, defaultModelSyncEvents);
+      <span class="keyword">if</span> (<span class="keyword">this</span>.modelSyncEvents) bindEvents(<span class="keyword">this</span>, <span class="keyword">this</span>.modelSyncEvents);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h3>Model cloning</h3>
+<h4>function cloneModelForEditing</h4>
+<p>This function clones the model for the workspace, and binds a handler to copy back
+attributes to the original model when saved. It also sets up the model&#39;s after save destination.
+After this method has been called, <code>this.model</code> refers to the clone, and <code>this.originalModel</code>
+refers to the original model.
+If you do not wish to edit a clone, simply override this method to return <code>this.model</code> instead.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    cloneModelForEditing: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.model) <span class="keyword">throw</span>(<span class="string">"Found not, has your model been. Cloned, it can not be."</span>);
+      <span class="keyword">this</span>.originalModel = <span class="keyword">this</span>.model;
+      <span class="keyword">this</span>.model = (<span class="keyword">typeof</span> <span class="keyword">this</span>.model.cloneWithAssociations == <span class="string">'function'</span>) ?
+        <span class="keyword">this</span>.model.cloneWithAssociations() : <span class="keyword">this</span>.originalModel.clone();
+      <span class="keyword">this</span>.weakBindToModel(<span class="string">'sync:success'</span>, <span class="keyword">this</span>.saveClone, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h4>function saveClone</h4>
+<p>Automatically called when the model is successfully synced, or <code>finishEditing()</code> is called.
+This saves the edited attributes from the clone back to the original model
+and copies the original model to the requested afterSaveDestination.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    saveClone: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isModelCloned()) <span class="keyword">return</span>;
+      <span class="keyword">var</span> attrs = _.clone(<span class="keyword">this</span>.model.attributes);
+      _(<span class="keyword">this</span>.form.fields).each(<span class="keyword">function</span>(field) {
+        <span class="keyword">if</span> (field.options.temporary) {
+          <span class="keyword">delete</span> attrs[field.modelAttribute];
+        }
+      });
+      <span class="keyword">this</span>.originalModel.set(attrs);
+      copyToDestination.call(<span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4>function expireClone</h4>
+<p>The function is called by the ViewLifecycleExtensions when the view&#39;s <code>remove()</code> method
+is called. It expires the clone and makes it unusable by replacing its get and set methods.
+The developer should be careful not to retain references to the model clone after tearing down the
+EditableView. It also moves the view&#39;s model reference to the originalModel, so that it is
+accessable to any <code>afterRemove()</code> callbacks.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    expireClone: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isModelCloned()) <span class="keyword">return</span>;
+      <span class="keyword">this</span>.model.clear({silent: <span class="literal">true</span>});
+      <span class="keyword">var</span> explode = <span class="keyword">function</span>() {
+        <span class="keyword">throw</span>(<span class="string">'Attempted get/set on expired clone from Duckbone.EditableView. Use original model instead.'</span>);
+      }
+      <span class="keyword">this</span>.model.set = explode;
+      <span class="keyword">this</span>.model.get = explode;
+      <span class="keyword">this</span>.model = <span class="keyword">this</span>.originalModel;
+      <span class="keyword">delete</span> <span class="keyword">this</span>.originalModel;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h4>function resetModel</h4>
+<p>Discards any edits to the clone, and restore its attributes from the original model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    resetModel: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (!<span class="keyword">this</span>.isModelCloned()) <span class="keyword">throw</span>(<span class="string">"Cloned not, has your model been. Reset, we can not do."</span>)
+      <span class="keyword">this</span>.model.set(<span class="keyword">this</span>.originalModel.attributes);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h4>function isModelCloned</h4>
+<p>Indicates that this view has a cloned model.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isModelCloned: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> (<span class="keyword">this</span>.originalModel &amp;&amp; <span class="keyword">this</span>.originalModel.cid != <span class="keyword">this</span>.model.cid);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3>Default Model Sync Handlers</h3>
+<p>These handlers are automatically bound to the model&#39;s sync events.</p>
+<h4>function defaultModelSyncSavingHandler</h4>
+<p>Called on either a <em>sync:create</em> or <em>sync:update</em> event. The default behavior is
+to clear all of the validation error notices on the form.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    defaultModelSyncSavingHandler: <span class="keyword">function</span>(response) {
+      $(<span class="keyword">this</span>.el).find(<span class="string">'div.error_banner'</span>).hide();
+      _.each(<span class="keyword">this</span>.form.fields, <span class="keyword">function</span>(field) {
+        <span class="keyword">if</span> (field.isValidateableField) {
+          field.clearErrors();
+        }
+      }, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h4>function defaultModelSyncInvalidHandler</h4>
+<p>Called on a <em>sync:invalid</em> event. The default behavior is to inspect the
+validation errors on the model, and add error notices to all invalid fields.
+It also scrolls the page so that the top of the form is visibile,
+in the event that it contains an error notice bar.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    defaultModelSyncInvalidHandler: <span class="keyword">function</span>(response) {
+      $(<span class="keyword">this</span>.el).find(<span class="string">'div.error_banner'</span>).show();
+      _.each(<span class="keyword">this</span>.model.errors, <span class="keyword">function</span>(error, modelAttribute) {
+        <span class="keyword">var</span> field = <span class="keyword">this</span>.form.getFieldForModelAttribute(modelAttribute);
+        _.each(<span class="keyword">this</span>.model.errors[modelAttribute], <span class="keyword">function</span>(error) {
+          <span class="keyword">if</span> (field &amp;&amp; field.isValidateableField) {
+              field.addError(error);
+              field.form.trigger(<span class="string">'fieldValidityChanged'</span>, field);
+          } <span class="keyword">else</span> {
+            _.log(<span class="string">"Cannot add error for field "</span> + modelAttribute + <span class="string">": "</span> + error);
+          }
+        }, <span class="keyword">this</span>);
+      }, <span class="keyword">this</span>);
+      <span class="keyword">this</span>.form.showErrorBanner();
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h4>function defaultModelSyncSuccessHandler</h4>
+<p>Called on a <em>sync:success</em> event. No operation. Reserved for future use.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    defaultModelSyncSuccessHandler: <span class="keyword">function</span>(response) {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h4>function defaultModelSyncErrorHandler</h4>
+<p>Called on a <em>sync:error</em> event. No operation. Reserved for future use.
+Note that SyncableModel will also trigger sync error events on the top level
+Duckbone object so that the entire application may respond to fatal server errors.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    defaultModelSyncErrorHandler: <span class="keyword">function</span>(response) {},</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h4>function defaultModelSyncCompleteHandler</h4>
+<p>Called on a <em>sync:complete</em> event. No operation. Reserved for future use.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    defaultModelSyncCompleteHandler: <span class="keyword">function</span>(response) {}
+
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <h2>FormManager</h2>
+<p>The Form Manager creates all of the subviews for each form field and manages their state and validation.
+Normally this object is not used much in practice, but in a view one can
+access individual form fields with it like: <code>this.form.getField(&#39;name&#39;)</code>.
+The developer may also wish to explicitly set() and get() field values at times.</p>
+<h4>Constructor</h4>
+<p>Accepts the following options:</p>
+<ul>
+<li>el - the DOM element to use, defaulting to the first form element in the view</li>
+<li>fields - the fields description object to use</li>
+<li>model - the Backbone Model to bind to, defaulting to a new model</li>
+<li>view - a reference to the parent view</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  Duckbone.FormManager = <span class="keyword">function</span>(options) {
+    <span class="keyword">this</span>.el = options.el || $(<span class="string">'&lt;form action="#"&gt;&lt;/form&gt;'</span>).get(<span class="number">0</span>);
+    <span class="keyword">this</span>.fieldOptions = _.clone(options.fields) || {};
+    <span class="keyword">this</span>.model = options.model || <span class="keyword">new</span> Backbone.Model({});
+    <span class="keyword">this</span>.view = options.view;
+    <span class="keyword">this</span>.name = $(<span class="keyword">this</span>.el).attr(<span class="string">'name'</span>) || <span class="string">'untitled_form'</span>;
+    <span class="keyword">this</span>.createFields();
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Mix in Backbone.Events</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _.extend(Duckbone.FormManager.prototype, Backbone.Events);
+
+  _.extend(Duckbone.FormManager.prototype, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h4>function createFields</h4>
+<p>Create form field views for all those defined in the fields object on the view.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createFields: <span class="keyword">function</span>() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Create all of the model fields</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">var</span> field, form = <span class="keyword">this</span>, name;
+      <span class="keyword">for</span> (name <span class="keyword">in</span> <span class="keyword">this</span>.fieldOptions) {
+        field = <span class="keyword">this</span>.createField(name, <span class="keyword">this</span>.fieldOptions[name]);
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Create the submit button fields</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      $(<span class="keyword">this</span>.el).find(<span class="string">'button.form_submit'</span>).each(<span class="keyword">function</span>() {
+        name = $(<span class="keyword">this</span>).attr(<span class="string">'name'</span>);
+        <span class="keyword">if</span> (!form.fields[name]) {
+          field = <span class="keyword">new</span> Duckbone.forms.fieldTypes[<span class="string">'submit'</span>]({
+            name: name, el: <span class="keyword">this</span>, form: form
+          });
+          form.fields[field.name] = field;
+        }
+      });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Assign ids and names to form labels</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      $(<span class="keyword">this</span>.el).find(<span class="string">'label'</span>).each(<span class="keyword">function</span>() {
+        <span class="keyword">var</span> name = $(<span class="keyword">this</span>).attr(<span class="string">'data-field-name'</span>);
+        <span class="keyword">if</span> (name &amp;&amp; form.fields[name]) $(<span class="keyword">this</span>).attr(<span class="string">'for'</span>, idFor(form, form.fields[name]));
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h4>function createField</h4>
+<ul>
+<li>name - the form field name</li>
+<li>fieldOptions - the field description object</li>
+<li>returns - the newly created form field view</li>
+</ul>
+<p>Create an individual form field view for the given field name and options.
+The field type is either determined by the &quot;type&quot; attribute in options,
+or by a heuristic in looking at the form field class attribute.
+Fields defined by Duckbone are classed &quot;form_[type]&quot; by the form helpers.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createField: <span class="keyword">function</span>(name, fieldOptions) {
+      <span class="keyword">this</span>.fields = <span class="keyword">this</span>.fields || {};
+      <span class="keyword">var</span> el, formFieldClass, field;
+      el = $(<span class="keyword">this</span>.el).find(selectorFor(name)).get(<span class="number">0</span>);
+      <span class="keyword">if</span> (el) {
+        formFieldClass = (fieldOptions[<span class="string">'type'</span>]) ? Duckbone.forms.fieldTypes[fieldOptions[<span class="string">'type'</span>]] : getFormFieldClass(el);
+        <span class="keyword">if</span> (formFieldClass) {
+          field = <span class="keyword">new</span> formFieldClass(_.extend(fieldOptions, {el: el, model: <span class="keyword">this</span>.model, form: <span class="keyword">this</span>, name: name} ));
+          field.name = name;
+          $(field.el).attr(<span class="string">'id'</span>, idFor(<span class="keyword">this</span>, field));
+        } <span class="keyword">else</span> {
+          <span class="keyword">throw</span> (<span class="string">"Bad form field type "</span> + name);
+        }
+      } <span class="keyword">else</span> {
+        <span class="keyword">throw</span> (<span class="string">"Form field "</span> + name + <span class="string">" defined in view, missing in template"</span>)
+      }
+      <span class="keyword">this</span>.fields[name] = field;
+      <span class="keyword">return</span> field;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h4>function getField</h4>
+<ul>
+<li>name - the form field name</li>
+<li>returns - the form field view</li>
+</ul>
+<p>Return a field view from the form for the given name.
+The developer may then use get() and set() on this field to manipulate its value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getField: <span class="keyword">function</span>(name) {
+      <span class="keyword">return</span> <span class="keyword">this</span>.fields[name];
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h4>function getFieldForModelAttribute</h4>
+<ul>
+<li>modelAttibute - the attribute on the model</li>
+<li>returns - the form field view bound to the given attribute</li>
+</ul>
+<p>Return the field view that corresponds to the given model attribute.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getFieldForModelAttribute: <span class="keyword">function</span>(modelAttribute) {
+      <span class="keyword">return</span> _.detect(<span class="keyword">this</span>.fields, <span class="function"><span class="keyword">function</span> <span class="params">(field)</span> {</span>
+        <span class="keyword">return</span> field.modelAttribute == modelAttribute;
+      }, <span class="keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h4>function validate</h4>
+<ul>
+<li>returns - a boolean indicating the validity of the form</li>
+</ul>
+<p>Validate all fields in the form according to their validation rules.
+After this is called, the view will have a boolean property &quot;isValid&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    validate: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.isValid = <span class="literal">true</span>
+      <span class="keyword">var</span> fieldValid;
+      <span class="keyword">for</span> (<span class="keyword">var</span> field <span class="keyword">in</span> <span class="keyword">this</span>.fields) {
+        fieldValid = <span class="keyword">this</span>.fields[field].validate ? <span class="keyword">this</span>.fields[field].validate() : <span class="literal">true</span>;
+        <span class="keyword">if</span> (!fieldValid) <span class="keyword">this</span>.isValid = <span class="literal">false</span>;
+      }
+      <span class="keyword">return</span> <span class="keyword">this</span>.isValid;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h4>function finishEditing</h4>
+<p>Validates the model locally.  If valid, saves the clone back to the originalModel.
+Otherwise displays errors and returns false.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    finishEditing: <span class="keyword">function</span>() {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.validate()) {
+        <span class="keyword">this</span>.view.saveClone();
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.showErrorBanner();
+        <span class="keyword">return</span> <span class="literal">false</span>;
+      }
+    },
+
+    showErrorBanner: <span class="keyword">function</span>() {
+      $(<span class="keyword">this</span>.el).find(<span class="string">'div.error_banner'</span>).show();
+      scrollToTop(<span class="keyword">this</span>.el);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h4>function submit</h4>
+<ul>
+<li>options - An options object for <code>model.save</code></li>
+</ul>
+<p>Submits the form. First validate() is called on all fields,
+and then if the form is valid, then the model is saved to the server.
+The given options object is passed directly to <code>model.save</code> and can contain
+<code>success</code> and <code>error</code> callbacks. However, these callbacks are deferred one tick
+so that all of the model sync event handlers have run first, and the callbacks
+are called subsequent to all default form behaviors.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    submit: <span class="keyword">function</span>(options) {
+      <span class="keyword">if</span> (<span class="keyword">this</span>.validate()) {
+        options = _.clone(options) || {};
+        _.each([<span class="string">'success'</span>,<span class="string">'error'</span>], <span class="keyword">function</span>(callbackName) {
+          <span class="keyword">if</span> (<span class="keyword">typeof</span> options[callbackName] == <span class="string">'function'</span>) {
+            <span class="keyword">var</span> originalCallback = options[callbackName];
+            options[callbackName] = <span class="keyword">function</span>(model, response) {
+              _.defer(_.bind(originalCallback, model, model, response));
+            }
+          }
+        }, <span class="keyword">this</span>);
+        <span class="keyword">this</span>.model.save(<span class="literal">null</span>, options);
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.showErrorBanner();
+      }
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <h3>Internal Functions</h3>
+<p>Copys the model to the final place it should arrive at once it is saved,
+as defined by the view&#39;s &#39;afterSaveDestination&#39; property.
+Called by <code>EditableView.cloneModelForEditing</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> copyToDestination = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> dests =  <span class="keyword">this</span>.options.afterSaveDestination || <span class="keyword">this</span>.afterSaveDestination;
+    <span class="keyword">if</span> (!dests) <span class="keyword">return</span>;
+    <span class="keyword">if</span> (!(dests <span class="keyword">instanceof</span> Array)) {
+      dests = [dests];
+    }
+    _.each(dests, <span class="keyword">function</span>(dest) {
+      <span class="keyword">if</span> (dest.collection) {
+        dest.collection.add(<span class="keyword">this</span>.originalModel);
+      } <span class="keyword">else</span> {
+        <span class="keyword">var</span> setterName = <span class="string">'set'</span> + dest.association.slice(<span class="number">0</span>, <span class="number">1</span>).toUpperCase() + dest.association.slice(<span class="number">1</span>);
+        dest.model[setterName].call(dest.model, <span class="keyword">this</span>.originalModel);
+      }
+    }, <span class="keyword">this</span>);
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Default model sync events that are bound when bindModelSyncEvents() is called</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> defaultModelSyncEvents = {
+    <span class="string">'sync:create'</span>: <span class="string">'defaultModelSyncSavingHandler'</span>,
+    <span class="string">'sync:update'</span>: <span class="string">'defaultModelSyncSavingHandler'</span>,
+    <span class="string">'sync:success'</span>: <span class="string">'defaultModelSyncSuccessHandler'</span>,
+    <span class="string">'sync:invalid'</span>: <span class="string">'defaultModelSyncInvalidHandler'</span>,
+    <span class="string">'sync:error'</span>: <span class="string">'defaultModelSyncErrorHandler'</span>,
+    <span class="string">'sync:complete'</span>: <span class="string">'defaultModelSyncCompleteHandler'</span>
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Binds default events to the model</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">bindEvents</span><span class="params">(view, events)</span> {</span>
+    <span class="keyword">for</span> (<span class="keyword">var</span> event <span class="keyword">in</span> events) {
+      <span class="keyword">var</span> method = view[events[event]];
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> method == <span class="string">'function'</span>) view.weakBindToModel(event, method, view);
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Concatenates the form and field names into an id for each form field DOM element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">idFor</span><span class="params">(formManager, field)</span> {</span>
+    <span class="keyword">return</span> formManager.name + <span class="string">'_'</span> + field.name;
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Returns a jQuery selector for the given form field name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">selectorFor</span><span class="params">(name)</span> {</span>
+    <span class="keyword">return</span> <span class="string">'[name="'</span> + name + <span class="string">'"]'</span>;
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Inspects a DOM element and determines the form field type based upon its class name.
+The handlebars form helpers insert a class name, ie &quot;form_text&quot; or &quot;form_select&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">getFormFieldClass</span><span class="params">(el)</span> {</span>
+    <span class="keyword">var</span> type = <span class="regexp">/^form_(.*)/</span>.exec($(el).attr(<span class="string">'class'</span>))[<span class="number">1</span>];
+    <span class="keyword">return</span> Duckbone.forms.fieldTypes[type];
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <h3>Scrolling</h3>
+<p>Time to scroll to the top of the form in milliseconds</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> SCROLL_TIME = <span class="number">400</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Easing function to use</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> SCROLL_EASING = <span class="string">'swing'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Number of pixels above the top of the form element we scroll to</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> SCROLL_BREATHING_ROOM = <span class="number">100</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Smooth scrolls the browser window so that the top of the form is visible.
+Called when a form is invalid and all errors should be shown.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">scrollToTop</span><span class="params">(el)</span> {</span>
+    <span class="keyword">var</span> offset = $(el).offset().top;
+    offset = (offset &gt; SCROLL_BREATHING_ROOM) ? offset - SCROLL_BREATHING_ROOM : <span class="number">0</span>;
+    $(<span class="string">'html body'</span>).animate({ scrollTop: offset }, SCROLL_TIME, SCROLL_EASING);
+  }
+
+})();</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

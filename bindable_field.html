@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>BindableField</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base_classes.html">
+                base_classes.js
+              </a>
+            
+              
+              <a class="source" href="base_errors_view.html">
+                base_errors_view.js
+              </a>
+            
+              
+              <a class="source" href="bindable_field.html">
+                bindable_field.js
+              </a>
+            
+              
+              <a class="source" href="bindable_view.html">
+                bindable_view.js
+              </a>
+            
+              
+              <a class="source" href="collection.html">
+                collection.js
+              </a>
+            
+              
+              <a class="source" href="core.html">
+                core.js
+              </a>
+            
+              
+              <a class="source" href="editable_view.html">
+                editable_view.js
+              </a>
+            
+              
+              <a class="source" href="error_list.html">
+                error_list.js
+              </a>
+            
+              
+              <a class="source" href="flashable_view.html">
+                flashable_view.js
+              </a>
+            
+              
+              <a class="source" href="form_fields.html">
+                form_fields.js
+              </a>
+            
+              
+              <a class="source" href="form_validations.html">
+                form_validations.js
+              </a>
+            
+              
+              <a class="source" href="handlebars.html">
+                handlebars.js
+              </a>
+            
+              
+              <a class="source" href="handlebars_extensions.html">
+                handlebars_extensions.js
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.js
+              </a>
+            
+              
+              <a class="source" href="listable_view.html">
+                listable_view.js
+              </a>
+            
+              
+              <a class="source" href="model.html">
+                model.js
+              </a>
+            
+              
+              <a class="source" href="nestable_view.html">
+                nestable_view.js
+              </a>
+            
+              
+              <a class="source" href="pageable_collection.html">
+                pageable_collection.js
+              </a>
+            
+              
+              <a class="source" href="pageable_view.html">
+                pageable_view.js
+              </a>
+            
+              
+              <a class="source" href="remoteable_view.html">
+                remoteable_view.js
+              </a>
+            
+              
+              <a class="source" href="route.html">
+                route.js
+              </a>
+            
+              
+              <a class="source" href="routeable_application.html">
+                routeable_application.js
+              </a>
+            
+              
+              <a class="source" href="simple_queue.html">
+                simple_queue.js
+              </a>
+            
+              
+              <a class="source" href="stylizeable_view.html">
+                stylizeable_view.js
+              </a>
+            
+              
+              <a class="source" href="syncable.html">
+                syncable.js
+              </a>
+            
+              
+              <a class="source" href="template_registry.html">
+                template_registry.js
+              </a>
+            
+              
+              <a class="source" href="templateable_view.html">
+                templateable_view.js
+              </a>
+            
+              
+              <a class="source" href="validateable_field.html">
+                validateable_field.js
+              </a>
+            
+              
+              <a class="source" href="view_lifecycle_extensions.html">
+                view_lifecycle_extensions.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>BindableField</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This module enables a view to act as a form element that can bind bi-directionally to a model.
+For example, an input field in a form can both reflect the model&#39;s state, and also update it
+based on a user&#39;s input. The abstract form field base class <code>Duckbone.FormFieldBase</code> includes
+this module, and any custom form field types used by an EditableView should also include this module.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>(<span class="keyword">function</span>() {
+
+  Duckbone.BindableField = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h4>property isBindableField</h4>
+<p>Indicates a view with this mixin included</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isBindableField: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h3>Model/DOM Translation</h3>
+<p>If <code>jquery.val()</code> does not do the right thing for your form field, then
+override the <code>get</code> and <code>set</code> functions to move data in and out of the DOM element.
+If <code>jquery.val()</code> works, but the data must be transformed in or out of the model,
+then simply override <code>modelToDomTransform</code> and <code>domToModelTransform</code>.</p>
+<h4>function get</h4>
+<ul>
+<li>returns - The current value of the form field&#39;s DOM element</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    get: <span class="keyword">function</span>() {
+      <span class="keyword">var</span> val = <span class="keyword">this</span>.domToModelTransform($(<span class="keyword">this</span>.el).val());
+      <span class="keyword">if</span> (<span class="keyword">this</span>.stripWhitespace &amp;&amp; <span class="keyword">this</span>.options.stripWhitespace !== <span class="literal">false</span>) val = val.replace(<span class="regexp">/^\s+|\s+$/g</span>, <span class="string">''</span>);
+      <span class="keyword">return</span> val;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h4>function set</h4>
+<ul>
+<li>value - the new value to set the form field&#39;s DOM element to</li>
+<li>returns - nothing</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    set: <span class="keyword">function</span>(value) {
+      $(<span class="keyword">this</span>.el).val(<span class="keyword">this</span>.modelToDomTransform(value));
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h4>function modelToDomTransform</h4>
+<ul>
+<li>modelValue - the given model value</li>
+<li>returns - the transformed value to set on the DOM element</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    modelToDomTransform: <span class="keyword">function</span>(modelValue) {
+      <span class="keyword">return</span> (modelValue !== <span class="literal">undefined</span> || modelValue !== <span class="literal">NaN</span>) ? modelValue : <span class="string">""</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4>function domToModelTransform</h4>
+<ul>
+<li>domValue - the given DOM element value</li>
+<li>returns - the transformed value to set on the model</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    domToModelTransform: <span class="keyword">function</span>(domValue) {
+      <span class="keyword">return</span> domValue;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h3>Binding</h3>
+<h4>function bindToModel</h4>
+<ul>
+<li>attr - the model attribute to bind to, falling back first to the view&#39;s <code>modelAttribute</code>,
+and then to the form field&#39;s <code>name</code> attribute.</li>
+<li>returns - nothing</li>
+</ul>
+<p>This method initializes the form field&#39;s value to the model value,
+and then continually updates on any changes to that model attribute.
+The DOM element will only be updated if the model attribute is a valid value
+(non-undefined, non-NaN) and different from the existing field value.
+This behavior arrests the circular firing of change events.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindToModel: <span class="keyword">function</span>(attr) {
+      attr = attr || <span class="keyword">this</span>.options.modelAttribute || <span class="keyword">this</span>.modelAttribute || <span class="keyword">this</span>.options.name || <span class="keyword">this</span>.name;
+      <span class="keyword">if</span> (!attr) <span class="keyword">throw</span>(<span class="string">"Duckbone.BindableField.bindToModel() called without a modelAttribute"</span>);
+      <span class="keyword">this</span>.modelAttribute = attr;
+      <span class="keyword">var</span> field = <span class="keyword">this</span>, model = <span class="keyword">this</span>.model, changeEvent = <span class="string">'change:'</span>+attr;
+      field.form.view.weakBindToModel(changeEvent, <span class="keyword">function</span>() { <span class="comment">// bind to model changes</span>
+        <span class="keyword">var</span> newValue = model.get(attr);
+        <span class="keyword">if</span> (newValue !== field.get() &amp;&amp; Duckbone.ModelHelpers.isValidAttribute(newValue))
+          field.set(newValue);
+      });
+      field.set(model.get(attr)); <span class="comment">// initialize field to model value</span>
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h4">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h4>function bindToDOM</h4>
+<ul>
+<li>attr - the model attribute to bind to, falling back first to the view&#39;s <code>modelAttribute</code>,
+and then to the form field&#39;s <code>name</code> attribute.</li>
+<li>changeEvent - the DOM event on the view&#39;s element to bind to changes.
+Defaults to &#39;change&#39; which works for most input-style fields.</li>
+<li>el - the DOM element to bind to, defaulting to the view&#39;s top level element</li>
+</ul>
+<p>This method initializes the model&#39;s value to the form field value,
+and then continually updates on any further changes to the field.
+The model will generally be set to <code>null</code> on an empty field, not undefined.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    bindToDOM: <span class="keyword">function</span>(attr, changeEvent, el) {
+      attr = attr || <span class="keyword">this</span>.options.modelAttribute || <span class="keyword">this</span>.modelAttribute || <span class="keyword">this</span>.options.name || <span class="keyword">this</span>.name;
+      <span class="keyword">if</span> (!attr) <span class="keyword">throw</span>(<span class="string">"Duckbone.BindableField.bindToDOM() called without a modelAttribute"</span>);
+      <span class="keyword">this</span>.modelAttribute = attr;
+      <span class="keyword">var</span> changeEvent = <span class="keyword">this</span>.options.changeEvent || <span class="keyword">this</span>.changeEvent || <span class="string">'change'</span>;
+      el = el || <span class="keyword">this</span>.el; <span class="comment">// by default, bind to the parent element</span>
+      <span class="keyword">var</span> field = <span class="keyword">this</span>, model = <span class="keyword">this</span>.model;
+      $(el).bind(changeEvent, <span class="keyword">function</span>() { <span class="comment">// bind to DOM changes</span>
+        modelSet(model, attr, field.get());
+      });
+      modelSet(model, attr, field.get()); <span class="comment">// initialize model to field value</span>
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h3>Internal Functions</h3>
+<p>Make sure to never set a model value to undefined.
+Undefined attributes are dropped when serialized to JSON,
+which will have the wrong effect on the rails side.
+These attrs will be ignored instead of validated against a null value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="function"><span class="keyword">function</span> <span class="title">modelSet</span><span class="params">(model, attr, val, silent)</span> {</span>
+    silent = silent || <span class="literal">false</span>;
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> val == <span class="string">'undefined'</span>) val = <span class="literal">null</span>;
+    Duckbone.ModelHelpers.setOne.call(model, attr, val, {silent: silent});
+  }
+
+}).call(<span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
