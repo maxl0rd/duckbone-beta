@@ -40,6 +40,12 @@
       this.application.loadView(this.viewClass, options);
     },
 
+    fetchCollectionWithParams: function(collection, params, options) {
+      collection.params = collection.params || {page: 1};
+      _.extend(collection.params, params);
+      return collection.fetch(options);
+    },
+
     resolveViewClass: function() {
       if (typeof this.viewClass == "string") {
         this.viewClass = Duckbone.helpers.stringToGlobal(this.viewClass);
