@@ -75,22 +75,29 @@
 
     // #### function fetch
     // Delegate `fetch()` to `fetchPage()`. The normal options to fetch are discarded if passed.
-    fetch: function() {
-      this.fetchPage(1);
+    // - options - standard options passed through to fetch
+    // - returns - the jQuery XHR object for fetch
+    fetch: function(options) {
+      options = options ? _.clone(options) : {};
+      var params = this.params = this.params || {};
+      params.page = params.page || 1;
+      var collection = this;
+      var success = options.success;
+      options.url = buildUrl(this, params);
+      options.success = function(resp, status, xhr) {
+        collection.trigger('pageChange', collection.currentPage, params);
+        if (success) success(collection, resp);
+      }
+      return Backbone.Collection.prototype.fetch.call(this, options);
     },
 
     // #### function fetchPage
     // - pageNum - the page ordinal requested, begining with 1
+    // - options - standard options passed through to fetch
     // - returns - the jQuery XHR object for fetch
-    fetchPage: function(pageNum) {
-      var params = this.params = this.params || {};
-      params.page = pageNum || 1;
-      return Backbone.Collection.prototype.fetch.call(this, {
-        url: buildUrl(this, params),
-        success: function(c) {
-          c.trigger('pageChange', c.currentPage, params);
-        }
-      });
+    fetchPage: function(pageNum, options) {
+      if (pageNum) this.setParam('page', pageNum);
+      return this.fetch(options);
     },
 
     // #### function setParam
